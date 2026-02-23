@@ -47,6 +47,33 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
 
   return (
     <aside ref={asideRef} className="lg:sticky lg:self-start" style={{ top: 96 }}>
+      {/* Reading level info */}
+      <div
+        className="mb-3.5 rounded-xl border p-3.5"
+        style={{
+          background:
+            mode === "junior"
+              ? "rgba(34,197,94,0.06)"
+              : "rgba(232,101,26,0.06)",
+          borderColor:
+            mode === "junior"
+              ? "rgba(34,197,94,0.12)"
+              : "rgba(232,101,26,0.12)",
+        }}
+      >
+        <div
+          className="mb-1 text-xs font-bold"
+          style={{ color: mode === "junior" ? "#22C55E" : "#E8651A" }}
+        >
+          {mode === "junior" ? "\u{1F423} Junior Fables" : "\u{1F525} Full Fables"}
+        </div>
+        <p className="text-xs leading-relaxed text-text-dim">
+          {mode === "junior"
+            ? "Written for ages 6\u201311. Shorter sentences, simpler words, all the fun. Perfect for reading together!"
+            : "Written for ages 12 and up. Richer vocabulary, deeper emotions, dramatic storytelling."}
+        </p>
+      </div>
+
       {/* Card placeholders */}
       <div className="flex flex-col gap-3">
         {cards.map((card, ci) => (
@@ -141,32 +168,6 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
         </div>
       )}
 
-      {/* Reading level info */}
-      <div
-        className="mt-3.5 rounded-xl border p-3.5"
-        style={{
-          background:
-            mode === "junior"
-              ? "rgba(34,197,94,0.06)"
-              : "rgba(232,101,26,0.06)",
-          borderColor:
-            mode === "junior"
-              ? "rgba(34,197,94,0.12)"
-              : "rgba(232,101,26,0.12)",
-        }}
-      >
-        <div
-          className="mb-1 text-xs font-bold"
-          style={{ color: mode === "junior" ? "#22C55E" : "#E8651A" }}
-        >
-          {mode === "junior" ? "\u{1F423} Junior Fables" : "\u{1F525} Full Fables"}
-        </div>
-        <p className="text-xs leading-relaxed text-text-dim">
-          {mode === "junior"
-            ? "Written for ages 6\u201311. Shorter sentences, simpler words, all the fun. Perfect for reading together!"
-            : "Written for ages 12 and up. Richer vocabulary, deeper emotions, dramatic storytelling."}
-        </p>
-      </div>
     </aside>
   );
 }
