@@ -3,9 +3,12 @@ import type { StoryData } from "@/lib/types";
 interface StoryRendererProps {
   story: StoryData;
   seriesColor: string;
+  mode: "junior" | "full";
 }
 
-export function StoryRenderer({ story, seriesColor }: StoryRendererProps) {
+export function StoryRenderer({ story, seriesColor, mode }: StoryRendererProps) {
+  const fontSize = mode === "junior" ? "16px" : "15px";
+  const lineHeight = mode === "junior" ? "1.9" : "1.85";
   return (
     <article className="max-w-2xl">
       {/* Scene heading */}
@@ -19,8 +22,8 @@ export function StoryRenderer({ story, seriesColor }: StoryRendererProps) {
               return (
                 <p
                   key={i}
-                  className="text-base leading-[1.85]"
-                  style={{ color: "#C4C0B8" }}
+                  className="text-text-story"
+                  style={{ fontSize, lineHeight }}
                 >
                   {block.c}
                 </p>
@@ -41,8 +44,7 @@ export function StoryRenderer({ story, seriesColor }: StoryRendererProps) {
                     </span>
                   )}
                   <p
-                    className="text-base italic leading-[1.85]"
-                    style={{ color: "#E2DDD5" }}
+                    className="text-base italic leading-[1.85] text-text-primary"
                   >
                     {block.c}
                   </p>

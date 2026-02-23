@@ -70,7 +70,7 @@ export function Hero() {
             <span
               className="font-heading italic font-normal"
               style={{
-                color: "#6E6E82",
+                color: "#8888a0",
                 fontSize: "0.48em",
               }}
             >
@@ -84,7 +84,7 @@ export function Hero() {
             className="mb-4"
             style={{
               fontSize: 15,
-              color: "#9898AE",
+              color: "#a0a0b8",
               lineHeight: 1.75,
               maxWidth: 480,
             }}

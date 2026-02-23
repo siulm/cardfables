@@ -16,7 +16,7 @@ export function Field({
   rows = 4,
 }: FieldProps) {
   const inputStyles =
-    "w-full rounded-xl border border-[rgba(255,255,255,0.06)] bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-dim outline-none transition-colors duration-200 focus:border-[rgba(212,168,70,0.3)]";
+    "w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-dim outline-none transition-colors duration-200 focus:border-[rgba(212,168,70,0.3)]";
 
   return (
     <div className="flex flex-col gap-2">

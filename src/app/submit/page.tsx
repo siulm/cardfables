@@ -79,7 +79,7 @@ export default function SubmitPage() {
                   borderColor:
                     series === option
                       ? "rgba(212,168,70,0.3)"
-                      : "rgba(255,255,255,0.06)",
+                      : "rgba(255,255,255,0.10)",
                   background:
                     series === option
                       ? "rgba(212,168,70,0.05)"

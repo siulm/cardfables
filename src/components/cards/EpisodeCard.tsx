@@ -72,10 +72,16 @@ export function EpisodeCard({ episode, series, index }: EpisodeCardProps) {
         >
           {episode.title}
         </h4>
-        <p className="text-xs text-text-secondary">
-          {episode.card} &middot; {episode.set}
-        </p>
-        <p className="mt-1 text-xs text-text-dim">Art by {episode.artist}</p>
+        {episode.cards.length > 0 && (
+          <>
+            <p className="text-xs text-text-secondary">
+              {episode.cards.map((c) => c.name).join(" + ")}
+            </p>
+            <p className="mt-1 text-xs text-text-dim">
+              {episode.cards.map((c) => c.set).join(" / ")}
+            </p>
+          </>
+        )}
       </div>
     </Link>
   );

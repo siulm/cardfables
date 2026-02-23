@@ -1,11 +1,18 @@
+export interface CardInfo {
+  name: string;
+  set: string;
+  artist: string;
+  emoji: string;
+}
+
 export interface Episode {
   id: number;
   slug: string;
   title: string;
-  card: string;
-  set: string;
-  artist: string;
+  cards: CardInfo[];
   status: "live" | "locked";
+  junior?: StoryData;
+  full?: StoryData;
 }
 
 export interface Series {

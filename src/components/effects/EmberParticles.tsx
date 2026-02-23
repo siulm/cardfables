@@ -1,15 +1,33 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
+interface Particle {
+  id: number;
+  left: string;
+  width: number;
+  height: number;
+  color: string;
+  duration: string;
+  delay: string;
+}
+
 export function EmberParticles() {
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    left: `${5 + Math.random() * 90}%`,
-    width: 2 + Math.random() * 3,
-    height: 2 + Math.random() * 3,
-    color: i % 3 === 0 ? "#D4A846" : "#E8651A",
-    duration: `${4 + Math.random() * 5}s`,
-    delay: `${Math.random() * 4}s`,
-  }));
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        left: `${5 + Math.random() * 90}%`,
+        width: 2 + Math.random() * 3,
+        height: 2 + Math.random() * 3,
+        color: i % 3 === 0 ? "#D4A846" : "#E8651A",
+        duration: `${4 + Math.random() * 5}s`,
+        delay: `${Math.random() * 4}s`,
+      }))
+    );
+  }, []);
 
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">

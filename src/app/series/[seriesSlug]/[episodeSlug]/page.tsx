@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { CardSidebar } from "@/components/episode/CardSidebar";
-import { StoryRenderer } from "@/components/episode/StoryRenderer";
-import { NextEpisodeCTA } from "@/components/episode/NextEpisodeCTA";
-import { getEpisodeBySlugs, getAllEpisodePaths, STORY_DATA } from "@/lib/data";
+import { EpisodeReader } from "@/components/episode/EpisodeReader";
+import { getEpisodeBySlugs, getAllEpisodePaths } from "@/lib/data";
 
 interface Props {
   params: Promise<{ seriesSlug: string; episodeSlug: string }>;
@@ -23,13 +21,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!result) return {};
 
   const { series, episode } = result;
+  const cardNames = episode.cards.map((c) => c.name).join(" + ");
+  const desc = `Read "${episode.title}" — Episode ${episode.id} of ${series.title}. Inspired by ${cardNames}. Available in Junior (ages 6-11) and Full (ages 12+) reading levels.`;
+  const url = `https://cardfables.com/series/${series.id}/${episode.slug}`;
   return {
     title: `${episode.title} — ${series.title} Episode ${episode.id} | CardFables`,
-    description: `Read "${episode.title}" — Episode ${episode.id} of ${series.title}. Inspired by the ${episode.card} card from ${episode.set}.`,
+    description: desc,
+    keywords: [
+      "CardFables",
+      series.title,
+      episode.title,
+      "Pokemon card stories",
+      ...episode.cards.map((c) => c.name),
+      ...episode.cards.map((c) => c.set),
+      "kids stories",
+      "Pokemon fan fiction",
+    ],
+    robots: { index: true, follow: true },
+    alternates: { canonical: url },
     openGraph: {
       title: `${episode.title} — ${series.title} Episode ${episode.id}`,
-      description: `Read "${episode.title}" — Episode ${episode.id} of ${series.title}.`,
+      description: desc,
       type: "article",
+      url,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${episode.title} — ${series.title}`,
+      description: desc,
     },
   };
 }
@@ -41,17 +60,29 @@ export default async function EpisodePage({ params }: Props) {
 
   const { series, episode } = result;
 
+  const cardNames = episode.cards.map((c) => c.name).join(" + ");
+  const episodeUrl = `https://cardfables.com/series/${series.id}/${episode.slug}`;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TVEpisode",
     name: episode.title,
+    description: `Episode ${episode.id} of ${series.title}, inspired by ${cardNames}.`,
     episodeNumber: episode.id,
     partOfSeries: {
       "@type": "TVSeries",
       name: series.title,
       url: `https://cardfables.com/series/${series.id}`,
     },
-    url: `https://cardfables.com/series/${series.id}/${episode.slug}`,
+    url: episodeUrl,
+    publisher: {
+      "@type": "Organization",
+      name: "CardFables",
+      url: "https://cardfables.com",
+    },
+    potentialAction: {
+      "@type": "ReadAction",
+      target: episodeUrl,
+    },
   };
 
   return (
@@ -71,33 +102,7 @@ export default async function EpisodePage({ params }: Props) {
         />
       </div>
 
-      {/* Episode header */}
-      <div className="mb-8">
-        <div className="mb-2 flex items-center gap-3">
-          <span
-            className="text-xs font-semibold uppercase tracking-wider"
-            style={{ color: series.color }}
-          >
-            {series.title}
-          </span>
-          <span className="text-text-dim">&middot;</span>
-          <span className="text-xs text-text-secondary">
-            Episode {episode.id}
-          </span>
-        </div>
-        <h1 className="font-heading text-3xl font-bold text-text-primary">
-          {episode.title}
-        </h1>
-      </div>
-
-      {/* Two-column reader */}
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
-        <div>
-          <StoryRenderer story={STORY_DATA} seriesColor={series.color} />
-          <NextEpisodeCTA series={series} />
-        </div>
-        <CardSidebar episode={episode} series={series} />
-      </div>
+      <EpisodeReader episode={episode} series={series} />
     </div>
   );
 }
