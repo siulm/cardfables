@@ -3,6 +3,15 @@ export interface CardInfo {
   set: string;
   artist: string;
   emoji: string;
+  affiliateUrl?: string;
+}
+
+export interface AffiliateProduct {
+  name: string;
+  url: string;
+  price: string;
+  tag: string;
+  emoji: string;
 }
 
 export interface Episode {
@@ -10,6 +19,7 @@ export interface Episode {
   slug: string;
   title: string;
   cards: CardInfo[];
+  products?: AffiliateProduct[];
   status: "live" | "locked";
   junior?: StoryData;
   full?: StoryData;

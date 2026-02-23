@@ -19,7 +19,12 @@ export const SERIES: Series[] = [
         slug: "the-nap-that-changed-everything",
         title: "The Nap That Changed Everything",
         cards: [
-          { name: "Charizard V (SAR)", set: "VSTAR Universe", artist: "Oswaldo KATO", emoji: "\u{1F525}" },
+          { name: "Charizard V (SAR)", set: "VSTAR Universe", artist: "Oswaldo KATO", emoji: "\u{1F525}", affiliateUrl: "#" },
+        ],
+        products: [
+          { name: "VSTAR Universe Booster Box", url: "#", price: "~$85", tag: "Booster", emoji: "\u{1F4E6}" },
+          { name: "Ultra Pro Sleeves (100ct)", url: "#", price: "~$9", tag: "Sleeves", emoji: "\u{1F6E1}\uFE0F" },
+          { name: "9-Pocket Pro Binder", url: "#", price: "~$25", tag: "Binder", emoji: "\u{1F4D2}" },
         ],
         status: "live",
         junior: {
@@ -65,8 +70,13 @@ export const SERIES: Series[] = [
         slug: "the-witch-who-knew-too-much",
         title: "The Witch Who Knew Too Much",
         cards: [
-          { name: "Mismagius ex", set: "M2 (036/080 RR)", artist: "5ban Graphics", emoji: "\u{1F47B}" },
-          { name: "Genesect V", set: "VSTAR Universe (102/172 RR)", artist: "PLANETA Tsuji", emoji: "\u{1F916}" },
+          { name: "Mismagius ex", set: "M2 (036/080 RR)", artist: "5ban Graphics", emoji: "\u{1F47B}", affiliateUrl: "#" },
+          { name: "Genesect V", set: "VSTAR Universe (102/172 RR)", artist: "PLANETA Tsuji", emoji: "\u{1F916}", affiliateUrl: "#" },
+        ],
+        products: [
+          { name: "Pok\u00e9mon 151 Bundle (6 packs)", url: "#", price: "~$35", tag: "Booster", emoji: "\u{1F3B4}" },
+          { name: "Ultra Pro Sleeves (100ct)", url: "#", price: "~$9", tag: "Sleeves", emoji: "\u{1F6E1}\uFE0F" },
+          { name: "LED Magnifying Loupe", url: "#", price: "~$12", tag: "Gear", emoji: "\u{1F50D}" },
         ],
         status: "live",
         junior: {

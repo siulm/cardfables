@@ -1,15 +1,52 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
-import type { CardInfo } from "@/lib/types";
+import type { AffiliateProduct, CardInfo } from "@/lib/types";
 
 interface CardSidebarProps {
   cards: CardInfo[];
+  products?: AffiliateProduct[];
   seriesColor: string;
   mode: "junior" | "full";
 }
 
-export function CardSidebar({ cards, seriesColor, mode }: CardSidebarProps) {
+export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarProps) {
+  const asideRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const aside = asideRef.current;
+    if (!aside) return;
+
+    const topGap = 96; // 6rem — matches the navbar clearance
+    let lastScrollY = window.scrollY;
+    let stickyTop = topGap;
+
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      const delta = scrollY - lastScrollY;
+      const sidebarH = aside.offsetHeight;
+      const viewportH = window.innerHeight;
+
+      if (sidebarH <= viewportH - topGap) {
+        // Sidebar fits in viewport — plain sticky
+        stickyTop = topGap;
+      } else {
+        // Taller than viewport — shift top with scroll direction
+        const minTop = viewportH - sidebarH; // negative
+        stickyTop = Math.max(minTop, Math.min(topGap, stickyTop - delta));
+      }
+
+      aside.style.top = `${stickyTop}px`;
+      lastScrollY = scrollY;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <aside className="lg:sticky lg:top-24 lg:self-start">
+    <aside ref={asideRef} className="lg:sticky lg:self-start" style={{ top: 96 }}>
       {/* Card placeholders */}
       <div className="flex flex-col gap-3">
         {cards.map((card, ci) => (
@@ -59,10 +96,50 @@ export function CardSidebar({ cards, seriesColor, mode }: CardSidebarProps) {
           </div>
         ))}
 
-        <Button href="#" className="mt-3.5 w-full">
+        <Button href={cards[0]?.affiliateUrl ?? "#"} className="mt-3.5 w-full">
           Buy {cards.length > 1 ? "These Cards" : "This Card"}
         </Button>
       </div>
+
+      {/* Collector's Gear */}
+      {products && products.length > 0 && (
+        <div
+          className="mt-3.5 rounded-xl border border-border p-4"
+          style={{ background: "var(--color-surface-light, #1a1a2e)" }}
+        >
+          <h4 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+            Collector&apos;s Gear
+          </h4>
+          <div className="flex flex-col gap-2.5">
+            {products.map((product, i) => (
+              <a
+                key={i}
+                href={product.url}
+                target="_blank"
+                rel="nofollow noopener"
+                className="flex items-center gap-3 rounded-lg border border-border p-2.5 transition-colors hover:border-white/15"
+                style={{ background: "rgba(255,255,255,0.02)" }}
+              >
+                <span className="text-lg">{product.emoji}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[12px] font-semibold text-text-primary">
+                    {product.name}
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px] text-text-dim">
+                    <span>{product.price}</span>
+                    <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium">
+                      {product.tag}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <p className="mt-3 text-center text-[8px] text-text-dim/50">
+            As an Amazon Associate I earn from qualifying purchases
+          </p>
+        </div>
+      )}
 
       {/* Reading level info */}
       <div
