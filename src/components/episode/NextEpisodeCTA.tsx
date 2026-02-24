@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
 import type { Series } from "@/lib/types";
 
 interface NextEpisodeCTAProps {
@@ -46,9 +47,10 @@ export function NextEpisodeCTA({
           <h3 className="mb-2 font-heading text-lg font-bold text-text-dim">
             Episode {currentEpisodeId + 1} Coming Soon
           </h3>
-          <p className="text-sm text-text-dim">
-            Follow us to get notified when the next episode drops.
+          <p className="mb-4 text-sm text-text-dim">
+            Submit a card to help pick the next episode!
           </p>
+          <Button href="/submit">Submit a Card &rarr;</Button>
         </>
       )}
     </div>

@@ -162,7 +162,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
               </a>
             ))}
           </div>
-          <p className="mt-3 text-center text-[8px] text-text-dim/50">
+          <p className="mt-3 text-center text-[11px] text-text-secondary">
             As an Amazon Associate I earn from qualifying purchases
           </p>
         </div>

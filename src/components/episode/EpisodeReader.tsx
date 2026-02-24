@@ -99,18 +99,10 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
         />
       </div>
 
-      {/* Trademark disclaimer */}
-      <div className="mt-12 text-center text-[10px] leading-relaxed text-white/25">
-        <p>
-          Pok&eacute;mon and all character names are trademarks of Nintendo /
-          Creatures Inc. / GAME FREAK Inc.
-        </p>
-        <p>
-          CardFables is an independent fan project and is not affiliated with,
-          endorsed by, or sponsored by The Pok&eacute;mon Company. As an Amazon
-          Associate, CardFables earns from qualifying purchases.
-        </p>
-      </div>
+      {/* Disclaimer */}
+      <p className="mt-12 text-center text-[11px] text-text-dim">
+        An original fan story &mdash; not affiliated with The Pok&eacute;mon Company
+      </p>
     </>
   );
 }
