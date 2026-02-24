@@ -100,7 +100,7 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
       </div>
 
       {/* Disclaimer */}
-      <p className="mt-12 text-left text-sm text-text-dim">
+      <p className="mt-12 text-center text-sm text-text-dim">
         An original fan story &mdash; not affiliated with The Pok&eacute;mon Company
       </p>
     </>
