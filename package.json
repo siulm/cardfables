@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -14,12 +15,16 @@
   "license": "ISC",
   "packageManager": "pnpm@10.30.1",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["sharp", "unrs-resolver"]
+    "onlyBuiltDependencies": [
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
