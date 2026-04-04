@@ -1,17 +1,41 @@
 {
   "show_title": "Flames of Our Lives",
-  "last_episode": 2,
+  "last_episode": 3,
   "characters": [
-    { "name": "Charizard", "card": "Charizard V", "role": "reluctant hero, secretly kind" },
-    { "name": "Venusaur", "card": "N/A", "role": "skeptical neighbor, growing to care" },
-    { "name": "Mismagius", "card": "Mismagius ex", "role": "dramatic observer, reluctant hero" },
-    { "name": "Genesect", "card": "Genesect V", "role": "antagonist, approaching from north" }
+    {
+      "name": "Charizard",
+      "card": "Charizard V",
+      "role": "reluctant hero, secretly kind"
+    },
+    {
+      "name": "Venusaur",
+      "card": "N/A",
+      "role": "skeptical neighbor, growing to care"
+    },
+    {
+      "name": "Mismagius",
+      "card": "Mismagius ex",
+      "role": "dramatic observer, reluctant hero"
+    },
+    {
+      "name": "Genesect",
+      "card": "Genesect V",
+      "role": "antagonist, approaching from north"
+    },
+    {
+      "name": "Team Rocket's Dugtrio",
+      "card": "ロケット団のダグトリオ 083/193 (m2a)",
+      "role": "Team Rocket agents tunneling beneath the northern caves to create a hidden entry point for Genesect; three heads, perpetually bickering, dangerously competent despite themselves"
+    }
   ],
-  "current_plot": "Genesect is heading toward the northern caves where Charizard secretly shelters baby Pokemon. Venusaur and Mismagius are racing to warn him.",
+  "current_plot": "Team Rocket's Dugtrio has tunneled beneath Verdant Valley on orders to open a concealed entry into the northern caves — allowing Genesect to bypass any warning Venusaur and Mismagius might deliver. Venusaur and Mismagius have discovered Dugtrio mid-surface, but the tunnel behind them may already be open. Meanwhile, Charizard — alone in the caves with the sleeping baby Pokémon — has detected the underground intrusion. A fracture is forming in the cave floor. The babies are beginning to wake.",
   "setting": "Verdant Valley",
   "running_themes": [
     "Charizard secretly helps everyone but is too proud to admit it",
     "Venusaur is judgmental but genuinely cares",
-    "Mismagius observes and comments, resists heroism"
+    "Mismagius observes and comments, resists heroism",
+    "Anonymous kindness (Charizard's soup, revisited)",
+    "Plans that look simple on paper",
+    "Three opinions are worse than one"
   ]
 }
