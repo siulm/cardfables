@@ -135,3 +135,164 @@ Story block types:
 
 Each story MUST end with a block of type "end".`;
 }
+
+function encodeImage(imagePath) {
+  const absolutePath = resolve(imagePath);
+  if (!existsSync(absolutePath)) {
+    throw new Error(`Image not found: ${absolutePath}`);
+  }
+  const data = readFileSync(absolutePath);
+  const ext = extname(absolutePath).toLowerCase();
+  const mediaTypes = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+  };
+  const mediaType = mediaTypes[ext];
+  if (!mediaType) {
+    throw new Error(
+      `Unsupported image format: ${ext}. Use .jpg, .jpeg, .png, .gif, or .webp`
+    );
+  }
+  return {
+    type: "image",
+    source: {
+      type: "base64",
+      media_type: mediaType,
+      data: data.toString("base64"),
+    },
+  };
+}
+
+async function main() {
+  const { clientName, imagePaths } = parseArgs(process.argv.slice(2));
+
+  // Resolve paths
+  const clientDir = join(process.cwd(), "clients", clientName);
+  const configPath = join(clientDir, "config.json");
+  const biblePath = join(clientDir, "story-bible.json");
+  const episodesDir = join(clientDir, "episodes");
+
+  // Read config
+  if (!existsSync(configPath)) {
+    console.error(`Error: config.json not found for client '${clientName}'`);
+    console.error(`Expected at: ${configPath}`);
+    process.exit(1);
+  }
+  const config = JSON.parse(readFileSync(configPath, "utf-8"));
+
+  // Read story bible
+  if (!existsSync(biblePath)) {
+    console.error(
+      `Error: story-bible.json not found for client '${clientName}'`
+    );
+    console.error(`Expected at: ${biblePath}`);
+    process.exit(1);
+  }
+  const bible = JSON.parse(readFileSync(biblePath, "utf-8"));
+
+  // Encode images
+  console.log(`Encoding ${imagePaths.length} image(s)...`);
+  const imageBlocks = imagePaths.map((p) => encodeImage(p));
+
+  // Build the API request
+  const systemPrompt = buildSystemPrompt(config);
+  const nextEpisode = bible.last_episode + 1;
+
+  const userContent = [
+    ...imageBlocks,
+    {
+      type: "text",
+      text: `Here is the current story bible:\n\n${JSON.stringify(bible, null, 2)}\n\nAnalyze the card image(s) above and write episode ${nextEpisode}. Continue the ongoing story based on the bible context. The new card(s) should introduce or develop characters and advance the plot.`,
+    },
+  ];
+
+  // Call Claude
+  console.log(
+    `Calling Claude (claude-sonnet-4-6) for episode ${nextEpisode}...`
+  );
+  const client = new Anthropic({ apiKey: config.anthropic_api_key });
+  let response;
+  try {
+    response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userContent }],
+    });
+  } catch (err) {
+    console.error(`API call failed: ${err.message}`);
+    process.exit(1);
+  }
+
+  // Parse response
+  const responseText = response.content
+    .filter((block) => block.type === "text")
+    .map((block) => block.text)
+    .join("");
+
+  let parsed;
+  try {
+    parsed = JSON.parse(responseText);
+  } catch (err) {
+    console.error("Failed to parse Claude response as JSON.");
+    console.error("Raw response:");
+    console.error(responseText);
+    process.exit(1);
+  }
+
+  // Validate response has required fields
+  if (!parsed.episode || !parsed.bible_updates) {
+    console.error(
+      "Response missing required fields (episode, bible_updates)."
+    );
+    console.error("Parsed response:");
+    console.error(JSON.stringify(parsed, null, 2));
+    process.exit(1);
+  }
+
+  // Ensure slug is set
+  if (!parsed.episode.slug) {
+    parsed.episode.slug = slugify(parsed.episode.title);
+  }
+
+  // Write episode file
+  mkdirSync(episodesDir, { recursive: true });
+  const episodeFile = join(episodesDir, `episode-${nextEpisode}.json`);
+  writeFileSync(episodeFile, JSON.stringify(parsed.episode, null, 2));
+  console.log(`Wrote: ${episodeFile}`);
+
+  // Update story bible
+  const updatedBible = mergeBibleUpdates(bible, parsed.bible_updates);
+  writeFileSync(biblePath, JSON.stringify(updatedBible, null, 2));
+  console.log(`Updated: ${biblePath}`);
+
+  // Summary
+  console.log("\n--- Episode Summary ---");
+  console.log(`Episode: ${parsed.episode.id}`);
+  console.log(`Title: ${parsed.episode.title}`);
+  console.log(`Slug: ${parsed.episode.slug}`);
+  console.log(
+    `Cards: ${parsed.episode.cards.map((c) => c.name).join(", ")}`
+  );
+  console.log(`Junior paragraphs: ${parsed.episode.junior.paragraphs.length}`);
+  console.log(`Full paragraphs: ${parsed.episode.full.paragraphs.length}`);
+  console.log(
+    `New characters: ${parsed.bible_updates.new_characters.length}`
+  );
+  console.log("Done!");
+}
+
+// Run main only when executed directly (not imported for tests)
+const isMainModule =
+  import.meta.url === `file://${process.argv[1]}` ||
+  import.meta.url === new URL(process.argv[1], "file://").href;
+
+if (isMainModule) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
