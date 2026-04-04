@@ -31,6 +31,9 @@ yarn-error.log*
 # env files
 .env*.local
 
+# client config (contains API keys)
+clients/*/config.json
+
 # vercel
 .vercel
 
