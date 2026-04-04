@@ -1,0 +1,10 @@
+{
+  "brand": "Flames of Our Lives",
+  "tone": "soap opera, dramatic, funny, age-appropriate",
+  "audience_junior": "ages 6-11",
+  "audience_full": "ages 12+",
+  "output_format": "dual-age episode",
+  "anthropic_api_key": "YOUR_API_KEY_HERE",
+  "amazon_affiliate_tag": "their-tag-20",
+  "deployment": "vercel"
+}

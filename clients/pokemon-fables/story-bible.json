@@ -1,0 +1,17 @@
+{
+  "show_title": "Flames of Our Lives",
+  "last_episode": 2,
+  "characters": [
+    { "name": "Charizard", "card": "Charizard V", "role": "reluctant hero, secretly kind" },
+    { "name": "Venusaur", "card": "N/A", "role": "skeptical neighbor, growing to care" },
+    { "name": "Mismagius", "card": "Mismagius ex", "role": "dramatic observer, reluctant hero" },
+    { "name": "Genesect", "card": "Genesect V", "role": "antagonist, approaching from north" }
+  ],
+  "current_plot": "Genesect is heading toward the northern caves where Charizard secretly shelters baby Pokemon. Venusaur and Mismagius are racing to warn him.",
+  "setting": "Verdant Valley",
+  "running_themes": [
+    "Charizard secretly helps everyone but is too proud to admit it",
+    "Venusaur is judgmental but genuinely cares",
+    "Mismagius observes and comments, resists heroism"
+  ]
+}
