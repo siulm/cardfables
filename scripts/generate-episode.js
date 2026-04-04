@@ -227,11 +227,18 @@ async function main() {
     process.exit(1);
   }
 
-  // Parse response
-  const responseText = response.content
+  // Parse response — strip markdown code fences if present
+  let responseText = response.content
     .filter((block) => block.type === "text")
     .map((block) => block.text)
-    .join("");
+    .join("")
+    .trim();
+
+  if (responseText.startsWith("```")) {
+    responseText = responseText
+      .replace(/^```(?:json)?\s*\n?/, "")
+      .replace(/\n?```\s*$/, "");
+  }
 
   let parsed;
   try {
