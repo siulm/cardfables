@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { strict as assertStrict } from "node:assert";
 
-const { parseArgs, slugify, mergeBibleUpdates } = await import("./generate-episode.js");
+const { parseArgs, slugify, mergeBibleUpdates, buildSystemPrompt } = await import("./generate-episode.js");
 
 // ── parseArgs ──────────────────────────────────────────────
 
@@ -153,5 +153,52 @@ describe("mergeBibleUpdates", () => {
     const result = mergeBibleUpdates(bible, updates);
     assertStrict.equal(result.show_title, "My Show");
     assertStrict.equal(result.setting, "Valley");
+  });
+});
+
+// ── buildSystemPrompt ──────────────────────────────────────
+
+describe("buildSystemPrompt", () => {
+  it("includes brand, tone, and audience in the prompt", () => {
+    const config = {
+      brand: "Test Brand",
+      tone: "dramatic, funny",
+      audience_junior: "ages 6-11",
+      audience_full: "ages 12+",
+      output_format: "dual-age episode",
+    };
+    const prompt = buildSystemPrompt(config);
+    assertStrict.ok(prompt.includes("Test Brand"));
+    assertStrict.ok(prompt.includes("dramatic, funny"));
+    assertStrict.ok(prompt.includes("ages 6-11"));
+    assertStrict.ok(prompt.includes("ages 12+"));
+  });
+
+  it("includes JSON schema instructions", () => {
+    const config = {
+      brand: "X",
+      tone: "x",
+      audience_junior: "x",
+      audience_full: "x",
+      output_format: "x",
+    };
+    const prompt = buildSystemPrompt(config);
+    assertStrict.ok(prompt.includes('"episode"'));
+    assertStrict.ok(prompt.includes('"bible_updates"'));
+  });
+
+  it("includes story format rules", () => {
+    const config = {
+      brand: "X",
+      tone: "x",
+      audience_junior: "x",
+      audience_full: "x",
+      output_format: "x",
+    };
+    const prompt = buildSystemPrompt(config);
+    assertStrict.ok(prompt.includes("600"));
+    assertStrict.ok(prompt.includes("900"));
+    assertStrict.ok(prompt.includes("300"));
+    assertStrict.ok(prompt.includes("500"));
   });
 });
