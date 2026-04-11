@@ -1,6 +1,6 @@
 {
   "show_title": "Flames of Our Lives",
-  "last_episode": 4,
+  "last_episode": 5,
   "characters": [
     {
       "name": "Charizard",
@@ -31,9 +31,14 @@
       "name": "Metang",
       "card": "メタング 092/083 AR (M4) — illus. Kurata So",
       "role": "Structural inspector and assessor for Verdant Valley's Safety and Infrastructure Initiative; rule-abiding, methodical, deeply principled, and now the only thing standing between a tunneling Dugtrio and a cave full of baby Pokémon"
+    },
+    {
+      "name": "Ceruledge",
+      "card": "ソウブレイズ 109/106 AR SV8 — illus. Rond",
+      "role": "Mysterious armored wanderer with ghost-fire blades and a flair for the dramatic entrance; appeared claiming to be 'in the area'; used Blaze Curse to neutralize Dugtrio's Team Rocket equipment; now standing as the first line of defense against Genesect's cannon blast, flanked reluctantly by Venusaur and Mismagius"
     }
   ],
-  "current_plot": "Team Rocket's Dugtrio has completed the tunnel — the entrance is open and Genesect is approaching from the north, now visible on the ridge. Inside the northern caves, Charizard is trying to keep the baby Pokémon calm as the floor cracks and the ceiling fractures. Metang, mid-inspection, has detected the unauthorized excavation and activated Guard Press against the cave wall to hold the breach — buying precious minutes. Venusaur and Mismagius face Dugtrio at the tunnel mouth, momentarily outmaneuvered. The first real collision of all forces is imminent.",
+  "current_plot": "Ceruledge has arrived at the northern cave entrance, neutralizing Dugtrio's special equipment with Blaze Curse and positioning themselves directly in the path of Genesect's incoming cannon blast. Venusaur and Mismagius, moved despite themselves, have flanked Ceruledge to face the attack together. Inside the cave, Metang continues to hold the structural breach while Charizard keeps the baby Pokémon calm — both sensing the situation outside has shifted but not yet knowing how. Genesect has fired. The outcome of the blast is unknown.",
   "setting": "Verdant Valley",
   "running_themes": [
     "Charizard secretly helps everyone but is too proud to admit it",
@@ -44,6 +49,9 @@
     "Three opinions are worse than one",
     "Process and bureaucracy as a form of heroism",
     "The right person in the wrong place at the right time",
-    "Everyone arrives late except the one who was already doing their job"
+    "Everyone arrives late except the one who was already doing their job",
+    "The dramatic entrance as a form of communication",
+    "Standing in front of something terrible without being asked",
+    "Being in the area at exactly the right time"
   ]
 }

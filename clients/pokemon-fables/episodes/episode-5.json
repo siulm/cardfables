@@ -1,0 +1,256 @@
+{
+  "id": 5,
+  "slug": "blaze-of-glory-or-something-like-it",
+  "title": "Blaze of Glory (Or Something Like It)",
+  "cards": [
+    {
+      "name": "ソウブレイズ (Ceruledge) 109/106 AR",
+      "set": "SV8",
+      "artist": "Rond",
+      "emoji": "⚔️"
+    }
+  ],
+  "status": "live",
+  "junior": {
+    "scene": "The northern cave entrance — Genesect looms on the ridge, and a new warrior steps out of the shadows.",
+    "paragraphs": [
+      {
+        "t": "p",
+        "c": "The tunnel mouth glowed a horrible orange. Rocks were falling. Baby Pokémon were crying. And Genesect was getting VERY close."
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "\"We are NOT ready for this.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"I would like to formally state that this is not my fault.\""
+      },
+      {
+        "t": "a",
+        "c": "CRACK. BOOM. A wall of the cave shattered outward. Rocks flew everywhere. Everyone ducked."
+      },
+      {
+        "t": "p",
+        "c": "And then — out of the dust and dark — came something nobody expected. A tall, armored figure with blue ghost-fire on its shoulders and two blazing swords at its sides. It moved slowly. Dramatically. Like it had been practicing."
+      },
+      {
+        "t": "a",
+        "c": "WHOOOOSH. The ghost-fire flared. The swords crossed. The dust swirled around it like it had ordered the dust on purpose."
+      },
+      {
+        "t": "q",
+        "speaker": "Ceruledge",
+        "c": "\"I was in the area.\""
+      },
+      {
+        "t": "p",
+        "c": "Nobody knew who this was. Ceruledge did not explain further. Ceruledge simply turned toward Genesect on the ridge and pointed one glowing blade at the horizon."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #1",
+        "c": "\"Who IS that?!\""
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #2",
+        "c": "\"No idea.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #3",
+        "c": "\"I think I've seen them at the sandwich shop.\""
+      },
+      {
+        "t": "a",
+        "c": "Ceruledge used Blaze Curse. A pulse of eerie flame rippled out across the tunnel. All of Dugtrio's Team Rocket gear fizzled and went dark. Every gadget. Every gizmo. Every tiny Rocket badge. GONE."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #1",
+        "c": "\"That was our equipment!\""
+      },
+      {
+        "t": "q",
+        "speaker": "Ceruledge",
+        "c": "\"Yes.\""
+      },
+      {
+        "t": "p",
+        "c": "Inside the cave, Metang was still holding the wall. Charizard was still calming the babies. And now Ceruledge stood between Verdant Valley and Genesect's next move — swords crossed, ghost-fire blazing, completely unbothered."
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"I feel like we should ask for their name at some point.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "\"Give it a minute.\""
+      },
+      {
+        "t": "p",
+        "c": "On the ridge, Genesect's cannon began to charge. A deep red glow. A horrible hum. It was aiming straight at the cave entrance."
+      },
+      {
+        "t": "a",
+        "c": "Ceruledge did not flinch. Not even a little."
+      },
+      {
+        "t": "end",
+        "c": "To be continued..."
+      }
+    ]
+  },
+  "full": {
+    "scene": "The northern cave entrance — the ground is cracked, Genesect stands on the ridge above, and an unexpected armored figure emerges from the chaos.",
+    "paragraphs": [
+      {
+        "t": "p",
+        "c": "There is a particular kind of silence that falls right before everything goes wrong. Venusaur had learned to recognize it. It smelled like ozone and bad decisions."
+      },
+      {
+        "t": "a",
+        "c": "[Scene opens on the northern cave entrance. Rubble skitters across the path. The tunnel mouth breathes warm, suspicious air. Above, on the ridge, Genesect's silhouette cuts against a bruised twilight sky, cannon arm raised. Inside the cave, faint sounds — Metang straining, babies whimpering, Charizard's low, soothing rumble.]"
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "\"Right. So. We have a tunnel full of Rocket agents, a structural inspector holding up a wall with his bare hands, a dragon babysitting, and a mechanical monster on the ridge. Is that — is that the full picture? Anyone?\""
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"You forgot the part where I am personally having a terrible evening.\""
+      },
+      {
+        "t": "p",
+        "c": "Dugtrio had retreated three feet into the tunnel and was engaged in a hushed, furious argument between its three heads about what to do now that the ceiling was structurally compromised and their mission contact had stopped responding. Standard operations, really."
+      },
+      {
+        "t": "a",
+        "c": "Then the wall beside the tunnel mouth exploded."
+      },
+      {
+        "t": "a",
+        "c": "CRACK. A fracture line shot upward like a lightning bolt drawn by someone in a hurry. Rocks the size of small carriages tumbled loose. Venusaur threw up a Vine Whip to deflect the worst of it. Mismagius went incorporeal as debris passed through her. Both of them landed in a crouch, coughing, staring at the new gap in the rock face."
+      },
+      {
+        "t": "p",
+        "c": "From the dust emerged Ceruledge."
+      },
+      {
+        "t": "p",
+        "c": "Tall. Armored in deep navy and violet, every edge catching the last of the dying light. Ghost-fire burned blue on its shoulders — not frantically, not wildly, but with the focused calm of something that has decided. Twin blades at its sides, curved and luminous, trailing pale flame. It moved as though the dramatic entrance had been scheduled."
+      },
+      {
+        "t": "q",
+        "speaker": "Ceruledge",
+        "c": "\"I was in the area.\""
+      },
+      {
+        "t": "p",
+        "c": "Venusaur stared. Mismagius stared. Even the Dugtrio, all three heads, stared."
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"...You were in the area. Of the collapsing cave.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Ceruledge",
+        "c": "\"The valley looked like it needed someone.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"It did. Desperately. And yet I feel like I need more context than that.\""
+      },
+      {
+        "t": "p",
+        "c": "Ceruledge did not provide more context. Ceruledge turned, measured the ridge above them with a long, unhurried look, and brought both blades together in a slow, deliberate cross."
+      },
+      {
+        "t": "a",
+        "c": "Blaze Curse. It came out of Ceruledge like an exhale — a pulse of ancient, cursed fire rolling low across the ground, seeking out every piece of special equipment at the tunnel mouth. Dugtrio's comm devices. The portable drill the Rockets had left behind. The energy-boosted digging implements they'd been so proud of."
+      },
+      {
+        "t": "a",
+        "c": "All of it — fizzled. Went dark. Dissolved into thin, smoking nothing."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #1",
+        "c": "\"That was — that took months to requisition.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #2",
+        "c": "\"Giovanni is going to be so upset.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #3",
+        "c": "\"I feel like now is a good time to reconsider our life choices.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio Head #1 and #2",
+        "c": "\"Not now!\""
+      },
+      {
+        "t": "p",
+        "c": "Inside the cave, Charizard felt the tremor that wasn't a tremor — that particular stillness that means something outside just changed. She kept her voice steady for the babies. She kept her flame low and warm. But her eyes moved to the cave entrance, and something in her chest unknotted, just slightly, in a way she would absolutely never acknowledge."
+      },
+      {
+        "t": "p",
+        "c": "Metang, still braced against the cracked wall, registered the drop in seismic irregularity from the tunnel side. Filed it. Did not stop pressing. A win on one front did not mean the structural situation had improved. The structural situation had not improved. Metang was painfully aware of this."
+      },
+      {
+        "t": "p",
+        "c": "On the ridge, Genesect's cannon arm rotated downward, calibrating. The red glow at its core deepened. It had run its calculations. The cave entrance was the soft point. The cave entrance was the target."
+      },
+      {
+        "t": "a",
+        "c": "Ceruledge watched it happen. Watched the light gather. Watched the aim settle. And stood in front of the entrance anyway — blades up, ghost-fire steady, not a single armored inch of hesitation."
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "\"Are they — are they going to take that hit?\""
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"It appears so.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "\"That is either the bravest thing I've ever seen or the most reckless.\""
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "\"In my experience, those are rarely different things.\""
+      },
+      {
+        "t": "p",
+        "c": "Mismagius drifted forward to flank. Venusaur, muttering something uncharitable under his breath, took the other side. Neither of them had agreed to this. Neither of them walked away."
+      },
+      {
+        "t": "p",
+        "c": "Genesect fired."
+      },
+      {
+        "t": "end",
+        "c": "To be continued..."
+      }
+    ]
+  }
+}
