@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "icon": "🔥",
+      "name": "Charizard V (SAR)",
+      "desc": "The card that started Episode 1",
+      "price": "~$45",
+      "cat": "Featured"
+    },
+    {
+      "id": 2,
+      "icon": "📦",
+      "name": "VSTAR Universe Booster Box",
+      "desc": "Pull your own SAR cards. 10 packs.",
+      "price": "~$85",
+      "cat": "Booster"
+    },
+    {
+      "id": 3,
+      "icon": "🛡️",
+      "name": "Ultra Pro Sleeves (100ct)",
+      "desc": "Matte sleeves to protect your pulls.",
+      "price": "~$9",
+      "cat": "Gear"
+    },
+    {
+      "id": 4,
+      "icon": "📒",
+      "name": "9-Pocket Pro Binder",
+      "desc": "Side-loading premium card display.",
+      "price": "~$25",
+      "cat": "Gear"
+    },
+    {
+      "id": 5,
+      "icon": "🎴",
+      "name": "Pokemon 151 Bundle",
+      "desc": "6 booster packs from the 151 set.",
+      "price": "~$35",
+      "cat": "Booster"
+    },
+    {
+      "id": 6,
+      "icon": "🔍",
+      "name": "LED Magnifying Loupe",
+      "desc": "Inspect card condition. 60x zoom.",
+      "price": "~$12",
+      "cat": "Gear"
+    }
+  ],
+  "categories": ["All", "Featured", "Booster", "Gear"],
+  "browseTypes": ["All", "Fire", "Water", "Grass", "Electric", "Dark", "Steel"]
+}

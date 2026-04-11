@@ -1,0 +1,74 @@
+[
+  {
+    "id": "flames-of-our-lives",
+    "title": "Flames of Our Lives",
+    "tagline": "Love burns. So does Charizard.",
+    "genre": "Soap Opera • Drama • Comedy",
+    "type": "Fire",
+    "color": "#E8651A",
+    "accent": "#FFB347",
+    "bg": "linear-gradient(135deg, #E8651A 0%, #C41E3A 50%, #8B1A1A 100%)",
+    "desc": "The most dramatic saga in Verdant Valley. Fire-types with too many feelings, secrets that burn hotter than any Flamethrower, and a Venusaur who just wants answers.",
+    "status": "Airing"
+  },
+  {
+    "id": "oceans-deep",
+    "title": "Ocean's Deep",
+    "tagline": "What sinks, must surface.",
+    "genre": "Mystery • Thriller",
+    "type": "Water",
+    "color": "#3B82F6",
+    "accent": "#93C5FD",
+    "bg": "linear-gradient(135deg, #1E3A8A 0%, #1E40AF 50%, #0C1445 100%)",
+    "desc": "A missing Lapras. A suspicious Gyarados. A detective Slowking who's way smarter than everyone thinks. Dive into the underwater mystery that has the whole reef talking.",
+    "status": "Coming Soon"
+  },
+  {
+    "id": "grass-is-greener",
+    "title": "Grass Is Greener",
+    "tagline": "The comedy that grows on you.",
+    "genre": "Comedy • Slice of Life",
+    "type": "Grass",
+    "color": "#22C55E",
+    "accent": "#86EFAC",
+    "bg": "linear-gradient(135deg, #166534 0%, #15803D 50%, #052E16 100%)",
+    "desc": "Bulbasaur just wanted a quiet garden. Then Oddish moved in next door. Then Sunflora started a podcast. Welcome to the funniest meadow in the Pokemon world.",
+    "status": "Coming Soon"
+  },
+  {
+    "id": "thunderstruck",
+    "title": "Thunderstruck",
+    "tagline": "When the storm hits, who will you become?",
+    "genre": "Action • Coming of Age",
+    "type": "Electric",
+    "color": "#EAB308",
+    "accent": "#FDE68A",
+    "bg": "linear-gradient(135deg, #854D0E 0%, #A16207 50%, #422006 100%)",
+    "desc": "A young Pichu trying to evolve, a legendary Raikou who refuses to teach, and a storm that's about to change everything.",
+    "status": "Coming Soon"
+  },
+  {
+    "id": "shadow-protocol",
+    "title": "Shadow Protocol",
+    "tagline": "Trust no one. Especially the ghost types.",
+    "genre": "Espionage • Psychological Thriller",
+    "type": "Dark",
+    "color": "#A855F7",
+    "accent": "#D8B4FE",
+    "bg": "linear-gradient(135deg, #581C87 0%, #6B21A8 50%, #2E1065 100%)",
+    "desc": "Gengar is running a spy ring. Absol knows too much. And someone in the shadows is pulling all the strings. A psychological thriller where nobody is innocent.",
+    "status": "Coming Soon"
+  },
+  {
+    "id": "iron-will",
+    "title": "Iron Will",
+    "tagline": "Forged in fire. Tested by fate.",
+    "genre": "Epic • War Drama",
+    "type": "Steel",
+    "color": "#94A3B8",
+    "accent": "#CBD5E1",
+    "bg": "linear-gradient(135deg, #334155 0%, #475569 50%, #1E293B 100%)",
+    "desc": "An ancient conflict. A reluctant Lucario. A kingdom on the edge of collapse. The steel-type epic that will test everything you believe about honor and sacrifice.",
+    "status": "Coming Soon"
+  }
+]

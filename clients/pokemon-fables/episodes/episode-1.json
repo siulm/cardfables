@@ -1,0 +1,57 @@
+{
+  "id": 1,
+  "slug": "the-nap-that-changed-everything",
+  "title": "The Nap That Changed Everything",
+  "cards": [
+    {
+      "name": "Charizard V (SAR)",
+      "set": "VSTAR Universe",
+      "artist": "Oswaldo KATO",
+      "emoji": "🔥",
+      "affiliateUrl": "#"
+    }
+  ],
+  "products": [
+    { "name": "VSTAR Universe Booster Box", "url": "#", "price": "~$85", "tag": "Booster", "emoji": "📦" },
+    { "name": "Ultra Pro Sleeves (100ct)", "url": "#", "price": "~$9", "tag": "Sleeves", "emoji": "🛡️" },
+    { "name": "9-Pocket Pro Binder", "url": "#", "price": "~$25", "tag": "Binder", "emoji": "📒" }
+  ],
+  "status": "live",
+  "junior": {
+    "scene": "A sunny meadow in Verdant Valley",
+    "paragraphs": [
+      { "t": "p", "c": "Charizard was the biggest, strongest Pokémon in Verdant Valley. He could fly super fast. He could breathe fire that was SO hot. He was amazing." },
+      { "t": "p", "c": "But right now? He was taking a nap." },
+      { "t": "p", "c": "Not just any nap. The BIGGEST nap. He was curled up in the grass like a giant orange cat, snoring so loud that the leaves were falling off the trees. His tail flame went flicker... flicker... flicker..." },
+      { "t": "p", "c": "Venusaur was watching from behind a hill. Venusaur was big and green and covered in flowers, and right now he was very, VERY grumpy." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"Are you KIDDING me? He burned down half the meadow last week! And now he's sleeping here like nothing happened!\"" },
+      { "t": "p", "c": "Everyone in the valley thought Charizard was selfish. He never helped with anything. He never came to the valley meetings. He just flew around and napped and sometimes accidentally set things on fire." },
+      { "t": "p", "c": "But here's the secret. The BIG secret." },
+      { "t": "p", "c": "Charizard wasn't being lazy. He was EXHAUSTED." },
+      { "t": "p", "c": "Every single night, when everyone was asleep, Charizard flew to the caves on the north side of the valley. A big storm had knocked down the trees near the caves, and all the baby Pokémon who lived there were cold. Really, really cold." },
+      { "t": "p", "c": "So Charizard used his fire breath — very carefully, very gently — to keep the caves warm all night long. He kept the little Charmanders warm. He kept the shivering Eevees warm. He even kept a very grumpy Snorlax warm, even though Snorlax said he was \"fine\" (he was NOT fine)." },
+      { "t": "p", "c": "But Charizard never told anyone. He was too proud. He didn't want anyone to think he was... nice." },
+      { "t": "a", "c": "— a leaf floats gently across the meadow —" },
+      { "t": "p", "c": "Back on the hill, Venusaur squinted his eyes. He noticed something weird. The burn marks on Charizard's claws didn't look like accident burns. They looked like WORK burns. Like he'd been doing something careful and hard, over and over again." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"Hmm. Something's going on with that big lizard... and I'm going to find out WHAT.\"" },
+      { "t": "end", "c": "To be continued..." }
+    ]
+  },
+  "full": {
+    "scene": "A sunlit clearing in Verdant Valley",
+    "paragraphs": [
+      { "t": "p", "c": "Charizard — once the most feared, most powerful, most dramatic fire-breather in all of Verdant Valley — was… taking a nap." },
+      { "t": "p", "c": "Not just any nap. A legendary nap. Curled up like a giant orange cat, tail flame flickering lazily, snoring loud enough to shake the leaves off the trees. Some of those trees? Already a little burnt. Nobody talks about that." },
+      { "t": "p", "c": "In the background, Venusaur watched from behind a hill, squinting." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"Unbelievable. He burns down half the meadow LAST Tuesday, doesn't apologize, and now he's sleeping like a baby in the SAME meadow. The audacity.\"" },
+      { "t": "p", "c": "But here's the thing nobody knew — Charizard wasn't just being lazy. He was exhausted." },
+      { "t": "p", "c": "For weeks, he'd been secretly flying across the valley every night, using his Heat Blast to keep the northern caves warm for the baby Pokémon who'd lost their homes after the big storm. The little Charmanders, the shivering Eevees, even a very grumpy Snorlax who refused to admit he was cold." },
+      { "t": "p", "c": "He never told anyone. Too proud. Too stubborn. Too… Charizard." },
+      { "t": "p", "c": "So while the valley gossiped about the \"selfish dragon,\" Charizard just curled up tighter, let the sun warm his wings, and dreamed of a world where nobody needed saving anymore." },
+      { "t": "a", "c": "— a leaf blows gently across the clearing —" },
+      { "t": "p", "c": "Venusaur narrowed his eyes. Something didn't add up. The scorch marks on Charizard's claws weren't from recklessness — they were from work. Long, careful, exhausting work." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"Something's going on with that oversized lizard… and I'm going to find out what.\"" },
+      { "t": "end", "c": "To be continued…" }
+    ]
+  }
+}

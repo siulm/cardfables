@@ -1,247 +1,102 @@
 {
   "id": 3,
-  "slug": "team-rocket-dugtrio-and-the-tunnel-of-trouble",
-  "title": "Dirt, Lies, and Three Ugly Faces",
+  "slug": "the-ground-beneath-their-feet",
+  "title": "The Ground Beneath Their Feet",
   "cards": [
     {
-      "name": "ロケット団のダグトリオ (Team Rocket's Dugtrio) 083/193",
-      "set": "Mask of Change (m2a)",
+      "name": "Team Rocket's Dugtrio",
+      "set": "M2a (083/193)",
       "artist": "KEIICHIRO ITO",
-      "emoji": "🕳️"
+      "emoji": "💥",
+      "affiliateUrl": "#"
     }
+  ],
+  "products": [
+    { "name": "M2a Space-Time Smackdown Box", "url": "#", "price": "~$45", "tag": "Booster", "emoji": "🌌" },
+    { "name": "KMC Perfect Fit Inner Sleeves (100ct)", "url": "#", "price": "~$6", "tag": "Sleeves", "emoji": "🛡️" },
+    { "name": "BCW Card Storage Box (3200ct)", "url": "#", "price": "~$18", "tag": "Gear", "emoji": "📦" }
   ],
   "status": "live",
   "junior": {
-    "scene": "Deep underground, beneath the northern caves of Verdant Valley, something is digging. Fast.",
+    "scene": "The northern caves, night. The ground is shaking.",
     "paragraphs": [
-      {
-        "t": "p",
-        "c": "RUMBLE. RUMBLE. CRACK. The ground under Verdant Valley began to shake. Tiny rocks bounced across the dirt path. Then the earth split open — and three very angry heads popped out."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Left Head)",
-        "c": "We are on a MISSION. Keep digging!"
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Middle Head)",
-        "c": "We're ALWAYS digging. Can we take a break?"
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Right Head)",
-        "c": "No breaks! Team Rocket said find the caves. Find the caves WE SHALL."
-      },
-      {
-        "t": "p",
-        "c": "Team Rocket's Dugtrio had a job. Sneak under the northern caves. Open a hole big enough for Genesect to slip through without being seen. Easy, sneaky, and totally against the rules."
-      },
-      {
-        "t": "a",
-        "c": "[Underground, dirt flies everywhere as the three heads argue and tunnel closer toward the baby Pokémon hideout]"
-      },
-      {
-        "t": "p",
-        "c": "Above ground, Venusaur was RUNNING. Well, running as fast as a giant flower-dinosaur can, which is not very fast. THUD. THUD. THUD."
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "Why does this valley have SO MANY HILLS?!"
-      },
-      {
-        "t": "p",
-        "c": "Mismagius floated beside him, completely relaxed."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "You know, I sense a dark energy below our feet. Something is digging toward the caves. Something with three opinions and zero manners."
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "WHAT? Why didn't you say that SOONER?!"
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "I just did."
-      },
-      {
-        "t": "a",
-        "c": "[The ground beneath Venusaur's left foot cracks open. A single brown head pops up and stares at him]"
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Middle Head)",
-        "c": "...Oh. Uh. Hi. We are not digging toward any secret cave. Definitely not."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Right Head)",
-        "c": "SHHHH!"
-      },
-      {
-        "t": "p",
-        "c": "Meanwhile, deep in the northern caves, Charizard heard the rumbling. He spread his wings over the sleeping baby Pokémon and narrowed his eyes."
-      },
-      {
-        "t": "q",
-        "speaker": "Charizard",
-        "c": "...Someone's coming through the floor. That's new."
-      },
-      {
-        "t": "a",
-        "c": "[A tiny crack appears in the stone floor of the cave. Dust falls. The babies stir in their sleep]"
-      },
-      {
-        "t": "t",
-        "c": "To be continued..."
-      },
-      {
-        "t": "end",
-        "c": "To be continued..."
-      }
+      { "t": "p", "c": "Venusaur and Mismagius ran (and floated) as fast as they could toward the northern caves. They could see Charizard's fire glowing in the distance." },
+      { "t": "p", "c": "But something was wrong. The ground was shaking." },
+      { "t": "p", "c": "Not a little shake. A BIG shake. The kind of shake where the trees wiggle and the rocks bounce and Venusaur almost fell on his face THREE times." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"What is HAPPENING?!\"" },
+      { "t": "q", "speaker": "Mismagius", "c": "\"The ground is breaking apart! Something is tunneling underneath us!\"" },
+      { "t": "a", "c": "— CRACK! RUMBLE! CRASH! The cave entrance splits in two —" },
+      { "t": "p", "c": "They burst through the trees and saw the caves. And it was BAD." },
+      { "t": "p", "c": "Genesect was flying above the caves, firing laser blasts from its cannon. BOOM! BOOM! Rocks exploded everywhere. The baby Pokémon inside were crying." },
+      { "t": "p", "c": "And from BELOW the caves, three brown heads popped out of the ground. Dugtrio! But this wasn't a normal Dugtrio. It had mean, angry eyes. And on the rocks near the tunnel entrance, someone had painted a big red letter R." },
+      { "t": "p", "c": "Team Rocket." },
+      { "t": "p", "c": "Dugtrio was digging tunnels UNDER the caves, making the floor collapse! Genesect attacked from above. Dugtrio destroyed from below. It was a trap!" },
+      { "t": "p", "c": "Charizard was already fighting. He was blasting fire at Genesect, trying to keep it away from the cave entrance. But he was tired. So, SO tired. He'd been warming the caves all night, and now he had to fight too." },
+      { "t": "q", "speaker": "Charizard", "c": "\"Get... AWAY from them!\"" },
+      { "t": "p", "c": "His fire blast hit Genesect, but Genesect barely flinched. Its metal body just glowed red for a second, and then it fired back. Charizard dodged, but just barely." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"CHARIZARD! We're here! We came to help!\"" },
+      { "t": "p", "c": "Charizard looked down and saw Venusaur and Mismagius. His eyes went wide. For a second, he looked like he might cry. But Charizards don't cry. They just... breathe fire a little harder." },
+      { "t": "p", "c": "They made a plan in ten seconds flat. Charizard took the sky — fire blasts to keep Genesect busy. Venusaur sent his vines deep into the ground, wrapping around rocks and roots, holding the cave floor together like a giant green net. And Mismagius? She turned invisible and floated into Dugtrio's tunnels." },
+      { "t": "p", "c": "Dugtrio saw glowing purple eyes in the darkness of its own tunnel. Then two eyes. Then TEN eyes. Mismagius made it look like an army of ghosts was coming straight at it." },
+      { "t": "q", "speaker": "Dugtrio", "c": "\"AHHHHH!\"" },
+      { "t": "p", "c": "Dugtrio freaked out and tunneled away SO fast it left a dust cloud shaped like itself. Genesect, seeing its partner flee, fired one last shot and rocketed into the sky, disappearing in a flash of purple light." },
+      { "t": "p", "c": "The caves were safe. The babies were safe. Venusaur's vines were holding everything together. Charizard landed hard, exhausted, and for the first time ever... he looked at Venusaur and said:" },
+      { "t": "q", "speaker": "Charizard", "c": "\"...Thanks.\"" },
+      { "t": "p", "c": "Venusaur's flower bloomed so hard it almost exploded." },
+      { "t": "a", "c": "— the dust settles and moonlight returns to the caves —" },
+      { "t": "p", "c": "But Mismagius wasn't smiling. She floated back from the tunnels holding something she'd found deep underground. A metal badge. Shiny. Cold. With a big red R stamped on it." },
+      { "t": "q", "speaker": "Mismagius", "c": "\"This wasn't just a random attack. Those two were sent here. By Team Rocket. And if they sent two... they'll send more.\"" },
+      { "t": "p", "c": "Charizard, Venusaur, and Mismagius looked at each other. The babies were safe tonight. But what about tomorrow night? And the night after that?" },
+      { "t": "p", "c": "Somewhere far away, in a building with no windows, a screen flickered. A grunt in a black uniform watched Dugtrio and Genesect retreat on a radar map. He picked up a phone." },
+      { "t": "q", "speaker": "???", "c": "\"Send the next team. The valley has more fight than we expected.\"" },
+      { "t": "end", "c": "To be continued..." }
     ]
   },
   "full": {
-    "scene": "Deep underground, beneath Verdant Valley's northern caves, Team Rocket's Dugtrio tunnels toward Charizard's secret refuge — while above ground, Venusaur and Mismagius race against time.",
+    "scene": "The northern caves, deep night. The earth itself is trembling.",
     "paragraphs": [
-      {
-        "t": "p",
-        "c": "There are things that happen underground that the sky never knows about. Deals made in the dark. Missions whispered between dirt walls. Team Rocket understood this better than anyone — which is exactly why they'd sent their most reliable asset: three heads, one body, zero conscience, and an ability called Hole-Opener that made escape routes appear like magic."
-      },
-      {
-        "t": "a",
-        "c": "[Deep beneath Verdant Valley. The rumbling starts low — a vibration in the bones before it ever reaches the ears. CRACK. GRIND. CRACK.]"
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Left Head)",
-        "c": "Tunnel bearing north-northeast. Maintain depth. The cave system is forty meters ahead."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Middle Head)",
-        "c": "I just want to state, for the record, that my neck hurts and we've been doing this for six hours."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Right Head)",
-        "c": "Your neck is connected to MY neck. We all hurt equally. Now FOCUS."
-      },
-      {
-        "t": "p",
-        "c": "The mission was simple, as Team Rocket missions always sounded on paper. Tunnel beneath the northern caves of Verdant Valley. Create a concealed entry point. Hold it open long enough for Genesect to pass through undetected — bypassing any warning that Venusaur or Mismagius might deliver. Simple. Clean. Ruthlessly efficient."
-      },
-      {
-        "t": "p",
-        "c": "Above ground, Venusaur was not being efficient. He was being loud, out of breath, and deeply annoyed."
-      },
-      {
-        "t": "a",
-        "c": "[The northern ridge trail. Venusaur's vine whips flail behind him for momentum. Mismagius glides effortlessly at his side, looking almost bored.]"
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "I need — I need everyone to appreciate — that I am doing this for Charizard. Who has never once thanked me for anything. Ever."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "He brought you soup when you had root rot last autumn."
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "That was ANONYMOUS soup."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "I know. Isn't it sweet?"
-      },
-      {
-        "t": "p",
-        "c": "Mismagius paused mid-float. Her wide eyes darkened, the hat-like plumes along her head trembling with some invisible frequency."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "...There's something beneath us. Something that moves like intention. Three points of will, all pulling in the same direction."
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "In plain language, please, I'm running."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "Something is tunneling toward the caves right now. Something sent by someone who doesn't want us to arrive first."
-      },
-      {
-        "t": "a",
-        "c": "[CRACK. The ground splits between Venusaur's front hooves. Three round, pink-cheeked heads emerge from the earth like the world's least subtle surprise. Dugtrio blinks at Venusaur. Venusaur blinks at Dugtrio.]"
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Middle Head)",
-        "c": "...We are performing routine geological surveys."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Left Head)",
-        "c": "Completely authorized."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Right Head)",
-        "c": "By us. We authorized it ourselves. Internally."
-      },
-      {
-        "t": "q",
-        "speaker": "Venusaur",
-        "c": "You're wearing Team Rocket colors."
-      },
-      {
-        "t": "q",
-        "speaker": "Dugtrio (Right Head)",
-        "c": "...These are just our natural colors."
-      },
-      {
-        "t": "p",
-        "c": "Mismagius let out a long, theatrical sigh. She hadn't wanted to be a hero in episode one. She hadn't wanted to be a hero in episode two. And yet here she was, crackling with psychic energy, her eyes beginning to glow."
-      },
-      {
-        "t": "q",
-        "speaker": "Mismagius",
-        "c": "Detain them or move past them. Choose quickly. Whatever tunnel they dug behind them — Genesect may already be inside it."
-      },
-      {
-        "t": "p",
-        "c": "Deep in the northern caves, Charizard heard it first — not with his ears but with his feet. A low grind through the stone. A vibration that didn't belong to wind or weather. He stood slowly, careful not to wake the seven baby Pokémon curled against his tail."
-      },
-      {
-        "t": "p",
-        "c": "His tail flame burned a shade hotter. His jaw set."
-      },
-      {
-        "t": "q",
-        "speaker": "Charizard",
-        "c": "...Someone's coming up through the floor. That's a new one."
-      },
-      {
-        "t": "a",
-        "c": "[A hairline fracture appears in the stone beneath him. Then another. The cave dust begins to drift upward — pulled by something rising from below. A Mud Shot attack's sulfurous scent drifts through the air. The babies stir. One small Larvesta opens its eyes.]"
-      },
-      {
-        "t": "end",
-        "c": "To be continued..."
-      }
+      { "t": "p", "c": "They heard the caves before they saw them." },
+      { "t": "p", "c": "A low, grinding vibration rolled through the forest floor — not thunder, not wind, but something beneath. Something deliberate. The trees swayed without breeze. Pebbles danced on flat stones like water on a hot pan. Venusaur felt it in his roots, in the deep places where instinct lived." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"The ground is wrong. Something is tunneling beneath us.\"" },
+      { "t": "q", "speaker": "Mismagius", "c": "\"Not something. Someone. And they've been at it for a while.\"" },
+      { "t": "p", "c": "They broke through the tree line and the world opened into a nightmare." },
+      { "t": "a", "c": "— an explosion of rock and light above the northern caves —" },
+      { "t": "p", "c": "Genesect hung in the air above the cave entrance like a malevolent star, its cannon cycling through violet charges and releasing them in precise, devastating arcs. Each blast struck the cliff face with surgical accuracy — not random destruction, but calculated demolition. It was taking the caves apart piece by piece." },
+      { "t": "p", "c": "And below — below was worse." },
+      { "t": "p", "c": "Three brown heads emerged from a fissure in the earth twenty meters from the cave mouth. Dugtrio. But not wild — Venusaur could see it immediately. The movements were too coordinated, too purposeful. This creature answered to someone. And carved into the rock wall beside the tunnel it had emerged from, fresh and unmistakable, was a symbol: a crimson R." },
+      { "t": "p", "c": "Team Rocket. The name carried weight even here, even in a valley that had spent decades pretending the outside world couldn't touch it." },
+      { "t": "p", "c": "Dugtrio worked in silence, boring through the substrate beneath the caves with mechanical efficiency, each tunnel weakening the foundation a little more. Genesect attacked from above. Dugtrio eroded from below. A pincer operation executed with the cold logic of machines and the cruelty of people who built them." },
+      { "t": "p", "c": "And in the middle of it all, Charizard fought alone." },
+      { "t": "p", "c": "He was magnificent and he was failing. Fire Blast after Fire Blast lit up the night sky, driving Genesect back, buying seconds for the cave entrance. But Charizard had been warming those caves for hours before the attack began. His flame was already low. His wings trembled on every upstroke. A blast from Genesect's cannon caught his left shoulder and he spiraled, caught himself, and climbed again — slower this time." },
+      { "t": "q", "speaker": "Charizard", "c": "\"Come on, you metal freak. COME ON.\"" },
+      { "t": "p", "c": "Inside the caves, Venusaur could hear them — the babies. Charmanders crying. Eevees pressed against the back wall. That stubborn Snorlax, finally awake and terrified, trying to shield the smaller ones with his body. The floor beneath them cracking." },
+      { "t": "q", "speaker": "Venusaur", "c": "\"We need to move. NOW.\"" },
+      { "t": "p", "c": "What happened next took eleven seconds. Venusaur had never moved that fast in his life and probably never would again." },
+      { "t": "p", "c": "He charged. Four hundred pounds of Grass-type fury barreling toward the cave mouth. His vines — all of them, every tendril he had — shot into the ground like anchors, threading through rock and root and clay, weaving a lattice beneath the cave floor. It wouldn't hold forever. But it would hold long enough." },
+      { "t": "p", "c": "Charizard saw Venusaur arrive and his eyes went wide. For one unguarded moment, the proud dragon looked like what he actually was — exhausted, overwhelmed, and unspeakably grateful that he wasn't alone anymore." },
+      { "t": "q", "speaker": "Charizard", "c": "\"Venusaur? What are you —\"" },
+      { "t": "q", "speaker": "Venusaur", "c": "\"SHUT UP AND KEEP FLYING! I've got the ground!\"" },
+      { "t": "p", "c": "Charizard shut up and kept flying. Overhead, his fire renewed — not because his energy had returned, but because something fiercer had taken the place of exhaustion. He wasn't fighting alone. That changed things." },
+      { "t": "p", "c": "Mismagius, meanwhile, had already vanished." },
+      { "t": "p", "c": "She phased through solid rock and descended into Dugtrio's tunnel network. In the absolute darkness sixty feet below the surface, she let herself become what Ghost-types truly are when they stop performing for an audience. Her form dissolved into pure spectral energy — eyes multiplying, voice splitting into layered harmonics, the temperature dropping so fast that frost crystallized on the tunnel walls." },
+      { "t": "p", "c": "Dugtrio turned and saw the darkness behind it fill with light. Not warm light. The cold, violet, ancient light of something that existed before the concept of mercy was invented." },
+      { "t": "q", "speaker": "Mismagius", "c": "\"You are in my valley. You are beneath my ground. And I am the thing that lives in the dark down here.\"" },
+      { "t": "p", "c": "Dugtrio fled. There was no other word for it. All three heads screamed in unison and the creature burrowed away so fast it left a vacuum in its wake, the tunnel collapsing behind it. Up above, Genesect registered its partner's retreat on whatever internal systems governed its tactical decisions. It fired one final volley — a parting shot that cracked the cliff face above the cave entrance — and rocketed skyward, disappearing into the clouds like a violet comet." },
+      { "t": "p", "c": "Silence." },
+      { "t": "p", "c": "Charizard landed hard at the cave mouth, wings folded, chest heaving. Venusaur's vines still held the ground together, roots trembling with the strain. Inside the caves, a Charmander peeked out from behind Snorlax's belly. Then an Eevee. Then another." },
+      { "t": "q", "speaker": "Charizard", "c": "\"...You came.\"" },
+      { "t": "q", "speaker": "Venusaur", "c": "\"Of course I came, you idiot. You think I'd let you have all the dramatic moments to yourself?\"" },
+      { "t": "p", "c": "Charizard laughed. It was a rough, broken sound — half exhaustion, half something that had been wound too tight for too long finally releasing. His tail flame flickered. Venusaur's flower bloomed in the dark." },
+      { "t": "a", "c": "— moonlight breaks through the dust, illuminating the ruined cave entrance —" },
+      { "t": "p", "c": "Mismagius emerged from the ground moments later, her usual sparkles dimmed, her expression something none of them had seen before. Serious. Genuinely, deeply serious." },
+      { "t": "p", "c": "In her spectral grasp, she held a small metal object. A badge. Matte black with a crimson R embossed on its surface. It was warm to the touch and hummed faintly — a transmitter." },
+      { "t": "q", "speaker": "Mismagius", "c": "\"This wasn't a raid. It was a reconnaissance mission. They weren't trying to destroy the caves. They were testing defenses. Mapping the valley. And this —\" she held up the badge, \"— has been broadcasting our location since the moment they arrived.\"" },
+      { "t": "p", "c": "The three of them stood in the wreckage of the cave entrance, surrounded by sleeping babies and broken stone, and understood the same thing at the same time: tonight was not the end of something. It was the beginning." },
+      { "t": "p", "c": "Somewhere beyond the mountains, in a facility that didn't appear on any map, a monitor displayed three thermal signatures clustered around the northern caves. A grunt in a black uniform picked up a secure line." },
+      { "t": "q", "speaker": "???", "c": "\"Dugtrio and Genesect have been repelled. But we have the data. The valley is defended, but not by much. Three hostiles. One fire, one grass, one ghost. Recommend escalating to Phase Two.\"" },
+      { "t": "p", "c": "The line crackled. Then a voice — calm, measured, the kind of voice that had never needed to raise itself:" },
+      { "t": "q", "speaker": "???", "c": "\"Approved. Send the next unit. And this time, don't underestimate the dragon.\"" },
+      { "t": "end", "c": "To be continued…" }
     ]
   }
 }
