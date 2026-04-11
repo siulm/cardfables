@@ -1,6 +1,6 @@
 {
   "show_title": "Flames of Our Lives",
-  "last_episode": 3,
+  "last_episode": 4,
   "characters": [
     {
       "name": "Charizard",
@@ -26,9 +26,14 @@
       "name": "Team Rocket's Dugtrio",
       "card": "ロケット団のダグトリオ 083/193 (m2a)",
       "role": "Team Rocket agents tunneling beneath the northern caves to create a hidden entry point for Genesect; three heads, perpetually bickering, dangerously competent despite themselves"
+    },
+    {
+      "name": "Metang",
+      "card": "メタング 092/083 AR (M4) — illus. Kurata So",
+      "role": "Structural inspector and assessor for Verdant Valley's Safety and Infrastructure Initiative; rule-abiding, methodical, deeply principled, and now the only thing standing between a tunneling Dugtrio and a cave full of baby Pokémon"
     }
   ],
-  "current_plot": "Team Rocket's Dugtrio has tunneled beneath Verdant Valley on orders to open a concealed entry into the northern caves — allowing Genesect to bypass any warning Venusaur and Mismagius might deliver. Venusaur and Mismagius have discovered Dugtrio mid-surface, but the tunnel behind them may already be open. Meanwhile, Charizard — alone in the caves with the sleeping baby Pokémon — has detected the underground intrusion. A fracture is forming in the cave floor. The babies are beginning to wake.",
+  "current_plot": "Team Rocket's Dugtrio has completed the tunnel — the entrance is open and Genesect is approaching from the north, now visible on the ridge. Inside the northern caves, Charizard is trying to keep the baby Pokémon calm as the floor cracks and the ceiling fractures. Metang, mid-inspection, has detected the unauthorized excavation and activated Guard Press against the cave wall to hold the breach — buying precious minutes. Venusaur and Mismagius face Dugtrio at the tunnel mouth, momentarily outmaneuvered. The first real collision of all forces is imminent.",
   "setting": "Verdant Valley",
   "running_themes": [
     "Charizard secretly helps everyone but is too proud to admit it",
@@ -36,6 +41,9 @@
     "Mismagius observes and comments, resists heroism",
     "Anonymous kindness (Charizard's soup, revisited)",
     "Plans that look simple on paper",
-    "Three opinions are worse than one"
+    "Three opinions are worse than one",
+    "Process and bureaucracy as a form of heroism",
+    "The right person in the wrong place at the right time",
+    "Everyone arrives late except the one who was already doing their job"
   ]
 }

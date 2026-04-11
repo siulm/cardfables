@@ -1,0 +1,227 @@
+{
+  "id": 4,
+  "slug": "the-inspector-arrives",
+  "title": "The Inspector Arrives",
+  "cards": [
+    {
+      "name": "メタング (Metang) 092/083 AR",
+      "set": "M4",
+      "artist": "Kurata So",
+      "emoji": "🔩"
+    }
+  ],
+  "status": "live",
+  "junior": {
+    "scene": "High above Verdant Valley, a steel-clawed inspector checks the cave ceiling — and finds something very wrong.",
+    "paragraphs": [
+      {
+        "t": "p",
+        "c": "High above the northern caves, a Metang hovered beside the rock face. It was wearing a tiny hard hat. Well — sort of. It had magnetically clamped a yellow construction marker to its head. That counted."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "Structural survey. Section Seven. All clear so— CLUNK."
+      },
+      {
+        "t": "a",
+        "c": "CRACK. A chunk of cave ceiling broke off and bonked Metang right in the claws."
+      },
+      {
+        "t": "p",
+        "c": "Metang stared at the chunk. Then at the ceiling. Then at its clipboard. There was a very long crack running along the cave wall — all the way down to the floor."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "That is... not in my report."
+      },
+      {
+        "t": "a",
+        "c": "Deep below, something was RUMBLING. The ground shook. Dust fell like snow."
+      },
+      {
+        "t": "p",
+        "c": "Inside the cave, the baby Pokémon were fully awake now. A tiny Larvitar was crying. A baby Snorlax was sitting on a baby Jigglypuff. Nobody was happy."
+      },
+      {
+        "t": "q",
+        "speaker": "Charizard",
+        "c": "Nobody panic. I said NOBODY PANIC."
+      },
+      {
+        "t": "a",
+        "c": "Everyone panicked. WAAAH. BONK. SQUEAK."
+      },
+      {
+        "t": "p",
+        "c": "Metang pressed one cold steel claw against the cracked wall and felt it. The vibrations were coming from below — rhythmic, deliberate. Not an earthquake. Something was DIGGING."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "Unauthorized excavation detected. This is a hard hat zone."
+      },
+      {
+        "t": "a",
+        "c": "Metang reached out one claw and knocked firmly on the cave wall. Three times. CLANG. CLANG. CLANG."
+      },
+      {
+        "t": "p",
+        "c": "The digging stopped. For exactly two seconds."
+      },
+      {
+        "t": "p",
+        "c": "Then it got FASTER."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "...They are not going to fill out a permit, are they."
+      },
+      {
+        "t": "a",
+        "c": "Outside, Venusaur and Mismagius were still facing Team Rocket's Dugtrio. Three heads. Three smug grins. One very large tunnel entrance behind them."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio (Head One)",
+        "c": "Too late, flower. The door's already open."
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "I would like to dramatically disagree — but I'm afraid he's right."
+      },
+      {
+        "t": "p",
+        "c": "Far to the north, something metallic caught the moonlight. Moving fast. Moving low. Getting closer."
+      },
+      {
+        "t": "end",
+        "c": "To be continued..."
+      }
+    ]
+  },
+  "full": {
+    "scene": "High above the northern cave face, a lone Metang conducts a routine structural inspection — and discovers a crack that is anything but routine.",
+    "paragraphs": [
+      {
+        "t": "a",
+        "c": "[Scene opens on the sheer rock face of the northern caves, lit cold blue by a three-quarter moon. A Metang hovers six feet from the wall, a yellow construction warning marker clamped magnetically to the top of its head. It holds a clipboard in one claw. The clipboard is also held on by magnets. Metang is nothing if not consistent.]"
+      },
+      {
+        "t": "p",
+        "c": "Metang had been assigned to Section Seven of the northern cave perimeter as a structural assessor for Verdant Valley's entirely voluntary, almost entirely ignored Safety and Infrastructure Initiative. Most evenings this meant floating along the rock face, noting minor erosion, and returning home to file a report that no one would read until something fell on someone important. It was, Metang had decided long ago, a perfectly dignified profession."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "Section Seven. Upper face. Nominal surface integrity. Minor calcium deposit buildup at — CLUNK."
+      },
+      {
+        "t": "a",
+        "c": "[A fist-sized chunk of ceiling breaks away and drops squarely into Metang's outstretched claw. A beat. Metang looks at the chunk. Looks at the ceiling. Looks at the clipboard. Writes something down.]"
+      },
+      {
+        "t": "p",
+        "c": "The crack was not minor. It ran nearly four feet along the junction of wall and ceiling, spiderwebbing downward in three distinct branches, all converging toward the cave floor with the focused intention of something that had been stressed from below. Metang had seen earthquake damage, water erosion, and one memorable incident involving a Rhydon with a grudge. This was none of those things. This was tunneling. Recent. Deliberate."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "...That is not in my report."
+      },
+      {
+        "t": "a",
+        "c": "[Metang presses one flat steel claw against the crack and closes its eyes — or what passes for eyes. The vibrations travel up through the metal like a second language. Rhythmic. Repetitive. Getting closer.]"
+      },
+      {
+        "t": "p",
+        "c": "Inside the cave, Charizard was having what could generously be described as a complicated evening. The floor fracture had grown another six inches. The baby Pokémon — who had been sleeping in blissful ignorance forty minutes ago — were now comprehensively awake, comprehensively alarmed, and, in the case of one baby Snorlax, comprehensively sitting on a baby Jigglypuff."
+      },
+      {
+        "t": "q",
+        "speaker": "Charizard",
+        "c": "Everything is fine. I need everyone to be calm. I am extremely calm. Look at me. I am the picture of — would someone please move the Snorlax."
+      },
+      {
+        "t": "p",
+        "c": "Nobody moved the Snorlax. The Jigglypuff made a sound like a squeeze toy having an existential crisis. Charizard, who had not asked to be here, had not asked to care about any of this, and was absolutely not going to admit that the sight of a crying Larvitar clinging to its tail had produced a feeling suspiciously close to tenderness — Charizard held it together. Barely."
+      },
+      {
+        "t": "a",
+        "c": "[From directly above, Metang hears the babies. It pauses its survey. The vibrations from below are now strong enough to feel without touching the wall. A decision is being made, silently, the way structural engineers make decisions — by calculating load, stress, failure points, and the specific expression on Charizard's face that it cannot yet see but somehow already knows is happening.]"
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "Unauthorized excavation. Active. Probable point of breach — south tunnel junction. Estimated time to surface fracture at current rate..."
+      },
+      {
+        "t": "a",
+        "c": "[Metang checks the clipboard. Then the crack. Then the clipboard again.]"
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "...Eight minutes. Possibly seven."
+      },
+      {
+        "t": "p",
+        "c": "Metang knocked three times on the cave wall — firm, official, the knock of someone who genuinely believed in process even when process had been catastrophically abandoned by everyone around them. CLANG. CLANG. CLANG. The digging paused for exactly two seconds. Then accelerated."
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "They are not going to file a permit."
+      },
+      {
+        "t": "a",
+        "c": "[Outside, at the mouth of the tunnel Dugtrio has already completed, Venusaur and Mismagius face the three-headed smirk of Team Rocket's finest underground operatives. The tunnel entrance yawns open behind them — wide enough. Tall enough. Ready.]"
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio (Head One)",
+        "c": "Hate to break it to you, flower pot, but the door's already open. All we needed was for you to be out here arguing about it while the real work got done."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio (Head Two)",
+        "c": "Classic misdirection."
+      },
+      {
+        "t": "q",
+        "speaker": "Dugtrio (Head Three)",
+        "c": "I mean, technically we were also arguing about it underground, but the point stands."
+      },
+      {
+        "t": "q",
+        "speaker": "Mismagius",
+        "c": "I want to object to this outcome on principle. Unfortunately the principle in question is 'we were distracted,' and I was one of the people being distracted, so I'll simply observe that this is dreadful and let the moment speak for itself."
+      },
+      {
+        "t": "q",
+        "speaker": "Venusaur",
+        "c": "We are NOT letting this moment speak for itself. We are DOING something. As soon as I figure out what."
+      },
+      {
+        "t": "p",
+        "c": "To the north, just beyond the ridge, something moved through the dark. Low. Fast. The moonlight caught a metallic glint — a silhouette that did not belong to any natural thing in Verdant Valley. It was still far away. But it was not slowing down."
+      },
+      {
+        "t": "a",
+        "c": "[Back at the cave wall, Metang makes a decision that is not in any inspection manual. It tucks the clipboard under one claw, faces the cracked stone, and raises the other claw — fingers spread, Guard Press activating with a low steel hum.]"
+      },
+      {
+        "t": "q",
+        "speaker": "Metang",
+        "c": "...This is going to be a very long footnote."
+      },
+      {
+        "t": "end",
+        "c": "To be continued..."
+      }
+    ]
+  }
+}
