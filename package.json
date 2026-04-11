@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "prebuild": "node scripts/build-data.js",
+    "build": "pnpm prebuild && next build",
     "start": "next start",
     "lint": "next lint"
   },

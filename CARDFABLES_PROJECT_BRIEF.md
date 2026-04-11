@@ -201,7 +201,10 @@ clients/pokemon-fables/
   config.json          ← API key, brand, tone (gitignored)
   config.example.json  ← template without key (committed)
   story-bible.json     ← persistent story state
+  series.json          ← series metadata: colors, taglines, "Coming Soon" series (pending)
   episodes/
+    episode-1.json     ← exported from data.ts (pending)
+    episode-2.json     ← exported from data.ts (pending)
     episode-3.json     ← first pipeline-generated episode
 ```
 
@@ -213,8 +216,25 @@ clients/pokemon-fables/
 
 ## What Still Needs to Be Built (v1 — Local)
 
-### 1. Website refactor — read from episode JSON files
-The website currently reads episode content from hardcoded `src/lib/data.ts`. It needs to be refactored to read from `clients/pokemon-fables/episodes/*.json` so pipeline-generated episodes appear on the live site automatically after deploy.
+### 1. Website refactor — pre-build data pipeline (in progress)
+The website reads episode content from hardcoded `src/lib/data.ts`. A pre-build script (`scripts/build-data.js`) will:
+- Read episode JSON files from `clients/pokemon-fables/episodes/`
+- Read series metadata from `clients/pokemon-fables/series.json` (colors, taglines, "Coming Soon" series)
+- Auto-generate `src/lib/data.ts` with all data merged
+- Run automatically before `next build` via `"prebuild"` in package.json
+
+This means zero changes to components — they keep importing `SERIES` from `data.ts`.
+
+New files needed:
+- `scripts/build-data.js` — pre-build script
+- `clients/pokemon-fables/series.json` — series metadata (non-story data: colors, taglines, etc.)
+- `clients/pokemon-fables/episodes/episode-1.json` — exported from current data.ts
+- `clients/pokemon-fables/episodes/episode-2.json` — exported from current data.ts
+
+Full deploy flow after refactor:
+```
+Pipeline generates episode JSON → commit + push → Vercel runs prebuild → next build → live site updated
+```
 
 ### 2. Deploy script (`scripts/deploy.js`)
 - Commits episode JSON + updated story bible to git
@@ -275,4 +295,4 @@ Prompt caching (story bible + system prompt) saves ~60% on input costs.
 
 ---
 
-*Last updated: April 11, 2026. Episode generation pipeline complete. Website refactor pending.*
+*Last updated: April 11, 2026. Episode generation pipeline complete. Website refactor (pre-build data pipeline) in progress.*
