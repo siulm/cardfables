@@ -15,7 +15,7 @@ export function verifyPassword(password: string): boolean {
 
 export async function setSessionCookie(): Promise<void> {
   const store = await cookies();
-  const token = hashPassword(process.env.ADMIN_PASSWORD + Date.now());
+  const token = hashPassword((process.env.ADMIN_PASSWORD || "") + Date.now());
   store.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
