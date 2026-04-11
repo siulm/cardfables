@@ -131,7 +131,7 @@ src/lib/github.ts                       ← GitHub API helper (read/write files)
 
 ## UI Style
 
-Simple, functional utility style. No design polish — plain form elements, basic layout. Uses existing Tailwind classes but not the site's branded components (no gold accents or Playfair Display). The admin page is a tool, not a customer-facing page.
+Matches the existing site theme — dark background, gold accents, Playfair Display headings, DM Sans body text. Reuses existing components (Button, Field) and Tailwind classes from the site. The admin page should feel like part of the same app, not a separate tool.
 
 ## Dependencies
 

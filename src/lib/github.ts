@@ -36,7 +36,7 @@ export async function commitFiles(
   message: string
 ): Promise<void> {
   // 1. Get current HEAD
-  const refRes = await ghFetch("/git/ref/heads/main");
+  const refRes = await ghFetch("/git/refs/heads/main");
   const refData = await refRes.json();
   const headSha = refData.object.sha;
 
@@ -76,7 +76,7 @@ export async function commitFiles(
   const newCommitData = await newCommitRes.json();
 
   // 6. Update ref
-  await ghFetch("/git/ref/heads/main", {
+  await ghFetch("/git/refs/heads/main", {
     method: "PATCH",
     body: JSON.stringify({ sha: newCommitData.sha }),
   });

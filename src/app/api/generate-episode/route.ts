@@ -119,7 +119,7 @@ export async function POST(request: Request) {
     }
 
     // Read config and story bible from GitHub
-    const { content: configRaw } = await readFile("clients/pokemon-fables/config.json");
+    const { content: configRaw } = await readFile("clients/pokemon-fables/config.example.json");
     const config = JSON.parse(configRaw);
 
     const { content: bibleRaw } = await readFile("clients/pokemon-fables/story-bible.json");

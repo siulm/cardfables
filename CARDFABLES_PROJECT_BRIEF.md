@@ -228,17 +228,39 @@ Full deploy flow:
 Pipeline generates episode JSON → commit + push → Vercel runs prebuild → next build → live site updated
 ```
 
-### 2. Deploy script (`scripts/deploy.js`)
-- Commits episode JSON + updated story bible to git
-- Pushes to GitHub
-- Vercel auto-deploys → live website updated
-- Logs result
+### ~~2. Admin UI + auto-deploy~~ (complete)
+A `/admin` page in the existing Next.js app with password protection:
 
-### 3. Simple UI (optional v1 local app)
-- Drag-and-drop card image(s)
-- Hit "Generate Episode"
-- Shows result preview
-- One-click publish
+**UI at `/admin`:**
+- Password gate (env var `ADMIN_PASSWORD`)
+- Drag-and-drop or file picker for 1-3 card images
+- "Generate Episode" button — calls Claude API via Next.js API route
+- Editable preview of the generated episode (junior + full) before publishing
+- "Publish" button — commits episode JSON + updated story bible to GitHub via GitHub API
+- Vercel auto-deploys → episode appears on live site
+
+**API routes:**
+- `POST /api/admin/auth` — password verification, sets session cookie
+- `POST /api/generate-episode` — accepts image uploads, reads story bible + config from GitHub, calls Claude, returns episode JSON for preview
+- `POST /api/publish-episode` — commits episode JSON + updated story bible to GitHub repo
+
+**Environment variables required (set in `.env.local` + Vercel dashboard):**
+- `ADMIN_PASSWORD` — admin page access
+- `GITHUB_TOKEN` — GitHub API read/write (needs `repo` scope)
+- `ANTHROPIC_API_KEY` — Claude API calls
+
+**Storage (v1):** GitHub-as-storage via GitHub API. No database needed yet.
+
+**Two workflows for generating episodes:**
+1. **CLI (local):** `node scripts/generate-episode.js pokemon-fables card.jpg` — writes files locally, then `git add/commit/push` to deploy. Faster, no timeout issues.
+2. **Admin UI (browser):** Upload images at `/admin`, generate + preview + publish. Works on Vercel but may hit timeout limits on free tier (Claude calls take 15-30s, free tier limit is 10s). Best for Vercel Pro ($20/mo).
+
+**Note:** When using the admin UI, episodes are committed to GitHub directly. To see them locally, run `git pull origin main && node scripts/build-data.js`.
+
+**Future (SaaS):**
+- Add per-company auth (login per client)
+- Replace GitHub storage with Supabase (Postgres + auth + file storage)
+- Per-client config, subdomain routing, billing (Stripe)
 
 ---
 
@@ -287,4 +309,4 @@ Prompt caching (story bible + system prompt) saves ~60% on input costs.
 
 ---
 
-*Last updated: April 11, 2026. Episode generation pipeline and pre-build data pipeline complete.*
+*Last updated: April 11, 2026. Episode generation pipeline, pre-build data pipeline, and admin UI complete.*

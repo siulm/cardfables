@@ -178,18 +178,23 @@ export default function AdminPage() {
 
       {/* ── Locked ── */}
       {state === "locked" && (
-        <div className="mt-8 space-y-4">
+        <form className="mt-8 space-y-4" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
           <p className="text-sm text-text-secondary">Enter password to continue.</p>
-          <Field
-            label="Password"
-            placeholder="Admin password"
-            value={password}
-            onChange={setPassword}
-          />
-          <Button onClick={handleLogin} type="submit">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-text-secondary">Password</label>
+            <input
+              type="password"
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-dim outline-none transition-colors duration-200 focus:border-[rgba(212,168,70,0.3)]"
+              placeholder="Admin password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
+          </div>
+          <Button type="submit">
             Enter
           </Button>
-        </div>
+        </form>
       )}
 
       {/* ── Ready ── */}
