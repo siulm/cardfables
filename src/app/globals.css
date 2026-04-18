@@ -1,20 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #07070d;
-  --color-surface: #111122;
-  --color-surface-light: #1a1a2e;
-  --color-gold: #d4a846;
-  --color-gold-dark: #b8860b;
-  --color-text-primary: #e2ddd5;
-  --color-text-secondary: #8888a0;
-  --color-text-dim: #6e6e82;
-  --color-text-body: #a0a0b8;
-  --color-text-story: #c4c0b8;
-  --color-nav-link: #9898ae;
-  --color-border: rgba(255, 255, 255, 0.10);
-  --color-footer-disclaimer: #5a5a70;
-  --color-footer-copyright: #4a4a62;
+  /* Ghibli-inspired "Sky & Parchment" theme */
+  --color-bg: #FFFEF7;
+  --color-surface: #F2EDE4;
+  --color-surface-light: #E8DFD0;
+  --color-gold: #D4893A;
+  --color-gold-dark: #B86E28;
+  --color-text-primary: #4A4035;
+  --color-text-secondary: #7A6E60;
+  --color-text-dim: #9E9080;
+  --color-text-body: #6A5E50;
+  --color-text-story: #5A5040;
+  --color-nav-link: #8A7E70;
+  --color-border: rgba(74, 64, 53, 0.12);
+  --color-footer-disclaimer: #9E9080;
+  --color-footer-copyright: #B0A090;
 
   --color-fire: #e8651a;
   --color-fire-accent: #ffb347;
@@ -90,7 +91,7 @@ html {
 }
 
 ::selection {
-  background-color: rgba(212, 168, 70, 0.27);
+  background-color: rgba(212, 137, 58, 0.2);
 }
 
 /* Custom scrollbar */
@@ -104,7 +105,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #C8BCA8;
   border-radius: 3px;
 }
 
