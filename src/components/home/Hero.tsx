@@ -70,7 +70,7 @@ export function Hero() {
             <span
               className="font-heading italic font-normal"
               style={{
-                color: "#7A6E60",
+                color: "#4A4035",
                 fontSize: "0.48em",
               }}
             >
@@ -83,7 +83,7 @@ export function Hero() {
           <p
             className="mb-4"
             style={{
-              fontSize: 16,
+              fontSize: 14.5,
               color: "#5A5040",
               lineHeight: 1.75,
               maxWidth: 480,
@@ -93,7 +93,7 @@ export function Hero() {
           </p>
 
           {/* Genre */}
-          <p className="mb-8 text-xs text-text-secondary">{feat.genre}</p>
+          <p className="mb-8 text-sm text-text-secondary">{feat.genre}</p>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-4">
