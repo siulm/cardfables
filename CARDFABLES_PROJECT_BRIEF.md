@@ -252,10 +252,17 @@ A `/admin` page in the existing Next.js app with password protection:
 **Storage (v1):** GitHub-as-storage via GitHub API. No database needed yet.
 
 **Two workflows for generating episodes:**
-1. **CLI (local):** `node scripts/generate-episode.js pokemon-fables card.jpg` — writes files locally, then `git add/commit/push` to deploy. Faster, no timeout issues.
-2. **Admin UI (browser):** Upload images at `/admin`, generate + preview + publish. Works on Vercel but may hit timeout limits on free tier (Claude calls take 15-30s, free tier limit is 10s). Best for Vercel Pro ($20/mo).
 
-**Note:** When using the admin UI, episodes are committed to GitHub directly. To see them locally, run `git pull origin main && node scripts/build-data.js`.
+1. **Admin UI (recommended):** Go to `/admin` in browser → upload card images → generate → preview/edit → publish. Everything is handled automatically — commits to GitHub, Vercel auto-redeploys, episode appears on live site. No extra steps. May hit timeout on Vercel free tier (Claude calls take 15-30s, free tier limit is 10s). Works best with Vercel Pro ($20/mo).
+
+2. **CLI (local fallback):** Run two commands:
+   ```
+   node scripts/generate-episode.js pokemon-fables card.jpg
+   node scripts/deploy.js
+   ```
+   First command generates the episode locally. Second command rebuilds `data.ts`, commits to git, and pushes to GitHub (triggering Vercel redeploy). Episode appears both locally and on the live site. No timeout issues since Claude runs on your Mac.
+
+**Note:** When using the admin UI, episodes are committed to GitHub directly. To see them in your local dev server, run `git pull origin main && node scripts/build-data.js`.
 
 **Future (SaaS):**
 - Add per-company auth (login per client)
