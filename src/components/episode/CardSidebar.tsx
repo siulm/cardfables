@@ -82,21 +82,21 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
             className="relative flex flex-col items-center justify-center overflow-hidden rounded-2xl"
             style={{
               aspectRatio: cards.length > 1 ? "3/2" : "2.5/3.5",
-              background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}66, #1a1a2e)`,
-              boxShadow: `0 0 40px ${seriesColor}15, 0 16px 48px rgba(0,0,0,0.4)`,
+              background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}55, ${seriesColor}22)`,
+              boxShadow: `0 0 40px ${seriesColor}10, 0 16px 48px rgba(0,0,0,0.08)`,
             }}
           >
             <span className={cards.length > 1 ? "text-4xl" : "text-5xl"}>
               {card.emoji}
             </span>
-            <span className="mt-1 text-xs font-semibold text-white/65">
+            <span className="mt-1 text-xs font-semibold text-white/90">
               {card.name}
             </span>
-            <span className="mt-0.5 text-[11px] text-white/35">
+            <span className="mt-0.5 text-[11px] text-white/60">
               Your card image here
             </span>
             {cards.length > 1 && (
-              <div className="absolute top-2 left-2 rounded-md bg-black/50 px-2 py-0.5 text-[11px] font-bold tracking-wider backdrop-blur-sm">
+              <div className="absolute top-2 left-2 rounded-md bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white/90 backdrop-blur-sm">
                 CARD {ci + 1} OF {cards.length}
               </div>
             )}
@@ -107,7 +107,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
       {/* Card info */}
       <div
         className="mt-3.5 rounded-xl border border-border p-4"
-        style={{ background: "var(--color-surface-light, #1a1a2e)" }}
+        style={{ background: "var(--color-surface-light, #E8DFD0)" }}
       >
         {cards.map((card, ci) => (
           <div key={ci} className={ci < cards.length - 1 ? "mb-3" : ""}>
@@ -132,7 +132,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
       {products && products.length > 0 && (
         <div
           className="mt-3.5 rounded-xl border border-border p-4"
-          style={{ background: "var(--color-surface-light, #1a1a2e)" }}
+          style={{ background: "var(--color-surface-light, #E8DFD0)" }}
         >
           <h4 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
             Collector&apos;s Gear
@@ -144,7 +144,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
                 href={product.url}
                 target="_blank"
                 rel="nofollow noopener"
-                className="flex items-center gap-3 rounded-lg border border-border p-2.5 transition-colors hover:border-white/15"
+                className="flex items-center gap-3 rounded-lg border border-border p-2.5 transition-colors hover:border-[rgba(74,64,53,0.20)]"
                 style={{ background: "rgba(74,64,53,0.04)" }}
               >
                 <span className="text-lg">{product.emoji}</span>
@@ -154,7 +154,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
                   </div>
                   <div className="flex items-center gap-2 text-[10px] text-text-dim">
                     <span>{product.price}</span>
-                    <span className="rounded bg-white/5 px-1.5 py-0.5 text-[9px] font-medium">
+                    <span className="rounded bg-[rgba(74,64,53,0.08)] px-1.5 py-0.5 text-[9px] font-medium">
                       {product.tag}
                     </span>
                   </div>

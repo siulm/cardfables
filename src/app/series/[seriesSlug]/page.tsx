@@ -74,7 +74,7 @@ export default async function SeriesPage({ params }: Props) {
             >
               {series.title}
             </h1>
-            <p className="mt-1 text-sm italic text-white/60">
+            <p className="mt-1 text-sm italic text-white/80">
               {series.tagline}
             </p>
           </div>

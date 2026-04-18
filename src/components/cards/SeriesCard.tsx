@@ -22,7 +22,7 @@ export function SeriesCard({ series }: SeriesCardProps) {
       onMouseEnter={(e) => {
         const el = e.currentTarget;
         el.style.borderColor = `${series.color}44`;
-        el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.5), 0 0 30px ${series.color}10`;
+        el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.10), 0 0 30px ${series.color}15`;
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget;
