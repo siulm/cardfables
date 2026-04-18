@@ -1,16 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Field } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
 import { SERIES } from "@/lib/data";
 
 export default function SubmitPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [cardName, setCardName] = useState("");
   const [series, setSeries] = useState("");
   const [reason, setReason] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  function handlePhotoFiles(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return;
+    const file = fileList[0];
+    if (/\.(jpe?g|png|webp)$/i.test(file.name)) {
+      setPhoto(file);
+    }
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    handlePhotoFiles(e.dataTransfer.files);
+  }
+
+  async function handleSubmit() {
+    setError("");
+
+    if (!cardName.trim()) {
+      setError("Card name is required.");
+      return;
+    }
+    if (!photo) {
+      setError("Card photo is required.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("cardName", cardName);
+    formData.append("series", series);
+    formData.append("reason", reason);
+    formData.append("photo", photo);
+
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Submission could not be processed.");
+        setSubmitting(false);
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("Submission could not be processed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (submitted) {
     return (
@@ -32,6 +91,8 @@ export default function SubmitPage() {
             setCardName("");
             setSeries("");
             setReason("");
+            setPhoto(null);
+            setError("");
           }}>
             Submit Another
           </Button>
@@ -50,16 +111,22 @@ export default function SubmitPage() {
         might become the next episode.
       </p>
 
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {error}
+        </div>
+      )}
+
       <div className="space-y-6">
         <Field
-          label="Your Name"
+          label="Your Name (optional)"
           placeholder="What should we call you?"
           value={name}
           onChange={setName}
         />
 
         <Field
-          label="Card Name & Set"
+          label="Card Name & Set *"
           placeholder='e.g. "Charizard V — VSTAR Universe"'
           value={cardName}
           onChange={setCardName}
@@ -68,7 +135,7 @@ export default function SubmitPage() {
         {/* Series radio */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-text-secondary">
-            Which series?
+            Which series? (optional)
           </label>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {[...SERIES.map((s) => s.title), "New Series"].map((option) => (
@@ -115,17 +182,37 @@ export default function SubmitPage() {
           </div>
         </div>
 
-        {/* Photo upload placeholder */}
+        {/* Photo upload */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-text-secondary">
-            Card Photo
+            Card Photo *
           </label>
           <div
-            className="flex h-32 items-center justify-center rounded-xl border-2 border-dashed text-sm text-text-dim"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+            onClick={() => fileInputRef.current?.click()}
+            className="flex min-h-[128px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed text-sm text-text-dim transition-colors hover:border-[rgba(212,168,70,0.3)] hover:text-text-secondary"
+            style={{ borderColor: photo ? "rgba(212,168,70,0.3)" : "rgba(255,255,255,0.08)" }}
           >
-            Drag & drop JPG or PNG (up to 10MB)
+            {photo ? (
+              <div className="flex items-center gap-2 px-4 py-3">
+                <span>📎</span>
+                <span className="text-text-primary">{photo.name}</span>
+                <span className="text-text-dim">({(photo.size / 1024).toFixed(0)} KB)</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-1 py-4">
+                <span>Drag & drop JPG, PNG, or WebP (up to 10MB)</span>
+              </div>
+            )}
           </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            className="hidden"
+            onChange={(e) => handlePhotoFiles(e.target.files)}
+          />
         </div>
 
         <Field
@@ -138,10 +225,10 @@ export default function SubmitPage() {
 
         <Button
           type="submit"
-          onClick={() => setSubmitted(true)}
-          className="w-full"
+          onClick={handleSubmit}
+          className={`w-full ${submitting ? "opacity-50 pointer-events-none" : ""}`}
         >
-          {"\u{1F3B4}"} Submit My Card
+          {submitting ? "Submitting..." : "\u{1F3B4} Submit My Card"}
         </Button>
       </div>
     </div>
