@@ -19,7 +19,7 @@ export function FilterPills({ options, active, onChange }: FilterPillsProps) {
               active === option
                 ? "rgba(212,137,58,0.15)"
                 : "rgba(74,64,53,0.06)",
-            color: active === option ? "#D4893A" : "#8888a0",
+            color: active === option ? "#D4893A" : "#7A6E60",
             border: `1px solid ${active === option ? "rgba(212,137,58,0.3)" : "rgba(74,64,53,0.10)"}`,
           }}
         >

@@ -31,7 +31,7 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-400"
       style={{
         height: 60,
-        background: scrolled ? "rgba(7,7,13,0.92)" : "transparent",
+        background: scrolled ? "rgba(255,254,247,0.92)" : "transparent",
         backdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
         transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
@@ -64,7 +64,7 @@ export function Navbar() {
                 color:
                   pathname === link.href || pathname.startsWith(link.href + "/")
                     ? "#D4893A"
-                    : "#8888A0",
+                    : "#7A6E60",
               }}
             >
               {link.label}
@@ -105,7 +105,7 @@ export function Navbar() {
       {mobileOpen && (
         <div
           className="flex flex-col gap-1 px-6 pb-6 pt-2 md:hidden"
-          style={{ background: "rgba(7,7,13,0.96)" }}
+          style={{ background: "rgba(255,254,247,0.98)" }}
         >
           {NAV_LINKS.map((link) => (
             <Link
@@ -116,7 +116,7 @@ export function Navbar() {
                 color:
                   pathname === link.href || pathname.startsWith(link.href + "/")
                     ? "#D4893A"
-                    : "#8888A0",
+                    : "#7A6E60",
               }}
             >
               {link.label}
