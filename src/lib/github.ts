@@ -31,6 +31,19 @@ export async function readFile(path: string): Promise<{ content: string; sha: st
   return { content, sha: data.sha };
 }
 
+export async function listDir(path: string): Promise<{ name: string; path: string }[]> {
+  try {
+    const res = await ghFetch(`/contents/${path}`);
+    const data = await res.json();
+    if (!Array.isArray(data)) return [];
+    return data
+      .filter((item: { type: string }) => item.type === "file")
+      .map((item: { name: string; path: string }) => ({ name: item.name, path: item.path }));
+  } catch {
+    return [];
+  }
+}
+
 export async function commitFiles(
   files: { path: string; content: string }[],
   message: string
