@@ -3,6 +3,7 @@ export interface CardInfo {
   set: string;
   artist: string;
   emoji: string;
+  image?: string;
   affiliateUrl?: string;
 }
 

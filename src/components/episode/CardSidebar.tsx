@@ -79,22 +79,33 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
         {cards.map((card, ci) => (
           <div
             key={ci}
-            className="relative flex flex-col items-center justify-center overflow-hidden rounded-2xl"
+            className="relative overflow-hidden rounded-2xl"
             style={{
               aspectRatio: cards.length > 1 ? "3/2" : "2.5/3.5",
-              background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}55, ${seriesColor}22)`,
               boxShadow: `0 0 40px ${seriesColor}10, 0 16px 48px rgba(0,0,0,0.08)`,
             }}
           >
-            <span className={cards.length > 1 ? "text-4xl" : "text-5xl"}>
-              {card.emoji}
-            </span>
-            <span className="mt-1 text-xs font-semibold text-white/90">
-              {card.name}
-            </span>
-            <span className="mt-0.5 text-[11px] text-white/60">
-              Your card image here
-            </span>
+            {card.image ? (
+              <img
+                src={card.image}
+                alt={card.name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div
+                className="flex h-full w-full flex-col items-center justify-center"
+                style={{
+                  background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}55, ${seriesColor}22)`,
+                }}
+              >
+                <span className={cards.length > 1 ? "text-4xl" : "text-5xl"}>
+                  {card.emoji}
+                </span>
+                <span className="mt-1 text-xs font-semibold text-white/90">
+                  {card.name}
+                </span>
+              </div>
+            )}
             {cards.length > 1 && (
               <div className="absolute top-2 left-2 rounded-md bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white/90 backdrop-blur-sm">
                 CARD {ci + 1} OF {cards.length}

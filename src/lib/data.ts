@@ -27,6 +27,7 @@ export const SERIES: Series[] = [
             "set": "VSTAR Universe",
             "artist": "Oswaldo KATO",
             "emoji": "🔥",
+            "image": "/images/cards/charizardVSAR.jpg",
             "affiliateUrl": "#"
           }
         ],
@@ -556,6 +557,7 @@ export const SERIES: Series[] = [
             "set": "M2a (083/193)",
             "artist": "KEIICHIRO ITO",
             "emoji": "💥",
+            "image": "/images/cards/dugtrio.jpg",
             "affiliateUrl": "#"
           }
         ],
@@ -911,7 +913,8 @@ export const SERIES: Series[] = [
             "name": "メタング (Metang) 092/083 AR",
             "set": "M4",
             "artist": "Kurata So",
-            "emoji": "🔩"
+            "emoji": "🔩",
+            "image": "/images/cards/metang092-083.jpg"
           }
         ],
         "status": "live",
@@ -1138,7 +1141,8 @@ export const SERIES: Series[] = [
             "name": "ソウブレイズ (Ceruledge) 109/106 AR",
             "set": "SV8",
             "artist": "Rond",
-            "emoji": "⚔️"
+            "emoji": "⚔️",
+            "image": "/images/cards/nufareizu.jpg"
           }
         ],
         "status": "live",
