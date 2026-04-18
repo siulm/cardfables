@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/Button";
-import type { AffiliateProduct, CardInfo } from "@/lib/types";
+import type { AffiliateProduct, CardInfo, ShopProduct } from "@/lib/types";
+import { SHOP } from "@/lib/data";
 
 interface CardSidebarProps {
   cards: CardInfo[];
@@ -43,6 +44,13 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Pick a random shop product (stable per render)
+  const randomProduct = useMemo(() => {
+    const withUrl = SHOP.filter((p) => p.url && p.url !== "#");
+    const pool = withUrl.length > 0 ? withUrl : SHOP;
+    return pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : null;
   }, []);
 
   return (
@@ -176,6 +184,33 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
           <p className="mt-3 text-center text-[11px] text-text-secondary">
             As an Amazon Associate I earn from qualifying purchases
           </p>
+        </div>
+      )}
+
+      {/* Random shop suggestion */}
+      {randomProduct && (
+        <div className="mt-3.5 rounded-xl border border-border p-4" style={{ background: "var(--color-surface, #F2EDE4)" }}>
+          <h4 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+            You Might Like
+          </h4>
+          <a
+            href={randomProduct.url && randomProduct.url !== "#" ? randomProduct.url : undefined}
+            target={randomProduct.url && randomProduct.url !== "#" ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            className={`flex items-center gap-3 rounded-lg border border-border p-3 transition-colors ${
+              randomProduct.url && randomProduct.url !== "#"
+                ? "hover:border-[rgba(212,137,58,0.3)] cursor-pointer"
+                : ""
+            }`}
+            style={{ background: "rgba(74,64,53,0.04)" }}
+          >
+            <span className="text-2xl">{randomProduct.icon}</span>
+            <div className="min-w-0 flex-1">
+              <div className="text-[13px] font-semibold text-text-primary">{randomProduct.name}</div>
+              <div className="text-[11px] text-text-dim mt-0.5">{randomProduct.desc}</div>
+              <div className="mt-1 text-xs font-bold text-gold">{randomProduct.price}</div>
+            </div>
+          </a>
         </div>
       )}
 
