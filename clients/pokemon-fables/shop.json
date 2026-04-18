@@ -6,7 +6,8 @@
       "name": "Charizard V (SAR)",
       "desc": "The card that started Episode 1",
       "price": "~$45",
-      "cat": "Featured"
+      "cat": "Featured",
+      "url": "#"
     },
     {
       "id": 2,
@@ -14,7 +15,8 @@
       "name": "VSTAR Universe Booster Box",
       "desc": "Pull your own SAR cards. 10 packs.",
       "price": "~$85",
-      "cat": "Booster"
+      "cat": "Booster",
+      "url": "#"
     },
     {
       "id": 3,
@@ -22,7 +24,8 @@
       "name": "Ultra Pro Sleeves (100ct)",
       "desc": "Matte sleeves to protect your pulls.",
       "price": "~$9",
-      "cat": "Gear"
+      "cat": "Gear",
+      "url": "#"
     },
     {
       "id": 4,
@@ -30,7 +33,8 @@
       "name": "9-Pocket Pro Binder",
       "desc": "Side-loading premium card display.",
       "price": "~$25",
-      "cat": "Gear"
+      "cat": "Gear",
+      "url": "#"
     },
     {
       "id": 5,
@@ -38,7 +42,8 @@
       "name": "Pokemon 151 Bundle",
       "desc": "6 booster packs from the 151 set.",
       "price": "~$35",
-      "cat": "Booster"
+      "cat": "Booster",
+      "url": "#"
     },
     {
       "id": 6,
@@ -46,7 +51,8 @@
       "name": "LED Magnifying Loupe",
       "desc": "Inspect card condition. 60x zoom.",
       "price": "~$12",
-      "cat": "Gear"
+      "cat": "Gear",
+      "url": "#"
     }
   ],
   "categories": ["All", "Featured", "Booster", "Gear"],

@@ -1470,7 +1470,8 @@ export const SHOP: ShopProduct[] = [
     "name": "Charizard V (SAR)",
     "desc": "The card that started Episode 1",
     "price": "~$45",
-    "cat": "Featured"
+    "cat": "Featured",
+    "url": "#"
   },
   {
     "id": 2,
@@ -1478,7 +1479,8 @@ export const SHOP: ShopProduct[] = [
     "name": "VSTAR Universe Booster Box",
     "desc": "Pull your own SAR cards. 10 packs.",
     "price": "~$85",
-    "cat": "Booster"
+    "cat": "Booster",
+    "url": "#"
   },
   {
     "id": 3,
@@ -1486,7 +1488,8 @@ export const SHOP: ShopProduct[] = [
     "name": "Ultra Pro Sleeves (100ct)",
     "desc": "Matte sleeves to protect your pulls.",
     "price": "~$9",
-    "cat": "Gear"
+    "cat": "Gear",
+    "url": "#"
   },
   {
     "id": 4,
@@ -1494,7 +1497,8 @@ export const SHOP: ShopProduct[] = [
     "name": "9-Pocket Pro Binder",
     "desc": "Side-loading premium card display.",
     "price": "~$25",
-    "cat": "Gear"
+    "cat": "Gear",
+    "url": "#"
   },
   {
     "id": 5,
@@ -1502,7 +1506,8 @@ export const SHOP: ShopProduct[] = [
     "name": "Pokemon 151 Bundle",
     "desc": "6 booster packs from the 151 set.",
     "price": "~$35",
-    "cat": "Booster"
+    "cat": "Booster",
+    "url": "#"
   },
   {
     "id": 6,
@@ -1510,7 +1515,8 @@ export const SHOP: ShopProduct[] = [
     "name": "LED Magnifying Loupe",
     "desc": "Inspect card condition. 60x zoom.",
     "price": "~$12",
-    "cat": "Gear"
+    "cat": "Gear",
+    "url": "#"
   }
 ];
 

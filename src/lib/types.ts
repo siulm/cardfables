@@ -61,6 +61,7 @@ export interface ShopProduct {
   desc: string;
   price: string;
   cat: string;
+  url?: string;
 }
 
 export interface Submission {
