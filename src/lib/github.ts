@@ -44,6 +44,14 @@ export async function listDir(path: string): Promise<{ name: string; path: strin
   }
 }
 
+export async function deleteFile(path: string, message: string): Promise<void> {
+  const { sha } = await readFile(path);
+  await ghFetch(`/contents/${path}`, {
+    method: "DELETE",
+    body: JSON.stringify({ message, sha }),
+  });
+}
+
 export async function commitFiles(
   files: { path: string; content: string }[],
   message: string

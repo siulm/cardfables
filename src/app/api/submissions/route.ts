@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { commitFiles, listDir, readFile } from "@/lib/github";
+import { commitFiles, deleteFile, listDir, readFile } from "@/lib/github";
 import { isAuthenticated } from "@/lib/auth";
 
 async function screenImage(base64Data: string, mediaType: string): Promise<boolean> {
@@ -149,6 +149,30 @@ export async function GET() {
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return NextResponse.json({ submissions: sorted });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { timestamp } = await request.json();
+    if (!timestamp) {
+      return NextResponse.json({ error: "Missing timestamp" }, { status: 400 });
+    }
+
+    const filename = timestamp.replace(/:/g, "-").replace(/\./g, "-");
+    await deleteFile(
+      `clients/pokemon-fables/submissions/${filename}.json`,
+      `chore: remove card submission`
+    );
+
+    return NextResponse.json({ ok: true });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });

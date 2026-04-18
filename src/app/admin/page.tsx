@@ -180,6 +180,25 @@ export default function AdminPage() {
     }
   }
 
+  async function dismissSubmission(submission: Submission) {
+    setError("");
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ timestamp: submission.timestamp }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Failed to remove submission");
+        return;
+      }
+      setSubmissions(submissions.filter((s) => s.timestamp !== submission.timestamp));
+    } catch {
+      setError("Failed to remove submission");
+    }
+  }
+
   function useForEpisode(submission: Submission) {
     // Convert base64 data URI back to a File
     const parts = submission.photo.split(",");
@@ -554,7 +573,7 @@ export default function AdminPage() {
                         minute: "2-digit",
                       })}
                     </p>
-                    <div className="mt-3">
+                    <div className="mt-3 flex gap-2">
                       <Button
                         variant="ghost"
                         onClick={() => useForEpisode(sub)}
@@ -562,6 +581,12 @@ export default function AdminPage() {
                       >
                         Use for Episode →
                       </Button>
+                      <button
+                        onClick={() => dismissSubmission(sub)}
+                        className="rounded-lg px-3 py-1.5 text-xs text-red-400 border border-red-500/20 hover:bg-red-500/10 transition-colors cursor-pointer"
+                      >
+                        Dismiss
+                      </button>
                     </div>
                   </div>
                 </div>
