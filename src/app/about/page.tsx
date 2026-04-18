@@ -87,8 +87,8 @@ export default function AboutPage() {
       <section
         className="rounded-2xl p-8 text-center"
         style={{
-          background: "rgba(212,168,70,0.025)",
-          border: "1px solid rgba(212,168,70,0.06)",
+          background: "rgba(212,137,58,0.025)",
+          border: "1px solid rgba(212,137,58,0.06)",
         }}
       >
         <h2 className="mb-2 font-heading text-xl font-bold text-text-primary">

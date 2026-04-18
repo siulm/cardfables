@@ -15,7 +15,7 @@ export function Footer() {
               <span
                 className="flex h-[30px] w-[30px] items-center justify-center rounded-lg text-sm"
                 style={{
-                  background: "linear-gradient(135deg, #D4A846, #B8860B)",
+                  background: "linear-gradient(135deg, #D4893A, #B86E28)",
                 }}
               >
                 📖
@@ -99,7 +99,7 @@ export function Footer() {
         {/* Divider + Legal */}
         <div
           className="mt-12 border-t pt-8"
-          style={{ borderColor: "rgba(255,255,255,0.04)" }}
+          style={{ borderColor: "rgba(74,64,53,0.06)" }}
         >
           <div className="space-y-2">
             <p className="text-xs leading-relaxed text-footer-disclaimer">

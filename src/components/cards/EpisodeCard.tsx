@@ -27,7 +27,7 @@ export function EpisodeCard({ episode, series, index }: EpisodeCardProps) {
             <span className="text-xs font-semibold text-text-dim">
               EP {index + 1}
             </span>
-            <span className="rounded-full bg-[rgba(255,255,255,0.04)] px-2.5 py-0.5 text-xs text-text-dim">
+            <span className="rounded-full bg-[rgba(74,64,53,0.06)] px-2.5 py-0.5 text-xs text-text-dim">
               Locked
             </span>
           </div>

@@ -247,7 +247,7 @@ export default function AdminPage() {
             onClick={() => setTab("generate")}
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors cursor-pointer ${
               tab === "generate"
-                ? "bg-[rgba(212,168,70,0.15)] text-[#D4A846]"
+                ? "bg-[rgba(212,137,58,0.15)] text-[#D4893A]"
                 : "text-text-dim hover:text-text-secondary"
             }`}
           >
@@ -260,7 +260,7 @@ export default function AdminPage() {
             }}
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors cursor-pointer ${
               tab === "submissions"
-                ? "bg-[rgba(212,168,70,0.15)] text-[#D4A846]"
+                ? "bg-[rgba(212,137,58,0.15)] text-[#D4893A]"
                 : "text-text-dim hover:text-text-secondary"
             }`}
           >
@@ -277,7 +277,7 @@ export default function AdminPage() {
             <label className="text-sm font-medium text-text-secondary">Password</label>
             <input
               type="password"
-              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-dim outline-none transition-colors duration-200 focus:border-[rgba(212,168,70,0.3)]"
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-primary placeholder:text-text-dim outline-none transition-colors duration-200 focus:border-[rgba(212,137,58,0.3)]"
               placeholder="Admin password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -302,8 +302,8 @@ export default function AdminPage() {
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
             onClick={() => fileInputRef.current?.click()}
-            className="flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed text-sm text-text-dim transition-colors hover:border-[rgba(212,168,70,0.3)] hover:text-text-secondary"
-            style={{ borderColor: "rgba(255,255,255,0.08)" }}
+            className="flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed text-sm text-text-dim transition-colors hover:border-[rgba(212,137,58,0.3)] hover:text-text-secondary"
+            style={{ borderColor: "rgba(74,64,53,0.10)" }}
           >
             <span className="text-3xl">🃏</span>
             <span>Drop card images here or click to browse</span>
@@ -351,7 +351,7 @@ export default function AdminPage() {
       {/* ── Generating ── */}
       {tab === "generate" && state === "generating" && (
         <div className="mt-16 flex flex-col items-center gap-4 text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4893A]" />
           <p className="text-sm text-text-secondary">
             Generating episode... this takes 15–30 seconds.
           </p>
@@ -426,7 +426,7 @@ export default function AdminPage() {
                     </span>
                     {block.speaker && (
                       <input
-                        className="rounded border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary outline-none focus:border-[rgba(212,168,70,0.3)]"
+                        className="rounded border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary outline-none focus:border-[rgba(212,137,58,0.3)]"
                         value={block.speaker}
                         onChange={(e) =>
                           updateParagraph("junior", i, "speaker", e.target.value)
@@ -435,7 +435,7 @@ export default function AdminPage() {
                     )}
                   </div>
                   <textarea
-                    className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary outline-none transition-colors focus:border-[rgba(212,168,70,0.3)]"
+                    className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary outline-none transition-colors focus:border-[rgba(212,137,58,0.3)]"
                     value={block.c}
                     onChange={(e) =>
                       updateParagraph("junior", i, "c", e.target.value)
@@ -471,7 +471,7 @@ export default function AdminPage() {
                     </span>
                     {block.speaker && (
                       <input
-                        className="rounded border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary outline-none focus:border-[rgba(212,168,70,0.3)]"
+                        className="rounded border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary outline-none focus:border-[rgba(212,137,58,0.3)]"
                         value={block.speaker}
                         onChange={(e) =>
                           updateParagraph("full", i, "speaker", e.target.value)
@@ -480,7 +480,7 @@ export default function AdminPage() {
                     )}
                   </div>
                   <textarea
-                    className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary outline-none transition-colors focus:border-[rgba(212,168,70,0.3)]"
+                    className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary outline-none transition-colors focus:border-[rgba(212,137,58,0.3)]"
                     value={block.c}
                     onChange={(e) =>
                       updateParagraph("full", i, "c", e.target.value)
@@ -507,7 +507,7 @@ export default function AdminPage() {
       {/* ── Publishing ── */}
       {tab === "generate" && state === "publishing" && (
         <div className="mt-16 flex flex-col items-center gap-4 text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4893A]" />
           <p className="text-sm text-text-secondary">
             Publishing to GitHub...
           </p>
@@ -527,7 +527,7 @@ export default function AdminPage() {
 
           {loadingSubmissions && (
             <div className="flex flex-col items-center gap-4 py-16">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4893A]" />
               <p className="text-sm text-text-secondary">Loading submissions...</p>
             </div>
           )}

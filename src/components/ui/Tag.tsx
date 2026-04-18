@@ -14,9 +14,9 @@ export function Tag({ label, color }: TagProps) {
           ? "rgba(34,197,94,0.1)"
           : color
             ? `${color}15`
-            : "rgba(212,168,70,0.1)",
-        color: isAiring ? "#22C55E" : color || "#D4A846",
-        border: `1px solid ${isAiring ? "rgba(34,197,94,0.2)" : color ? `${color}30` : "rgba(212,168,70,0.2)"}`,
+            : "rgba(212,137,58,0.1)",
+        color: isAiring ? "#22C55E" : color || "#D4893A",
+        border: `1px solid ${isAiring ? "rgba(34,197,94,0.2)" : color ? `${color}30` : "rgba(212,137,58,0.2)"}`,
       }}
     >
       {isAiring && (

@@ -22,7 +22,7 @@ export function EmberParticles() {
         left: `${5 + Math.random() * 90}%`,
         width: 2 + Math.random() * 3,
         height: 2 + Math.random() * 3,
-        color: i % 3 === 0 ? "#D4A846" : "#E8651A",
+        color: i % 3 === 0 ? "#D4893A" : "#E8651A",
         duration: `${4 + Math.random() * 5}s`,
         delay: `${Math.random() * 4}s`,
       }))

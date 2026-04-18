@@ -31,9 +31,9 @@ export function NextEpisodeCTA({
           </h3>
           <Link
             href={`/series/${series.id}/${nextEpisode.slug}`}
-            className="mt-4 inline-block rounded-lg px-6 py-2.5 text-sm font-bold text-[#07070D] transition-opacity hover:opacity-90"
+            className="mt-4 inline-block rounded-lg px-6 py-2.5 text-sm font-bold text-[#FFFEF7] transition-opacity hover:opacity-90"
             style={{
-              background: `linear-gradient(135deg, #D4A846, #B8860B)`,
+              background: `linear-gradient(135deg, #D4893A, #B86E28)`,
             }}
           >
             Read Next Episode &rarr;

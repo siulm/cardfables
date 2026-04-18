@@ -27,7 +27,7 @@ export function Hero() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, #07070D 92%)",
+              "linear-gradient(180deg, transparent 0%, #FFFEF7 92%)",
           }}
         />
       </div>
@@ -42,8 +42,8 @@ export function Hero() {
             className="mb-6 inline-flex items-center gap-2 rounded-full text-gold"
             style={{
               padding: "5px 14px",
-              background: "rgba(212,168,70,0.1)",
-              border: "1px solid rgba(212,168,70,0.2)",
+              background: "rgba(212,137,58,0.1)",
+              border: "1px solid rgba(212,137,58,0.2)",
               fontSize: 11,
               fontWeight: 700,
               letterSpacing: 1.5,
@@ -76,7 +76,7 @@ export function Hero() {
             >
               of our
             </span>{" "}
-            <span style={{ color: "#D4A846" }}>Lives</span>
+            <span style={{ color: "#D4893A" }}>Lives</span>
           </h1>
 
           {/* Description */}

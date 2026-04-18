@@ -12,7 +12,7 @@ export function ShopCard({ product }: ShopCardProps) {
       className="group overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1"
       style={{ background: "var(--color-surface)" }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "rgba(212,168,70,0.2)";
+        e.currentTarget.style.borderColor = "rgba(212,137,58,0.2)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = "";
@@ -33,7 +33,7 @@ export function ShopCard({ product }: ShopCardProps) {
         </p>
         <div className="flex items-center justify-between">
           <span className="text-sm font-bold text-gold">{product.price}</span>
-          <span className="rounded-lg border border-[rgba(255,255,255,0.08)] px-3 py-1.5 text-xs font-medium text-text-secondary transition-all duration-200 group-hover:border-gold group-hover:bg-gold group-hover:text-[#07070D]">
+          <span className="rounded-lg border border-[rgba(74,64,53,0.10)] px-3 py-1.5 text-xs font-medium text-text-secondary transition-all duration-200 group-hover:border-gold group-hover:bg-gold group-hover:text-[#FFFEF7]">
             Amazon
           </span>
         </div>

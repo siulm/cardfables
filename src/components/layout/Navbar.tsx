@@ -43,7 +43,7 @@ export function Navbar() {
           <span
             className="flex h-[30px] w-[30px] items-center justify-center rounded-lg text-sm"
             style={{
-              background: "linear-gradient(135deg, #D4A846, #B8860B)",
+              background: "linear-gradient(135deg, #D4893A, #B86E28)",
             }}
           >
             📖
@@ -63,7 +63,7 @@ export function Navbar() {
               style={{
                 color:
                   pathname === link.href || pathname.startsWith(link.href + "/")
-                    ? "#D4A846"
+                    ? "#D4893A"
                     : "#8888A0",
               }}
             >
@@ -115,7 +115,7 @@ export function Navbar() {
               style={{
                 color:
                   pathname === link.href || pathname.startsWith(link.href + "/")
-                    ? "#D4A846"
+                    ? "#D4893A"
                     : "#8888A0",
               }}
             >

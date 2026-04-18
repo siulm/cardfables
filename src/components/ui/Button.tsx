@@ -22,12 +22,12 @@ export function Button({
 
   const variantStyles =
     variant === "primary"
-      ? "text-[#07070D] shadow-[0_8px_28px_rgba(212,168,70,0.25)]"
-      : "border border-[rgba(255,255,255,0.1)] text-text-primary hover:border-[rgba(255,255,255,0.2)]";
+      ? "text-[#FFFEF7] shadow-[0_8px_28px_rgba(212,137,58,0.25)]"
+      : "border border-[rgba(74,64,53,0.10)] text-text-primary hover:border-[rgba(74,64,53,0.20)]";
 
   const style =
     variant === "primary"
-      ? { background: "linear-gradient(135deg, #D4A846, #B8860B)" }
+      ? { background: "linear-gradient(135deg, #D4893A, #B86E28)" }
       : undefined;
 
   const classes = `${baseStyles} ${variantStyles} ${className}`;

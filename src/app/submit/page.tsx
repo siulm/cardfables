@@ -145,14 +145,14 @@ export default function SubmitPage() {
                 style={{
                   borderColor:
                     series === option
-                      ? "rgba(212,168,70,0.3)"
-                      : "rgba(255,255,255,0.10)",
+                      ? "rgba(212,137,58,0.3)"
+                      : "rgba(74,64,53,0.10)",
                   background:
                     series === option
-                      ? "rgba(212,168,70,0.05)"
+                      ? "rgba(212,137,58,0.05)"
                       : "var(--color-surface)",
                   color:
-                    series === option ? "#D4A846" : "var(--color-text-secondary)",
+                    series === option ? "#D4893A" : "var(--color-text-secondary)",
                 }}
               >
                 <input
@@ -168,8 +168,8 @@ export default function SubmitPage() {
                   style={{
                     borderColor:
                       series === option
-                        ? "#D4A846"
-                        : "rgba(255,255,255,0.12)",
+                        ? "#D4893A"
+                        : "rgba(74,64,53,0.15)",
                   }}
                 >
                   {series === option && (
@@ -191,8 +191,8 @@ export default function SubmitPage() {
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
             onClick={() => fileInputRef.current?.click()}
-            className="flex min-h-[128px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed text-sm text-text-dim transition-colors hover:border-[rgba(212,168,70,0.3)] hover:text-text-secondary"
-            style={{ borderColor: photo ? "rgba(212,168,70,0.3)" : "rgba(255,255,255,0.08)" }}
+            className="flex min-h-[128px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed text-sm text-text-dim transition-colors hover:border-[rgba(212,137,58,0.3)] hover:text-text-secondary"
+            style={{ borderColor: photo ? "rgba(212,137,58,0.3)" : "rgba(74,64,53,0.10)" }}
           >
             {photo ? (
               <div className="flex items-center gap-2 px-4 py-3">

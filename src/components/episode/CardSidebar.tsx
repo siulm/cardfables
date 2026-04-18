@@ -145,7 +145,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
                 target="_blank"
                 rel="nofollow noopener"
                 className="flex items-center gap-3 rounded-lg border border-border p-2.5 transition-colors hover:border-white/15"
-                style={{ background: "rgba(255,255,255,0.02)" }}
+                style={{ background: "rgba(74,64,53,0.04)" }}
               >
                 <span className="text-lg">{product.emoji}</span>
                 <div className="min-w-0 flex-1">
