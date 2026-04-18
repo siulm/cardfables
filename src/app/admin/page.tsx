@@ -29,6 +29,15 @@ interface BibleUpdates {
   last_episode: number;
 }
 
+interface Submission {
+  name: string;
+  cardName: string;
+  series: string;
+  reason: string;
+  photo: string;
+  timestamp: string;
+}
+
 export default function AdminPage() {
   const [state, setState] = useState<PageState>("locked");
   const [password, setPassword] = useState("");
@@ -38,6 +47,9 @@ export default function AdminPage() {
   const [episode, setEpisode] = useState<Episode | null>(null);
   const [bibleUpdates, setBibleUpdates] = useState<BibleUpdates | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [tab, setTab] = useState<"generate" | "submissions">("generate");
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false);
 
   // ── Auth ──────────────────────────────────────────────────
 
@@ -150,6 +162,39 @@ export default function AdminPage() {
     setEpisode(updated);
   }
 
+  async function loadSubmissions() {
+    setLoadingSubmissions(true);
+    setError("");
+    try {
+      const res = await fetch("/api/submissions");
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Failed to load submissions");
+        return;
+      }
+      setSubmissions(data.submissions);
+    } catch {
+      setError("Failed to load submissions");
+    } finally {
+      setLoadingSubmissions(false);
+    }
+  }
+
+  function useForEpisode(submission: Submission) {
+    // Convert base64 data URI back to a File
+    const parts = submission.photo.split(",");
+    const mime = parts[0].match(/:(.*?);/)?.[1] || "image/jpeg";
+    const bstr = atob(parts[1]);
+    const arr = new Uint8Array(bstr.length);
+    for (let i = 0; i < bstr.length; i++) arr[i] = bstr.charCodeAt(i);
+    const ext = mime.split("/")[1] || "jpg";
+    const file = new File([arr], `${submission.cardName}.${ext}`, { type: mime });
+
+    setFiles([file]);
+    setTab("generate");
+    setState("ready");
+  }
+
   // ── Render ────────────────────────────────────────────────
 
   return (
@@ -176,6 +221,35 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* ── Tabs ── */}
+      {state !== "locked" && (
+        <div className="mt-6 mb-8 flex gap-1 rounded-xl border border-border p-1">
+          <button
+            onClick={() => setTab("generate")}
+            className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              tab === "generate"
+                ? "bg-[rgba(212,168,70,0.15)] text-[#D4A846]"
+                : "text-text-dim hover:text-text-secondary"
+            }`}
+          >
+            Generate
+          </button>
+          <button
+            onClick={() => {
+              setTab("submissions");
+              if (submissions.length === 0) loadSubmissions();
+            }}
+            className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors cursor-pointer ${
+              tab === "submissions"
+                ? "bg-[rgba(212,168,70,0.15)] text-[#D4A846]"
+                : "text-text-dim hover:text-text-secondary"
+            }`}
+          >
+            Submissions
+          </button>
+        </div>
+      )}
+
       {/* ── Locked ── */}
       {state === "locked" && (
         <form className="mt-8 space-y-4" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
@@ -198,7 +272,7 @@ export default function AdminPage() {
       )}
 
       {/* ── Ready ── */}
-      {state === "ready" && (
+      {tab === "generate" && state === "ready" && (
         <div className="mt-8 space-y-6">
           <p className="text-sm text-text-secondary">
             Upload 1–3 card images to generate the next episode.
@@ -256,7 +330,7 @@ export default function AdminPage() {
       )}
 
       {/* ── Generating ── */}
-      {state === "generating" && (
+      {tab === "generate" && state === "generating" && (
         <div className="mt-16 flex flex-col items-center gap-4 text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
           <p className="text-sm text-text-secondary">
@@ -266,7 +340,7 @@ export default function AdminPage() {
       )}
 
       {/* ── Preview ── */}
-      {state === "preview" && episode && (
+      {tab === "generate" && state === "preview" && episode && (
         <div className="mt-8 space-y-8">
           <div className="flex items-center justify-between">
             <h2 className="font-heading text-xl font-bold text-text-primary">
@@ -412,12 +486,88 @@ export default function AdminPage() {
       )}
 
       {/* ── Publishing ── */}
-      {state === "publishing" && (
+      {tab === "generate" && state === "publishing" && (
         <div className="mt-16 flex flex-col items-center gap-4 text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
           <p className="text-sm text-text-secondary">
             Publishing to GitHub...
           </p>
+        </div>
+      )}
+      {/* ── Submissions Tab ── */}
+      {tab === "submissions" && state !== "locked" && (
+        <div className="mt-8">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-heading text-xl font-bold text-text-primary">
+              Card Submissions
+            </h2>
+            <Button variant="ghost" onClick={loadSubmissions}>
+              Refresh
+            </Button>
+          </div>
+
+          {loadingSubmissions && (
+            <div className="flex flex-col items-center gap-4 py-16">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-dim border-t-[#D4A846]" />
+              <p className="text-sm text-text-secondary">Loading submissions...</p>
+            </div>
+          )}
+
+          {!loadingSubmissions && submissions.length === 0 && (
+            <p className="py-16 text-center text-sm text-text-dim">No submissions yet.</p>
+          )}
+
+          {!loadingSubmissions && submissions.length > 0 && (
+            <div className="space-y-4">
+              {submissions.map((sub, i) => (
+                <div
+                  key={i}
+                  className="flex gap-4 rounded-xl border border-border bg-surface p-4"
+                >
+                  {/* Photo thumbnail */}
+                  <div className="flex-shrink-0">
+                    <img
+                      src={sub.photo}
+                      alt={sub.cardName}
+                      className="h-[150px] w-[110px] rounded-lg object-cover border border-border"
+                    />
+                  </div>
+
+                  {/* Details */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-text-primary">{sub.cardName}</h3>
+                    {sub.name && (
+                      <p className="text-sm text-text-secondary">by {sub.name}</p>
+                    )}
+                    {sub.series && (
+                      <p className="mt-1 text-xs text-text-dim">Series: {sub.series}</p>
+                    )}
+                    {sub.reason && (
+                      <p className="mt-2 text-sm text-text-secondary italic">&ldquo;{sub.reason}&rdquo;</p>
+                    )}
+                    <p className="mt-2 text-xs text-text-dim">
+                      {new Date(sub.timestamp).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <div className="mt-3">
+                      <Button
+                        variant="ghost"
+                        onClick={() => useForEpisode(sub)}
+                        className="text-xs px-3 py-1.5"
+                      >
+                        Use for Episode →
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
