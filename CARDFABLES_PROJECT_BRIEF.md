@@ -234,21 +234,32 @@ Full deploy flow:
 Pipeline generates episode JSON → commit + push → Vercel runs prebuild → next build → live site updated
 ```
 
-### ~~2. Admin UI + auto-deploy~~ (complete)
-A `/admin` page in the existing Next.js app with password protection:
+### ~~2. Admin Dashboard~~ (complete)
+A full dashboard at `/admin` with sidebar navigation and password protection:
 
-**UI at `/admin`:**
-- Password gate (env var `ADMIN_PASSWORD`)
-- Drag-and-drop or file picker for 1-3 card images
-- "Generate Episode" button — calls Claude API via Next.js API route
-- Editable preview of the generated episode (junior + full) before publishing
-- "Publish" button — commits episode JSON + updated story bible to GitHub via GitHub API
-- Vercel auto-deploys → episode appears on live site
+**Dashboard pages:**
+- `/admin` — Overview with stats (episodes, series, submissions) + quick action cards
+- `/admin/generate` — Upload 1-3 images, generate episode via Claude, editable preview, publish to GitHub
+- `/admin/submissions` — Review user card submissions (LIFO), photo thumbnails, "Use for Episode" to pre-load into generate, dismiss button
+- `/admin/shop` — Manage shop products: icon picker, name, price, description, category, Amazon URL. Add/remove products.
+- `/admin/arc` — Story arc planning: progress bar, act selector, climax/resolution editing, season 2 hooks, episode outlines. "Ask Claude to Propose" for hybrid arc planning.
+- `/admin/series` — Create new series, edit metadata (title, tagline, genre, type, description, color picker, status)
+
+**Architecture:**
+- Sidebar navigation with active state, series selector, logout, "View Site" link
+- Shared React context (AdminProvider) for auth, selected series, cross-page state
+- Login as standalone centered page
+- Each page is its own file under `src/app/admin/`
 
 **API routes:**
 - `POST /api/admin/auth` — password verification, sets session cookie
-- `POST /api/generate-episode` — accepts image uploads, reads story bible + config from GitHub, calls Claude, returns episode JSON for preview
-- `POST /api/publish-episode` — commits episode JSON + updated story bible to GitHub repo
+- `POST /api/generate-episode` — accepts image uploads + seriesId, reads story bible from GitHub, calls Claude, returns episode JSON for preview
+- `POST /api/publish-episode` — commits episode JSON + updated story bible to GitHub per-series directory
+- `GET/POST /api/submissions` — list (admin) and save (public) card submissions with Claude Haiku safety screening
+- `DELETE /api/submissions` — dismiss a submission
+- `GET/PUT /api/shop` — read and update shop products
+- `GET/PUT/POST /api/story-arc` — read, update, and propose story arcs per series
+- `GET/PUT/POST /api/series` — list, update, and create series
 
 **Environment variables required (set in `.env.local` + Vercel dashboard):**
 - `ADMIN_PASSWORD` — admin page access
@@ -263,7 +274,7 @@ A `/admin` page in the existing Next.js app with password protection:
 
 2. **CLI (local fallback):** Run two commands:
    ```
-   node scripts/generate-episode.js pokemon-fables card.jpg
+   node scripts/generate-episode.js pokemon-fables flames-of-our-lives card.jpg
    node scripts/deploy.js
    ```
    First command generates the episode locally. Second command rebuilds `data.ts`, commits to git, and pushes to GitHub (triggering Vercel redeploy). Episode appears both locally and on the live site. No timeout issues since Claude runs on your Mac.
@@ -322,4 +333,4 @@ Prompt caching (story bible + system prompt) saves ~60% on input costs.
 
 ---
 
-*Last updated: April 25, 2026. Genre-agnostic platform with multi-series support, story arc system, admin UI (generate/submissions/shop/story arc/series management), Ghibli theme, social links, Ko-fi donations, teaser generator.*
+*Last updated: April 25, 2026. Genre-agnostic platform with multi-series support, story arc system, admin dashboard (overview/generate/submissions/shop/story arc/series), Ghibli theme, social links, Ko-fi donations, teaser generator.*
