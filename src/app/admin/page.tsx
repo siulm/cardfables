@@ -82,7 +82,7 @@ interface SeriesMeta {
   status: string;
 }
 
-const POKEMON_TYPES = ["Fire", "Water", "Grass", "Electric", "Dark", "Steel", "Psychic", "Ghost", "Dragon", "Normal", "Fighting", "Ice", "Fairy"];
+// No hardcoded types — series type is free text input
 
 export default function AdminPage() {
   const [state, setState] = useState<PageState>("locked");
@@ -1290,17 +1290,7 @@ export default function AdminPage() {
                   <div className="grid grid-cols-2 gap-3">
                     <Field label="Genre" value={s.genre} onChange={(v) => updateSeriesMeta(i, "genre", v)} placeholder="e.g., Mystery • Thriller" />
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-medium text-text-secondary">Type</label>
-                      <select
-                        value={s.type}
-                        onChange={(e) => updateSeriesMeta(i, "type", e.target.value)}
-                        className="rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text-primary outline-none focus:border-[rgba(212,137,58,0.3)] cursor-pointer"
-                      >
-                        <option value="">Select type...</option>
-                        {POKEMON_TYPES.map((t) => (
-                          <option key={t} value={t}>{t}</option>
-                        ))}
-                      </select>
+                      <Field label="Type" value={s.type} onChange={(v) => updateSeriesMeta(i, "type", v)} placeholder="e.g., Fire, Romance, Mystery" />
                     </div>
                   </div>
 

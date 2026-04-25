@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { FilterPills } from "@/components/ui/FilterPills";
 import { SeriesCard } from "@/components/cards/SeriesCard";
-import { SERIES, BROWSE_TYPES } from "@/lib/data";
+import { SERIES } from "@/lib/data";
 
 export default function BrowsePage() {
   const [filter, setFilter] = useState("All");
+
+  // Derive browse types dynamically from series data
+  const browseTypes = ["All", ...Array.from(new Set(SERIES.map((s) => s.type).filter(Boolean)))] as const;
 
   const filtered =
     filter === "All" ? SERIES : SERIES.filter((s) => s.type === filter);
@@ -24,7 +27,7 @@ export default function BrowsePage() {
 
       <div className="mb-8">
         <FilterPills
-          options={BROWSE_TYPES}
+          options={browseTypes}
           active={filter}
           onChange={setFilter}
         />

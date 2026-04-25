@@ -64,7 +64,7 @@ export function buildSystemPrompt(config) {
 Tone: ${config.tone}
 Output format: ${config.output_format}
 
-You will receive 1-3 trading card images and a story bible with existing characters, plot, and themes. Analyze the card art — the Pokémon, scene, mood, and any text visible — then write the next episode continuing the ongoing story.
+You will receive 1-3 images and a story bible with existing characters, plot, and themes. Analyze each image — the subject, scene, mood, and any text visible — then write the next episode continuing the ongoing story.
 
 ## Story Arc
 
@@ -104,9 +104,9 @@ Return ONLY valid JSON with this exact structure (no markdown, no code fences):
     "title": "<episode title>",
     "cards": [
       {
-        "name": "<card name and set info visible on the card>",
-        "set": "<set name if visible>",
-        "artist": "<artist name if visible>",
+        "name": "<subject name or title visible in the image>",
+        "set": "<collection or set if visible>",
+        "artist": "<artist or creator if visible>",
         "emoji": "<one emoji that fits the card>"
       }
     ],
@@ -219,7 +219,7 @@ async function main() {
     ...imageBlocks,
     {
       type: "text",
-      text: `Here is the current story bible:\n\n${JSON.stringify(bible, null, 2)}\n\nAnalyze the card image(s) above and write episode ${nextEpisode}. Continue the ongoing story based on the bible context. The new card(s) should introduce or develop characters and advance the plot.`,
+      text: `Here is the current story bible:\n\n${JSON.stringify(bible, null, 2)}\n\nAnalyze the image(s) above and write episode ${nextEpisode}. Continue the ongoing story based on the bible context. The new image(s) should introduce or develop characters and advance the plot.`,
     },
   ];
 

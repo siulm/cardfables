@@ -6,9 +6,9 @@
 
 ## What is CardFables?
 
-CardFables is a white-label **image-to-story SaaS pipeline**. The owner uploads 1–3 card/product images through a simple app, Claude analyzes the images and generates dual-age narrative content, and the result is automatically published to a live website via GitHub + Vercel.
+CardFables is a **genre-agnostic image-to-story platform**. The owner uploads 1–3 images through a web admin or CLI, Claude analyzes them and generates dual-age narrative content, and the result is automatically published to a live website via GitHub + Vercel.
 
-The proof-of-concept is a Pokémon card soap opera called **"Flames of Our Lives"** — each card becomes a new episode in a serialized story. But the engine is generic and can be repackaged for any industry (e-commerce, real estate, museums, marketing agencies, etc.).
+The platform supports any genre — romance, action, mystery, motivational, or any narrative style. The proof-of-concept is a Pokémon card soap opera called **"Flames of Our Lives"**, but the engine is fully generic: series types, prompts, and story format are all config-driven with no genre-specific code.
 
 ---
 
@@ -322,4 +322,4 @@ Prompt caching (story bible + system prompt) saves ~60% on input costs.
 
 ---
 
-*Last updated: April 25, 2026. Episode generation pipeline, pre-build data pipeline, admin UI (generate/submissions/shop), Ghibli theme, social links, Ko-fi donations, teaser generator complete.*
+*Last updated: April 25, 2026. Genre-agnostic platform with multi-series support, story arc system, admin UI (generate/submissions/shop/story arc/series management), Ghibli theme, social links, Ko-fi donations, teaser generator.*
