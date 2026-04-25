@@ -40,6 +40,26 @@
   ],
   "current_plot": "Ceruledge has arrived at the northern cave entrance, neutralizing Dugtrio's special equipment with Blaze Curse and positioning themselves directly in the path of Genesect's incoming cannon blast. Venusaur and Mismagius, moved despite themselves, have flanked Ceruledge to face the attack together. Inside the cave, Metang continues to hold the structural breach while Charizard keeps the baby Pokémon calm — both sensing the situation outside has shifted but not yet knowing how. Genesect has fired. The outcome of the blast is unknown.",
   "setting": "Verdant Valley",
+  "story_arc": {
+    "season": 1,
+    "act": "climax",
+    "total_episodes": 10,
+    "arc_summary": "What began as a neighborhood dispute has become an unexpected act of collective courage, forcing every reluctant resident of Verdant Valley to admit they are each other's people. The series resolves not with a single hero's triumph but with the slow discovery that caring about someone is not a choice any of them managed to avoid.",
+    "climax": "Genesect's cannon blast strikes. Ceruledge, Venusaur, and Mismagius are still standing because Charizard took the worst of it alone, anonymously. Genesect, confronted with an entire valley that refused to move, hesitates for the first time.",
+    "resolution": "Genesect does not become a friend, but it becomes an uneasy neighbor. Charizard leaves anonymous soup outside its cave. Nobody talks about it. The valley returns to normal on the surface, entirely changed underneath.",
+    "season2_hooks": [
+      "The Team Rocket commander who sent Genesect is never revealed — 'send the next unit' implies a larger operation",
+      "Ceruledge vanishes as mysteriously as they arrived — who sent them and why?",
+      "Genesect stays in the valley but its original programming may resurface"
+    ],
+    "remaining_episodes": [
+      { "episode": 6, "outline": "Smoke clears — Charizard found singed at the blast edge, pretending to have been passing by. The others realize what he did." },
+      { "episode": 7, "outline": "Metang holds the cave together with bureaucratic willpower. Dugtrio, equipment destroyed, bickers about filing a complaint with Team Rocket HR." },
+      { "episode": 8, "outline": "Mismagius confronts Genesect with a dramatic monologue, buying time through sheer force of personality while Venusaur stands behind looking appalled and impressed." },
+      { "episode": 9, "outline": "Charizard walks to Genesect directly and offers it soup — not a fight, not a speech, just soup." },
+      { "episode": 10, "outline": "Finale — Metang files the report, Dugtrio tunnels home, Ceruledge vanishes. Genesect stays. The soup bowl is always empty by morning. A Team Rocket screen flickers: 'Send the next unit.'" }
+    ]
+  },
   "running_themes": [
     "Charizard secretly helps everyone but is too proud to admit it",
     "Venusaur is judgmental but genuinely cares",

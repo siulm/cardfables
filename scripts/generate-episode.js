@@ -62,6 +62,15 @@ Output format: ${config.output_format}
 
 You will receive 1-3 trading card images and a story bible with existing characters, plot, and themes. Analyze the card art — the Pokémon, scene, mood, and any text visible — then write the next episode continuing the ongoing story.
 
+## Story Arc
+
+The story bible includes a "story_arc" section with the planned arc for this season. Follow it:
+- Check which "act" the story is in (setup, rising_action, climax, resolution)
+- Check "remaining_episodes" for the outline of the episode you are writing
+- Write toward the planned climax and resolution
+- If the act is "resolution" or this is the final episode, write a satisfying ending (not a cliffhanger) but leave any "season2_hooks" subtly open
+- The card image determines WHO appears, but the arc determines WHERE the story goes
+
 ## Story Format
 
 Write TWO versions of the same episode:
