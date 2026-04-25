@@ -7,13 +7,17 @@ import Anthropic from "@anthropic-ai/sdk";
 export function parseArgs(args) {
   if (args.length === 0) {
     throw new Error(
-      "Usage: node scripts/generate-episode.js <client-name> <image1> [image2] [image3]"
+      "Usage: node scripts/generate-episode.js <client-name> <series-id> <image1> [image2] [image3]"
     );
   }
 
   const clientName = args[0];
-  const imagePaths = args.slice(1);
+  const seriesId = args[1];
+  const imagePaths = args.slice(2);
 
+  if (!seriesId) {
+    throw new Error("You must provide a series ID (e.g., flames-of-our-lives).");
+  }
   if (imagePaths.length < 1) {
     throw new Error("You must provide at least 1 image path.");
   }
@@ -21,7 +25,7 @@ export function parseArgs(args) {
     throw new Error("You may provide at most 3 image paths.");
   }
 
-  return { clientName, imagePaths };
+  return { clientName, seriesId, imagePaths };
 }
 
 export function slugify(title) {
@@ -176,13 +180,14 @@ function encodeImage(imagePath) {
 }
 
 async function main() {
-  const { clientName, imagePaths } = parseArgs(process.argv.slice(2));
+  const { clientName, seriesId, imagePaths } = parseArgs(process.argv.slice(2));
 
   // Resolve paths
   const clientDir = join(process.cwd(), "clients", clientName);
+  const seriesDir = join(clientDir, "series", seriesId);
   const configPath = join(clientDir, "config.json");
-  const biblePath = join(clientDir, "story-bible.json");
-  const episodesDir = join(clientDir, "episodes");
+  const biblePath = join(seriesDir, "story-bible.json");
+  const episodesDir = join(seriesDir, "episodes");
 
   // Read config
   if (!existsSync(configPath)) {

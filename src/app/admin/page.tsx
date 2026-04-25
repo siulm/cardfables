@@ -69,11 +69,21 @@ const ACT_LABELS: Record<string, string> = {
 
 const SHOP_ICONS = ["🔥", "📦", "🛡️", "📒", "🎴", "🔍", "⚡", "💎", "🎯", "🃏", "🏆", "⭐", "🎁", "🧩"];
 
+const ALL_SERIES = [
+  { id: "flames-of-our-lives", title: "Flames of Our Lives" },
+  { id: "oceans-deep", title: "Ocean's Deep" },
+  { id: "grass-is-greener", title: "Grass Is Greener" },
+  { id: "thunderstruck", title: "Thunderstruck" },
+  { id: "shadow-protocol", title: "Shadow Protocol" },
+  { id: "iron-will", title: "Iron Will" },
+];
+
 export default function AdminPage() {
   const [state, setState] = useState<PageState>("locked");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [selectedSeries, setSelectedSeries] = useState("flames-of-our-lives");
   const [files, setFiles] = useState<File[]>([]);
   const [episode, setEpisode] = useState<Episode | null>(null);
   const [bibleUpdates, setBibleUpdates] = useState<BibleUpdates | null>(null);
@@ -131,6 +141,7 @@ export default function AdminPage() {
 
     const formData = new FormData();
     files.forEach((f) => formData.append("images", f));
+    formData.append("seriesId", selectedSeries);
 
     try {
       const res = await fetch("/api/generate-episode", {
@@ -165,7 +176,7 @@ export default function AdminPage() {
       const res = await fetch("/api/publish-episode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ episode, bible_updates: bibleUpdates }),
+        body: JSON.stringify({ episode, bible_updates: bibleUpdates, seriesId: selectedSeries }),
       });
       const data = await res.json();
 
@@ -326,7 +337,7 @@ export default function AdminPage() {
     setLoadingArc(true);
     setError("");
     try {
-      const res = await fetch("/api/story-arc");
+      const res = await fetch(`/api/story-arc?seriesId=${selectedSeries}`);
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Failed to load arc"); return; }
       setStoryArc(data.story_arc || null);
@@ -343,7 +354,7 @@ export default function AdminPage() {
       const res = await fetch("/api/story-arc", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ story_arc: storyArc }),
+        body: JSON.stringify({ story_arc: storyArc, seriesId: selectedSeries }),
       });
       if (!res.ok) { const d = await res.json(); setError(d.error || "Failed to save"); return; }
       setSuccess("Story arc saved!");
@@ -355,7 +366,7 @@ export default function AdminPage() {
     setProposingArc(true);
     setError("");
     try {
-      const res = await fetch("/api/story-arc", { method: "POST" });
+      const res = await fetch(`/api/story-arc?seriesId=${selectedSeries}`, { method: "POST" });
       const data = await res.json();
       if (!res.ok) { setError(data.error || "Failed to propose arc"); return; }
       setStoryArc(data.proposed_arc);
@@ -441,6 +452,26 @@ export default function AdminPage() {
           >
             Story Arc
           </button>
+        </div>
+      )}
+
+      {/* ── Series Selector ── */}
+      {state !== "locked" && (tab === "generate" || tab === "arc") && (
+        <div className="mb-6 flex items-center gap-3">
+          <label className="text-sm font-medium text-text-secondary">Series:</label>
+          <select
+            value={selectedSeries}
+            onChange={(e) => {
+              setSelectedSeries(e.target.value);
+              setStoryArc(null);
+              setLastEpisode(0);
+            }}
+            className="rounded-xl border border-border bg-surface px-4 py-2 text-sm text-text-primary outline-none focus:border-[rgba(212,137,58,0.3)] cursor-pointer"
+          >
+            {ALL_SERIES.map((s) => (
+              <option key={s.id} value={s.id}>{s.title}</option>
+            ))}
+          </select>
         </div>
       )}
 
