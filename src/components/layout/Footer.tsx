@@ -85,7 +85,7 @@ export function Footer() {
             </h4>
             <div className="flex flex-col gap-2.5">
               {[
-                { name: "YouTube", url: "https://www.youtube.com/channel/UCQc2AESzSTzdqdFbS4kTgbg" },
+                { name: "YouTube", url: "https://www.youtube.com/@card.fables" },
                 { name: "Instagram", url: "https://www.instagram.com/card.fables" },
                 { name: "TikTok", url: "https://www.tiktok.com/@card.fables" },
               ].map((social) => (
