@@ -46,7 +46,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { episode, bible_updates } = await request.json();
+    const { episode, bible_updates, seriesId: rawSeriesId } = await request.json();
+    const seriesId = rawSeriesId ?? "flames-of-our-lives";
 
     if (!episode || !bible_updates) {
       return NextResponse.json(
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
 
     // Read current story bible from GitHub
     const { content: bibleRaw } = await readFile(
-      "clients/pokemon-fables/story-bible.json"
+      `clients/pokemon-fables/series/${seriesId}/story-bible.json`
     );
     const bible: Bible = JSON.parse(bibleRaw);
 
@@ -69,11 +70,11 @@ export async function POST(request: Request) {
     await commitFiles(
       [
         {
-          path: `clients/pokemon-fables/episodes/episode-${episodeId}.json`,
+          path: `clients/pokemon-fables/series/${seriesId}/episodes/episode-${episodeId}.json`,
           content: JSON.stringify(episode, null, 2),
         },
         {
-          path: "clients/pokemon-fables/story-bible.json",
+          path: `clients/pokemon-fables/series/${seriesId}/story-bible.json`,
           content: JSON.stringify(updatedBible, null, 2),
         },
       ],

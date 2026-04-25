@@ -119,6 +119,7 @@ export async function POST(request: Request) {
     // Read uploaded images from FormData
     const formData = await request.formData();
     const imageFiles = formData.getAll("images") as File[];
+    const seriesId = (formData.get("seriesId") as string | null) ?? "flames-of-our-lives";
 
     if (imageFiles.length < 1 || imageFiles.length > 3) {
       return NextResponse.json(
@@ -131,7 +132,7 @@ export async function POST(request: Request) {
     const { content: configRaw } = await readFile("clients/pokemon-fables/config.example.json");
     const config = JSON.parse(configRaw);
 
-    const { content: bibleRaw } = await readFile("clients/pokemon-fables/story-bible.json");
+    const { content: bibleRaw } = await readFile(`clients/pokemon-fables/series/${seriesId}/story-bible.json`);
     const bible = JSON.parse(bibleRaw);
 
     // Encode images as base64

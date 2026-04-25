@@ -4,13 +4,14 @@ import { readFile, commitFiles } from "@/lib/github";
 import { isAuthenticated } from "@/lib/auth";
 
 // GET — read current story bible (includes arc)
-export async function GET() {
+export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { content } = await readFile("clients/pokemon-fables/story-bible.json");
+    const seriesId = new URL(request.url).searchParams.get("seriesId") ?? "flames-of-our-lives";
+    const { content } = await readFile(`clients/pokemon-fables/series/${seriesId}/story-bible.json`);
     return NextResponse.json(JSON.parse(content));
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
@@ -25,17 +26,18 @@ export async function PUT(request: Request) {
   }
 
   try {
-    const { story_arc } = await request.json();
+    const { story_arc, seriesId: rawSeriesId } = await request.json();
+    const seriesId = rawSeriesId ?? "flames-of-our-lives";
     if (!story_arc) {
       return NextResponse.json({ error: "Missing story_arc" }, { status: 400 });
     }
 
-    const { content } = await readFile("clients/pokemon-fables/story-bible.json");
+    const { content } = await readFile(`clients/pokemon-fables/series/${seriesId}/story-bible.json`);
     const bible = JSON.parse(content);
     bible.story_arc = story_arc;
 
     await commitFiles(
-      [{ path: "clients/pokemon-fables/story-bible.json", content: JSON.stringify(bible, null, 2) }],
+      [{ path: `clients/pokemon-fables/series/${seriesId}/story-bible.json`, content: JSON.stringify(bible, null, 2) }],
       `feat: update story arc — act: ${story_arc.act}`
     );
 
@@ -53,7 +55,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { content } = await readFile("clients/pokemon-fables/story-bible.json");
+    const seriesId = new URL(request.url).searchParams.get("seriesId") ?? "flames-of-our-lives";
+    const { content } = await readFile(`clients/pokemon-fables/series/${seriesId}/story-bible.json`);
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
