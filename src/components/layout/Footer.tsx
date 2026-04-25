@@ -99,6 +99,14 @@ export function Footer() {
                   {social.name}
                 </a>
               ))}
+              <a
+                href="https://ko-fi.com/cardfables"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-[rgba(212,137,58,0.2)] bg-[rgba(212,137,58,0.06)] px-3 py-1.5 text-xs font-semibold text-gold transition-colors duration-200 hover:bg-[rgba(212,137,58,0.12)]"
+              >
+                ☕ Support CardFables
+              </a>
             </div>
           </div>
         </div>

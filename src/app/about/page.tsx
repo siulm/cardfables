@@ -103,6 +103,17 @@ export default function AboutPage() {
             Browse Stories
           </Button>
         </div>
+        <p className="mt-6 text-sm text-text-dim">
+          Love what we do?{" "}
+          <a
+            href="https://ko-fi.com/cardfables"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gold hover:underline"
+          >
+            Support CardFables on Ko-fi ☕
+          </a>
+        </p>
       </section>
     </div>
   );
