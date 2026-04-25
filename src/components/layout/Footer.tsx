@@ -84,13 +84,20 @@ export function Footer() {
               Follow
             </h4>
             <div className="flex flex-col gap-2.5">
-              {["YouTube", "Instagram", "TikTok"].map((platform) => (
-                <span
-                  key={platform}
-                  className="text-sm text-text-secondary"
+              {[
+                { name: "YouTube", url: "https://www.youtube.com/channel/UCVn0CzeMgvWamstMb73EOxw" },
+                { name: "Instagram", url: "https://www.instagram.com/card.fables" },
+                { name: "TikTok", url: "https://www.tiktok.com/@card.fables" },
+              ].map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-text-secondary transition-colors duration-200 hover:text-gold"
                 >
-                  {platform}
-                </span>
+                  {social.name}
+                </a>
               ))}
             </div>
           </div>
