@@ -51,6 +51,19 @@ export default function AboutPage() {
         </a>
       </p>
 
+      {/* Who It's For */}
+      <section className="mb-16">
+        <h2 className="mb-6 font-heading text-xl font-bold text-gold">
+          Who This Is For
+        </h2>
+        <p className="text-sm leading-relaxed text-text-body">
+          Built for the parent who wants something fresh to read with their kid.
+          The adult who still loves Pok&eacute;mon cards but grew out of the anime.
+          The collector who wants their cards to mean something beyond a price tag.
+          And the kid who just wants a good story with characters they already love.
+        </p>
+      </section>
+
       {/* The Concept */}
       <section className="mb-16">
         <h2 className="mb-6 font-heading text-xl font-bold text-gold">
