@@ -97,6 +97,18 @@ export default function SubmitPage() {
             Submit Another
           </Button>
         </div>
+        <p className="mt-8 text-sm text-text-dim">
+          Enjoy CardFables?{" "}
+          <a
+            href="https://ko-fi.com/cardfables"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gold hover:underline"
+          >
+            Buy us a coffee ☕ ↗
+          </a>{" "}
+          — it helps us keep writing!
+        </p>
       </div>
     );
   }

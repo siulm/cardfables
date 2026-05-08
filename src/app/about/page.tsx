@@ -36,8 +36,19 @@ export default function AboutPage() {
       <h1 className="mb-2 font-heading text-3xl font-bold text-text-primary">
         About CardFables
       </h1>
-      <p className="mb-12 text-base italic text-text-secondary">
+      <p className="mb-4 text-base italic text-text-secondary">
         Every card has a story worth telling.
+      </p>
+      <p className="mb-12 text-sm text-text-dim">
+        CardFables is free to read and community-supported.{" "}
+        <a
+          href="https://ko-fi.com/cardfables"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gold hover:underline"
+        >
+          Support us on Ko-fi ☕ ↗
+        </a>
       </p>
 
       {/* The Concept */}

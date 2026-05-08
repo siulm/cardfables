@@ -115,6 +115,14 @@ export function Hero() {
             <Button href={`/series/${feat.id}`} variant="ghost">
               Series Info
             </Button>
+            <a
+              href="https://ko-fi.com/cardfables"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-text-secondary transition-colors hover:text-gold"
+            >
+              ☕ Support Us ↗
+            </a>
           </div>
         </div>
       </div>
