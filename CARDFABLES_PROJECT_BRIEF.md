@@ -241,7 +241,7 @@ clients/pokemon-fables/
 
 - Shop product URLs are all `#` placeholders — no real Amazon affiliate links configured yet (Buy button shows "coming soon" gracefully)
 - Only 1 of 6 series has episodes; only 1 episode has real card images (others use emoji fallback)
-- Consider adding newsletter/RSS for episode updates
+- Newsletter/email capture: not needed for launch, but add later for retention (ConvertKit or Buttondown free tier). Places to add: about page + after last published episode. Social links cover this for now.
 - Consider Next.js `<Image>` component for automatic image optimization
 
 ---
