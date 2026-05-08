@@ -42,7 +42,7 @@
   --animate-ember: ember 6s ease-in infinite;
   --animate-shimmer: shimmer 2s linear infinite;
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
-  --animate-curtain-drop: curtain-drop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-curtain-drop: curtain-drop 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes fade-up {
     from {
@@ -91,13 +91,23 @@
   @keyframes curtain-drop {
     0% {
       opacity: 0;
-      transform: scaleY(0.4);
+      transform: translateY(-16px) scaleY(0.3);
       transform-origin: top center;
+      letter-spacing: -0.05em;
+      filter: blur(2px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(2px) scaleY(1.04);
+      letter-spacing: 0.01em;
+      filter: blur(0);
     }
     100% {
       opacity: 1;
-      transform: scaleY(1);
+      transform: translateY(0) scaleY(1);
       transform-origin: top center;
+      letter-spacing: 0;
+      filter: blur(0);
     }
   }
 }

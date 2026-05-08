@@ -118,7 +118,7 @@ export function StoryRenderer({
               );
             case "end":
               return (
-                <FadeUpOnScroll key={i} animation="curtain-drop" threshold={0.4}>
+                <FadeUpOnScroll key={i} animation="curtain-drop" threshold={0.1}>
                   <p
                     className="mt-8 text-center font-heading text-xl font-bold italic"
                     style={{ color: seriesColor }}
