@@ -18,12 +18,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const series = getSeriesBySlug(seriesSlug);
   if (!series) return {};
 
+  const epCount = series.episodes.filter((e) => e.status === "live").length;
+  const desc = `${series.desc} ${epCount} free episodes to read — written for kids and adults. ${series.genre}.`;
+
   return {
-    title: `${series.title} — CardFables`,
-    description: series.desc,
+    title: `${series.title} — Free ${series.genre} Stories | CardFables`,
+    description: desc,
     openGraph: {
       title: `${series.title} — CardFables`,
-      description: series.desc,
+      description: desc,
       type: "website",
     },
   };

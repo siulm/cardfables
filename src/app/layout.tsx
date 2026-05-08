@@ -28,11 +28,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "CardFables — Original Stories Inspired by Pokemon Card Artwork",
+    default: "CardFables — Free Pokemon Card Stories for Kids & Adults",
     template: "%s | CardFables",
   },
   description:
-    "Discover original episodic stories inspired by Pokemon trading card artwork. Drama, comedy, mystery — one card, one episode, one fable at a time.",
+    "Free original stories inspired by Pokemon card artwork. Written for kids (ages 6-11) and adults alike. New episodes regularly — read together or solo. Drama, comedy, mystery — one card, one fable at a time.",
   metadataBase: new URL("https://cardfables.com"),
   manifest: "/manifest.webmanifest",
   openGraph: {
