@@ -44,6 +44,21 @@ export function HowItWorks() {
           </div>
         ))}
       </div>
+
+      {/* Dual-age pitch */}
+      <div
+        className="mt-10 rounded-2xl border border-border p-8 text-center"
+        style={{ background: "var(--color-surface)" }}
+      >
+        <h3 className="mb-3 font-heading text-lg font-bold text-text-primary">
+          Two ways to read every story
+        </h3>
+        <p className="mx-auto max-w-lg text-sm leading-relaxed text-text-secondary">
+          Reading with a 7-year-old? Tap {"\u{1F423}"} Junior Fables — shorter sentences,
+          simpler words, all the fun. Reading solo? Tap {"\u{1F525}"} Full Fables — richer
+          language, deeper emotions, same story. Every episode has both.
+        </p>
+      </div>
     </section>
   );
 }
