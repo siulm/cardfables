@@ -34,6 +34,11 @@ export const metadata: Metadata = {
   description:
     "Discover original episodic stories inspired by Pokemon trading card artwork. Drama, comedy, mystery — one card, one episode, one fable at a time.",
   metadataBase: new URL("https://cardfables.com"),
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     siteName: "CardFables",
