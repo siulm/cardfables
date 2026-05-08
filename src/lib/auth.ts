@@ -1,11 +1,7 @@
 import { cookies } from "next/headers";
-import { createHash } from "crypto";
+import { randomBytes } from "crypto";
 
 const COOKIE_NAME = "admin_session";
-
-function hashPassword(password: string): string {
-  return createHash("sha256").update(password).digest("hex");
-}
 
 export function verifyPassword(password: string): boolean {
   const expected = process.env.ADMIN_PASSWORD;
@@ -15,7 +11,7 @@ export function verifyPassword(password: string): boolean {
 
 export async function setSessionCookie(): Promise<void> {
   const store = await cookies();
-  const token = hashPassword((process.env.ADMIN_PASSWORD || "") + Date.now());
+  const token = randomBytes(32).toString("hex");
   store.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
