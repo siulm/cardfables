@@ -49,3 +49,17 @@ export function findShopProductForCard(
   const short = shortName(card.name);
   return shop.find((p) => p.name.includes(short) && p.cat === "Featured");
 }
+
+export function resolveCardBuyUrl(
+  shop: ShopProduct[],
+  card: CardInfo
+): { url: string; external: boolean } {
+  if (card.affiliateUrl && card.affiliateUrl !== "#") {
+    return { url: card.affiliateUrl, external: true };
+  }
+  const fallback = findShopProductForCard(shop, card);
+  if (fallback?.url && fallback.url !== "#") {
+    return { url: fallback.url, external: true };
+  }
+  return { url: "/shop", external: false };
+}

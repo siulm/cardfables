@@ -1,22 +1,11 @@
 import Link from "next/link";
 import type { CardInfo } from "@/lib/types";
 import { SHOP } from "@/lib/data";
-import { findShopProductForCard } from "@/lib/shopMatch";
+import { resolveCardBuyUrl } from "@/lib/shopMatch";
 
 interface EpisodeCardSpotlightProps {
   cards: CardInfo[];
   seriesColor: string;
-}
-
-function resolveBuy(card: CardInfo): { url: string; external: boolean } {
-  if (card.affiliateUrl && card.affiliateUrl !== "#") {
-    return { url: card.affiliateUrl, external: true };
-  }
-  const fallback = findShopProductForCard(SHOP, card);
-  if (fallback?.url && fallback.url !== "#") {
-    return { url: fallback.url, external: true };
-  }
-  return { url: "/shop", external: false };
 }
 
 export function EpisodeCardSpotlight({
@@ -46,7 +35,7 @@ export function EpisodeCardSpotlight({
         }`}
       >
         {cards.map((card, i) => {
-          const buy = resolveBuy(card);
+          const buy = resolveCardBuyUrl(SHOP, card);
           const w = single ? 200 : 140;
           const h = single ? 280 : 196;
           return (

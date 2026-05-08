@@ -4,7 +4,7 @@ import { useEffect, useRef, useMemo, useState } from "react";
 import Link from "next/link";
 import type { AffiliateProduct, CardInfo } from "@/lib/types";
 import { SHOP } from "@/lib/data";
-import { rankProductsForEpisode, findShopProductForCard } from "@/lib/shopMatch";
+import { rankProductsForEpisode, resolveCardBuyUrl } from "@/lib/shopMatch";
 
 interface CardSidebarProps {
   cards: CardInfo[];
@@ -13,20 +13,9 @@ interface CardSidebarProps {
   mode: "junior" | "full";
 }
 
-function resolveBuy(card: CardInfo): { url: string; external: boolean } {
-  if (card.affiliateUrl && card.affiliateUrl !== "#") {
-    return { url: card.affiliateUrl, external: true };
-  }
-  const fallback = findShopProductForCard(SHOP, card);
-  if (fallback?.url && fallback.url !== "#") {
-    return { url: fallback.url, external: true };
-  }
-  return { url: "/shop", external: false };
-}
-
 export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarProps) {
   const asideRef = useRef<HTMLElement>(null);
-  const [pulseIndex, setPulseIndex] = useState<number | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   // Scroll-direction sticky behavior (unchanged)
   useEffect(() => {
@@ -58,15 +47,15 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Listen for chip clicks → pulse the matching card
+  // Listen for chip clicks → flash a focus ring on the matching card
   useEffect(() => {
     const onFocus = (e: Event) => {
       const detail = (e as CustomEvent<{ index: number }>).detail;
       if (typeof detail?.index !== "number") return;
-      setPulseIndex(detail.index);
+      setFocusedIndex(detail.index);
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const ms = reduce ? 0 : 1500;
-      window.setTimeout(() => setPulseIndex(null), ms);
+      window.setTimeout(() => setFocusedIndex(null), ms);
     };
     window.addEventListener("cardfables:focus-card", onFocus as EventListener);
     return () =>
@@ -80,7 +69,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
   );
 
   const primaryCard = cards[0];
-  const primaryBuy = primaryCard ? resolveBuy(primaryCard) : null;
+  const primaryBuy = primaryCard ? resolveCardBuyUrl(SHOP, primaryCard) : null;
 
   return (
     <aside ref={asideRef} className="lg:sticky lg:self-start" style={{ top: 96 }}>
@@ -123,14 +112,14 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
       {/* Card placeholders */}
       <div className="flex flex-col gap-3">
         {cards.map((card, ci) => {
-          const buy = resolveBuy(card);
+          const buy = resolveCardBuyUrl(SHOP, card);
           const cardImage = (
             <div
               className="relative h-full w-full overflow-hidden rounded-2xl"
               style={{
                 aspectRatio: cards.length > 1 ? "3/2" : "2.5/3.5",
                 boxShadow:
-                  pulseIndex === ci
+                  focusedIndex === ci
                     ? `0 0 0 3px ${seriesColor}, 0 0 32px ${seriesColor}80`
                     : `0 0 40px ${seriesColor}10, 0 16px 48px rgba(0,0,0,0.08)`,
                 transition: "box-shadow 350ms ease-out",
@@ -361,15 +350,15 @@ function BuyCTA({ card, buy, variant }: BuyCTAProps) {
     </Link>
   );
 
+  if (variant === "top") {
+    return button;
+  }
+
   return (
     <>
       {button}
       <p className="mt-2 text-center text-[10px] text-text-dim">
-        {variant === "top"
-          ? buy.external
-            ? "Opens Amazon.com — ask a parent first!"
-            : "Browse related cards on our shop page"
-          : buy.external
+        {buy.external
           ? "Opens Amazon.com — ask a parent first!"
           : "Browse related cards on our shop page"}
       </p>

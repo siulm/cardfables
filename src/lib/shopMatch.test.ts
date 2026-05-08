@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { rankProductsForEpisode, findShopProductForCard } from "./shopMatch";
+import { rankProductsForEpisode, findShopProductForCard, resolveCardBuyUrl } from "./shopMatch";
 import type { CardInfo, ShopProduct } from "./types";
 
 const charizard: CardInfo = {
@@ -116,5 +116,46 @@ describe("findShopProductForCard", () => {
   it("does not fall back to non-Featured short-name match", () => {
     const noCard: CardInfo = { name: "Booster", set: "X", artist: "Y", emoji: "📦" };
     expect(findShopProductForCard(shop, noCard)).toBeUndefined();
+  });
+});
+
+describe("resolveCardBuyUrl", () => {
+  const realUrlShop: ShopProduct[] = [
+    { id: 1, icon: "🔥", name: "Charizard V (SAR)", desc: "", price: "$45", cat: "Featured", url: "https://amazon.com/charizard" },
+  ];
+  const placeholderShop: ShopProduct[] = [
+    { id: 1, icon: "🔥", name: "Charizard V (SAR)", desc: "", price: "$45", cat: "Featured", url: "#" },
+  ];
+
+  it("returns card.affiliateUrl when set and not '#'", () => {
+    const card: CardInfo = { ...charizard, affiliateUrl: "https://amazon.com/direct" };
+    expect(resolveCardBuyUrl(placeholderShop, card)).toEqual({
+      url: "https://amazon.com/direct",
+      external: true,
+    });
+  });
+
+  it("falls back to shop product URL when affiliateUrl is '#' but shop has real URL", () => {
+    const card: CardInfo = { ...charizard, affiliateUrl: "#" };
+    expect(resolveCardBuyUrl(realUrlShop, card)).toEqual({
+      url: "https://amazon.com/charizard",
+      external: true,
+    });
+  });
+
+  it("falls back to /shop when both card and shop product have placeholder URLs", () => {
+    const card: CardInfo = { ...charizard, affiliateUrl: "#" };
+    expect(resolveCardBuyUrl(placeholderShop, card)).toEqual({
+      url: "/shop",
+      external: false,
+    });
+  });
+
+  it("falls back to /shop when no shop match exists", () => {
+    const card: CardInfo = { name: "Mewtwo", set: "X", artist: "Y", emoji: "🧠" };
+    expect(resolveCardBuyUrl(realUrlShop, card)).toEqual({
+      url: "/shop",
+      external: false,
+    });
   });
 });
