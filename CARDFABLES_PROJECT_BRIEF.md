@@ -171,6 +171,8 @@ Full Next.js 16 app deployed on Vercel:
 - Accessibility: form labels linked to inputs, skip-nav link, prefers-reduced-motion support, WCAG AA text contrast
 - Responsive: SeriesCard fills grid cells, admin sidebar hidden on mobile with hamburger drawer
 - Hero dynamically features series with most episodes (no hardcoding)
+- Homepage layout: Hero → Latest Episodes → How It Works → Submit CTA (no duplicate series sections)
+- Ko-fi donation links in 5 places: hero CTA, episode end (before next-episode link), about page top, submit confirmation, footer
 - Browse and Shop pages server-rendered for SEO (filter logic in client sub-components)
 - Auth: rate-limited login (5 attempts/15 min), 2-hour session duration
 - SEO: JSON-LD structured data, OpenGraph, sitemap, robots.txt
@@ -358,4 +360,4 @@ Prompt caching (story bible + system prompt) saves ~60% on input costs.
 
 ---
 
-*Last updated: May 8, 2026. Genre-agnostic platform with multi-series support, story arc system, admin dashboard (overview/generate/submissions/shop/story arc/series/episodes), Ghibli theme, social links, Ko-fi donations, teaser generator, favicon, OG social share images, PWA manifest, reading progress bar, text size toggle, share button, kid safety warnings, privacy/terms pages, friendly 404, WCAG AA contrast, responsive admin, rate-limited auth.*
+*Last updated: May 8, 2026. Genre-agnostic platform with multi-series support, story arc system, admin dashboard (overview/generate/submissions/shop/story arc/series/episodes), Ghibli theme, social links, Ko-fi donations (5 placements), teaser generator, favicon, OG social share images, PWA manifest, reading progress bar, text size toggle, share button, kid safety warnings, privacy/terms pages, friendly 404, WCAG AA contrast, responsive admin, rate-limited auth, streamlined homepage, stronger SEO metadata.*
