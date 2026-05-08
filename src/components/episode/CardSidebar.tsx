@@ -110,7 +110,7 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
       )}
 
       {/* Card placeholders */}
-      <div className="flex flex-col gap-3">
+      <div className="mt-3.5 flex flex-col gap-3">
         {cards.map((card, ci) => {
           const buy = resolveCardBuyUrl(SHOP, card);
           const cardImage = (
