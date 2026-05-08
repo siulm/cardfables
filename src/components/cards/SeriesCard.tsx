@@ -12,7 +12,7 @@ export function SeriesCard({ series }: SeriesCardProps) {
   return (
     <Link
       href={`/series/${series.id}`}
-      className="group block w-[280px] overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01]"
+      className="group block w-full min-w-[280px] overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01]"
       style={
         {
           background: "var(--color-surface)",
