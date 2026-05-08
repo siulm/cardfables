@@ -1,3 +1,5 @@
+import { FadeUpOnScroll } from "@/components/effects/FadeUpOnScroll";
+
 const STEPS = [
   {
     icon: "\u{1F4F7}",
@@ -23,7 +25,8 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section className="py-16">
+    <FadeUpOnScroll>
+      <section className="py-16">
       <p className="mb-10 text-center text-sm italic text-text-secondary">
         One card. One episode. One fable at a time.
       </p>
@@ -59,6 +62,7 @@ export function HowItWorks() {
           language, deeper emotions, same story. Every episode has both.
         </p>
       </div>
-    </section>
+      </section>
+    </FadeUpOnScroll>
   );
 }

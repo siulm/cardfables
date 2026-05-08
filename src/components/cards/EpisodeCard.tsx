@@ -42,7 +42,7 @@ export function EpisodeCard({ episode, series, index }: EpisodeCardProps) {
   return (
     <Link
       href={`/series/${series.id}/${episode.slug}`}
-      className="group block overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1"
+      className="hover-lift group block overflow-hidden rounded-2xl border border-border"
       style={{ background: "var(--color-surface)" }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = `${series.color}44`;

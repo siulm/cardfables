@@ -11,7 +11,7 @@ export function ShopCard({ product }: ShopCardProps) {
 
   const card = (
     <div
-      className={`group overflow-hidden rounded-2xl border border-border transition-all duration-300 ${hasUrl ? "hover:-translate-y-1 cursor-pointer" : ""}`}
+      className={`group overflow-hidden rounded-2xl border border-border ${hasUrl ? "hover-lift cursor-pointer" : ""}`}
       style={{ background: "var(--color-surface)" }}
       onMouseEnter={(e) => {
         if (hasUrl) e.currentTarget.style.borderColor = "rgba(212,137,58,0.2)";

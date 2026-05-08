@@ -12,7 +12,7 @@ export function SeriesCard({ series }: SeriesCardProps) {
   return (
     <Link
       href={`/series/${series.id}`}
-      className="group block w-full min-w-[280px] overflow-hidden rounded-2xl border border-border transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01]"
+      className="hover-lift group block w-full min-w-[280px] overflow-hidden rounded-2xl border border-border"
       style={
         {
           background: "var(--color-surface)",
@@ -20,14 +20,10 @@ export function SeriesCard({ series }: SeriesCardProps) {
         } as React.CSSProperties
       }
       onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = `${series.color}44`;
-        el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.10), 0 0 30px ${series.color}15`;
+        e.currentTarget.style.borderColor = `${series.color}44`;
       }}
       onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = "";
-        el.style.boxShadow = "";
+        e.currentTarget.style.borderColor = "";
       }}
     >
       {/* Gradient header */}

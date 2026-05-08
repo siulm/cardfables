@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { SERIES } from "@/lib/data";
+import { HeroClouds } from "@/components/effects/HeroClouds";
 
 export function Hero() {
   const feat = SERIES.filter((s) => s.epCount > 0).sort((a, b) => b.epCount - a.epCount)[0] ?? SERIES[0];
@@ -16,43 +17,8 @@ export function Hero() {
               "linear-gradient(180deg, #87BBCF 0%, #B8D4DC 25%, #E8D8C0 55%, #F0E4D0 75%, #F5F0E6 100%)",
           }}
         />
-        {/* Subtle cloud shapes */}
-        <div
-          className="absolute"
-          style={{
-            top: "8%",
-            right: "15%",
-            width: 180,
-            height: 50,
-            background: "rgba(255,255,255,0.35)",
-            borderRadius: 40,
-            filter: "blur(8px)",
-          }}
-        />
-        <div
-          className="absolute"
-          style={{
-            top: "12%",
-            right: "25%",
-            width: 120,
-            height: 35,
-            background: "rgba(255,255,255,0.25)",
-            borderRadius: 30,
-            filter: "blur(6px)",
-          }}
-        />
-        <div
-          className="absolute"
-          style={{
-            top: "6%",
-            left: "10%",
-            width: 140,
-            height: 40,
-            background: "rgba(255,255,255,0.20)",
-            borderRadius: 35,
-            filter: "blur(10px)",
-          }}
-        />
+        {/* Parallax cloud layer */}
+        <HeroClouds />
       </div>
 
       {/* Content */}
