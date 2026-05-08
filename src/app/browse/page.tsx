@@ -1,18 +1,14 @@
-"use client";
-
-import { useState } from "react";
-import { FilterPills } from "@/components/ui/FilterPills";
-import { SeriesCard } from "@/components/cards/SeriesCard";
+import type { Metadata } from "next";
+import { BrowseGrid } from "@/components/browse/BrowseGrid";
 import { SERIES } from "@/lib/data";
 
+export const metadata: Metadata = {
+  title: "Browse All Series — CardFables",
+  description: `Explore ${SERIES.length} original story series inspired by card artwork on CardFables.`,
+};
+
 export default function BrowsePage() {
-  const [filter, setFilter] = useState("All");
-
-  // Derive browse types dynamically from series data
   const browseTypes = ["All", ...Array.from(new Set(SERIES.map((s) => s.type).filter(Boolean)))] as const;
-
-  const filtered =
-    filter === "All" ? SERIES : SERIES.filter((s) => s.type === filter);
   const totalEps = SERIES.reduce((sum, s) => sum + s.epCount, 0);
 
   return (
@@ -25,19 +21,7 @@ export default function BrowsePage() {
         {totalEps !== 1 ? "s" : ""} and counting
       </p>
 
-      <div className="mb-8">
-        <FilterPills
-          options={browseTypes}
-          active={filter}
-          onChange={setFilter}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((s) => (
-          <SeriesCard key={s.id} series={s} />
-        ))}
-      </div>
+      <BrowseGrid series={SERIES} browseTypes={browseTypes} />
     </div>
   );
 }
