@@ -97,6 +97,8 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
               <img
                 src={card.image}
                 alt={card.name}
+                width={320}
+                height={448}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -149,12 +151,20 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
           </div>
         ))}
 
-        <Button href={cards[0]?.affiliateUrl ?? "#"} className="mt-3.5 w-full">
-          Buy on Amazon ↗
-        </Button>
-        <p className="mt-2 text-center text-[10px] text-text-dim">
-          Opens Amazon.com — ask a parent first!
-        </p>
+        {cards[0]?.affiliateUrl && cards[0].affiliateUrl !== "#" ? (
+          <>
+            <Button href={cards[0].affiliateUrl} className="mt-3.5 w-full">
+              Buy on Amazon ↗
+            </Button>
+            <p className="mt-2 text-center text-[10px] text-text-dim">
+              Opens Amazon.com — ask a parent first!
+            </p>
+          </>
+        ) : (
+          <div className="mt-3.5 w-full rounded-xl px-7 py-3.5 text-center text-sm font-semibold text-text-dim" style={{ background: "rgba(74,64,53,0.06)" }}>
+            Buy link coming soon
+          </div>
+        )}
       </div>
 
       {/* Collector's Gear */}

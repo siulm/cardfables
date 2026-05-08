@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CardSidebar } from "./CardSidebar";
 import { StoryRenderer } from "./StoryRenderer";
 import { NextEpisodeCTA } from "./NextEpisodeCTA";
@@ -16,6 +16,21 @@ type TextSize = "normal" | "large" | "xl";
 export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
   const [mode, setMode] = useState<"junior" | "full">("junior");
   const [textSize, setTextSize] = useState<TextSize>("normal");
+  const [progress, setProgress] = useState(0);
+  const readerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = readerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = el.scrollHeight - window.innerHeight;
+      const scrolled = -rect.top;
+      setProgress(Math.min(1, Math.max(0, scrolled / total)));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const story = mode === "junior" ? episode.junior : episode.full;
   const episodeIndex = series.episodes.findIndex((e) => e.id === episode.id);
@@ -24,6 +39,14 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
 
   return (
     <>
+      {/* Reading progress bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 h-1" style={{ background: "rgba(74,64,53,0.06)" }}>
+        <div
+          className="h-full transition-[width] duration-150"
+          style={{ width: `${progress * 100}%`, background: series.color }}
+        />
+      </div>
+
       {/* Episode header */}
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-3">
@@ -38,9 +61,27 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
             Episode {episode.id}
           </span>
         </div>
-        <h1 className="font-heading text-3xl font-bold text-text-primary">
-          {episode.title}
-        </h1>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="font-heading text-3xl font-bold text-text-primary">
+            {episode.title}
+          </h1>
+          <button
+            onClick={() => {
+              const url = window.location.href;
+              const text = `Read "${episode.title}" on CardFables!`;
+              if (navigator.share) {
+                navigator.share({ title: episode.title, text, url });
+              } else {
+                navigator.clipboard.writeText(url);
+                alert("Link copied!");
+              }
+            }}
+            className="mt-1 flex-shrink-0 cursor-pointer rounded-lg border border-border px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
+            aria-label="Share this episode"
+          >
+            Share ↗
+          </button>
+        </div>
         <p className="mt-1 text-sm text-text-dim">
           Featuring: {episode.cards.map((c) => c.name).join(" + ")}
         </p>
@@ -106,7 +147,7 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
       </div>
 
       {/* Two-column reader */}
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
+      <div ref={readerRef} className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
         <div>
           <StoryRenderer story={story} seriesColor={series.color} mode={mode} textSize={textSize} />
           <NextEpisodeCTA

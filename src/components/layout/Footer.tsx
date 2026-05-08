@@ -132,10 +132,11 @@ export function Footer() {
               qualifying purchases.
             </p>
           </div>
-          <p className="mt-6 text-xs text-footer-copyright">
-            &copy; {new Date().getFullYear()} CardFables. All original stories
-            and content are the property of their creators.
-          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-footer-copyright">
+            <span>&copy; {new Date().getFullYear()} CardFables. All original stories and content are the property of their creators.</span>
+            <Link href="/privacy" className="text-footer-copyright hover:text-text-secondary transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-footer-copyright hover:text-text-secondary transition-colors">Terms of Use</Link>
+          </div>
         </div>
       </div>
     </footer>

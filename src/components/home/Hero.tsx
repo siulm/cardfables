@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { EmberParticles } from "@/components/effects/EmberParticles";
 import { SERIES } from "@/lib/data";
 
 export function Hero() {
@@ -55,8 +54,6 @@ export function Hero() {
           }}
         />
       </div>
-
-      {/* EmberParticles removed — doesn't fit the light storybook theme */}
 
       {/* Content */}
       <div className="relative z-10 mx-auto flex max-w-6xl items-center px-6" style={{ minHeight: "88vh" }}>

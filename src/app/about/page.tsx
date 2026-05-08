@@ -22,7 +22,7 @@ const FAQ = [
   },
   {
     q: "What age group is this for?",
-    a: "We write for ages 10-30+. Fun and accessible for younger readers, but with enough drama and humor for adults. Think Pixar — enjoyable at any age.",
+    a: "Everyone! Junior Fables are written for ages 6\u201311 with simpler words and shorter sentences. Full Fables are for ages 12+ with richer storytelling. Think Pixar \u2014 enjoyable at any age.",
   },
   {
     q: "Can I use these stories?",
@@ -83,6 +83,26 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Creator */}
+      <section className="mb-16">
+        <h2 className="mb-6 font-heading text-xl font-bold text-gold">
+          Who Makes This?
+        </h2>
+        <div className="space-y-5 text-sm leading-relaxed text-text-body">
+          <p>
+            CardFables is a one-person project built in Tokyo. Every story is
+            written with care, every card is chosen for its artwork, and every
+            episode is crafted to be something you&rsquo;d want to read aloud
+            with your kids &mdash; or sneak off to read on your own.
+          </p>
+          <p>
+            The stories are generated with AI (Claude by Anthropic) and curated
+            by a human who genuinely loves Pokemon cards and good storytelling.
+            Think of it as a collaboration between creativity and technology.
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         className="rounded-2xl p-8 text-center"
@@ -111,7 +131,7 @@ export default function AboutPage() {
             rel="noopener noreferrer"
             className="text-gold hover:underline"
           >
-            Support CardFables on Ko-fi ☕
+            Support CardFables on Ko-fi ☕ ↗
           </a>
         </p>
       </section>
