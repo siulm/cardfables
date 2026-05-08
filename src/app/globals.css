@@ -113,6 +113,18 @@ html {
   background-color: rgba(212, 137, 58, 0.2);
 }
 
+/* Story prose — first paragraph raised cap (body color, larger size) */
+.drop-cap-letter {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.2em;
+  line-height: 1;
+  vertical-align: baseline;
+  margin-right: 0.06em;
+  color: inherit;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   height: 6px;
