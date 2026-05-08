@@ -250,6 +250,7 @@ clients/pokemon-fables/
 - Add Zod input validation schemas to API routes (low priority — all routes are behind admin auth, no public risk)
 - GitHub-as-storage isn't transactional — safe with single admin user, but replace with database (Supabase) before multi-tenant SaaS to handle concurrent writes
 - build-data.js hardcoded to `pokemon-fables` client — make dynamic before adding second client
+- Expand test coverage to auth, submissions, and publish API routes (currently only generate-episode utilities are tested)
 
 ---
 
