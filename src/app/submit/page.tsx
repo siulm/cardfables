@@ -133,10 +133,10 @@ export default function SubmitPage() {
         />
 
         {/* Series radio */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-text-secondary">
+        <fieldset className="flex flex-col gap-2">
+          <legend className="text-sm font-medium text-text-secondary">
             Which series? (optional)
-          </label>
+          </legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {[...SERIES.map((s) => s.title), "New Series"].map((option) => (
               <label
@@ -180,11 +180,11 @@ export default function SubmitPage() {
               </label>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         {/* Photo upload */}
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-text-secondary">
+          <label htmlFor="field-card-photo" className="text-sm font-medium text-text-secondary">
             Card Photo *
           </label>
           <div
@@ -207,6 +207,7 @@ export default function SubmitPage() {
             )}
           </div>
           <input
+            id="field-card-photo"
             ref={fileInputRef}
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
