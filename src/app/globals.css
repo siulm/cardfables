@@ -17,6 +17,11 @@
   --color-footer-disclaimer: #7A6E5E;
   --color-footer-copyright: #8A7E6E;
 
+  /* Depth tokens */
+  --shadow-soft: 0 4px 14px rgba(74, 64, 53, 0.06);
+  --shadow-warm: 0 12px 32px rgba(212, 137, 58, 0.10);
+  --shadow-deep: 0 20px 60px rgba(74, 64, 53, 0.16);
+
   --color-fire: #e8651a;
   --color-fire-accent: #ffb347;
   --color-water: #3b82f6;
@@ -37,6 +42,7 @@
   --animate-ember: ember 6s ease-in infinite;
   --animate-shimmer: shimmer 2s linear infinite;
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-curtain-drop: curtain-drop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes fade-up {
     from {
@@ -79,6 +85,19 @@
     }
     50% {
       opacity: 1;
+    }
+  }
+
+  @keyframes curtain-drop {
+    0% {
+      opacity: 0;
+      transform: scaleY(0.4);
+      transform-origin: top center;
+    }
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+      transform-origin: top center;
     }
   }
 }
@@ -130,6 +149,35 @@ html {
 }
 .fade-d4 {
   animation-delay: 0.4s;
+}
+
+/* Hover lift — translateY + warmer shadow on hover */
+.hover-lift {
+  transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-warm), var(--shadow-soft);
+}
+
+/* Press shadow — subtle inset on :active for buttons */
+.press-shadow:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 6px rgba(74, 64, 53, 0.18);
+}
+
+/* Story prose — first paragraph drop cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 3.4em;
+  line-height: 0.9;
+  margin: 0.08em 0.08em 0 0;
+  color: var(--series-color, #D4893A);
 }
 
 /* Horizontal scroll row */
