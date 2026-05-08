@@ -245,6 +245,7 @@ clients/pokemon-fables/
 - Only 1 of 6 series has episodes; only 1 episode has real card images (others use emoji fallback)
 - Newsletter/email capture: not needed for launch, but add later for retention (ConvertKit or Buttondown free tier). Places to add: about page + after last published episode. Social links cover this for now.
 - Consider Next.js `<Image>` component for automatic image optimization
+- Show featured community submissions on the submit page as social proof (needs real submissions first + permission flagging)
 
 ---
 
