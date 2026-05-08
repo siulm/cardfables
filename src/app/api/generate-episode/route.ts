@@ -215,7 +215,11 @@ export async function POST(request: Request) {
       nextEpisode,
     });
   } catch (err) {
+    console.error("Generate episode error:", err);
     const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const safeMessage = message.includes("api") || message.includes("key") || message.includes("token")
+      ? "Episode generation failed. Check server logs."
+      : message;
+    return NextResponse.json({ error: safeMessage }, { status: 500 });
   }
 }
