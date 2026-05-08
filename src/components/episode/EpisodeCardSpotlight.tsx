@@ -41,8 +41,8 @@ export function EpisodeCardSpotlight({
           return (
             <div
               key={i}
-              className="flex flex-col items-center"
-              style={{ width: w }}
+              className="hover-lift flex flex-col items-center rounded-xl"
+              style={{ width: w, padding: 4 }}
             >
               <div
                 className="relative overflow-hidden rounded-xl"

@@ -1,6 +1,7 @@
 import type { CardInfo, StoryData } from "@/lib/types";
 import { splitParagraph } from "@/lib/cardMentions";
 import { CardChip } from "./CardChip";
+import { FadeUpOnScroll } from "@/components/effects/FadeUpOnScroll";
 
 type TextSize = "normal" | "large" | "xl";
 
@@ -42,9 +43,19 @@ export function StoryRenderer({
   cards,
 }: StoryRendererProps) {
   const { fontSize, lineHeight } = SIZE_MAP[textSize][mode];
+  const firstProseIndex = story.paragraphs.findIndex((b) => b.t === "p");
+
   return (
-    <article className="max-w-2xl">
-      <p className="mb-8 text-sm italic text-text-secondary">{story.scene}</p>
+    <article
+      className="max-w-2xl"
+      style={{ ["--series-color" as string]: seriesColor }}
+    >
+      {/* Scene heading — italic with flanking ornaments */}
+      <p className="mb-8 flex items-center justify-center gap-3 text-sm italic text-text-secondary">
+        <span aria-hidden="true" style={{ color: seriesColor, opacity: 0.5 }}>·</span>
+        <span>{story.scene}</span>
+        <span aria-hidden="true" style={{ color: seriesColor, opacity: 0.5 }}>·</span>
+      </p>
 
       <div className="space-y-6">
         {story.paragraphs.map((block, i) => {
@@ -53,7 +64,7 @@ export function StoryRenderer({
               return (
                 <p
                   key={i}
-                  className="text-text-story"
+                  className={`text-text-story story-paragraph ${i === firstProseIndex ? "drop-cap" : ""}`}
                   style={{ fontSize, lineHeight }}
                 >
                   {renderWithChips(block.c, cards, seriesColor)}
@@ -63,8 +74,11 @@ export function StoryRenderer({
               return (
                 <blockquote
                   key={i}
-                  className="rounded-xl border-l-2 py-1 pl-5"
-                  style={{ borderColor: seriesColor }}
+                  className="rounded-xl py-1 pl-5"
+                  style={{
+                    borderLeft: `2px solid ${seriesColor}`,
+                    borderImage: `linear-gradient(180deg, ${seriesColor}, ${seriesColor}33) 1`,
+                  }}
                 >
                   {block.speaker && (
                     <span
@@ -90,13 +104,14 @@ export function StoryRenderer({
               );
             case "end":
               return (
-                <p
-                  key={i}
-                  className="mt-8 text-center font-heading text-xl font-bold italic"
-                  style={{ color: seriesColor }}
-                >
-                  {block.c}
-                </p>
+                <FadeUpOnScroll key={i} animation="curtain-drop" threshold={0.4}>
+                  <p
+                    className="mt-8 text-center font-heading text-xl font-bold italic"
+                    style={{ color: seriesColor }}
+                  >
+                    {block.c}
+                  </p>
+                </FadeUpOnScroll>
               );
             default:
               return null;

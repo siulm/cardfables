@@ -5,6 +5,8 @@ import { CardSidebar } from "./CardSidebar";
 import { StoryRenderer } from "./StoryRenderer";
 import { NextEpisodeCTA } from "./NextEpisodeCTA";
 import { EpisodeCardSpotlight } from "./EpisodeCardSpotlight";
+import { FadeUpOnScroll } from "@/components/effects/FadeUpOnScroll";
+import { EmberParticles } from "@/components/effects/EmberParticles";
 import type { Episode, Series } from "@/lib/types";
 
 interface EpisodeReaderProps {
@@ -35,6 +37,8 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
 
   const story = mode === "junior" ? episode.junior : episode.full;
   const episodeIndex = series.episodes.findIndex((e) => e.id === episode.id);
+  const isFireSeries =
+    series.color.toLowerCase() === "#e8651a" || series.type === "Fire";
 
   if (!story) return null;
 
@@ -149,23 +153,37 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
 
       {/* Two-column reader */}
       <div ref={readerRef} className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
-        <div>
-          <StoryRenderer
-            story={story}
-            seriesColor={series.color}
-            mode={mode}
-            textSize={textSize}
-            cards={episode.cards}
-          />
-          <EpisodeCardSpotlight
-            cards={episode.cards}
-            seriesColor={series.color}
-          />
-          <NextEpisodeCTA
-            series={series}
-            currentEpisodeId={episode.id}
-            currentEpisodeIndex={episodeIndex}
-          />
+        <div className="relative">
+          {isFireSeries && (
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{ opacity: 0.35 }}
+            >
+              <EmberParticles />
+            </div>
+          )}
+          <div className="relative z-10">
+            <FadeUpOnScroll>
+              <StoryRenderer
+                story={story}
+                seriesColor={series.color}
+                mode={mode}
+                textSize={textSize}
+                cards={episode.cards}
+              />
+            </FadeUpOnScroll>
+            <FadeUpOnScroll delay={0.1}>
+              <EpisodeCardSpotlight
+                cards={episode.cards}
+                seriesColor={series.color}
+              />
+            </FadeUpOnScroll>
+            <NextEpisodeCTA
+              series={series}
+              currentEpisodeId={episode.id}
+              currentEpisodeIndex={episodeIndex}
+            />
+          </div>
         </div>
         <CardSidebar
           cards={episode.cards}
