@@ -150,7 +150,7 @@ export default function SubmitPage() {
             Which series? (optional)
           </legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {[...SERIES.map((s) => s.title), "New Series"].map((option) => (
+            {[...SERIES.map((s) => ({ title: s.title, coming: s.epCount === 0 })), { title: "New Series", coming: false }].map(({ title: option, coming }) => (
               <label
                 key={option}
                 className="flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition-colors duration-200"
@@ -188,7 +188,8 @@ export default function SubmitPage() {
                     <span className="h-2 w-2 rounded-full bg-gold" />
                   )}
                 </span>
-                {option}
+                <span>{option}</span>
+                {coming && <span className="rounded-full bg-[rgba(74,64,53,0.08)] px-2 py-0.5 text-[10px] text-text-dim">Coming Soon</span>}
               </label>
             ))}
           </div>
