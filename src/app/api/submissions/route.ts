@@ -84,6 +84,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Card photo is required" }, { status: 400 });
     }
 
+    if (photo.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ error: "Photo must be under 10MB" }, { status: 400 });
+    }
+
     // Read photo as base64
     const buffer = Buffer.from(await photo.arrayBuffer());
     const base64Data = buffer.toString("base64");
