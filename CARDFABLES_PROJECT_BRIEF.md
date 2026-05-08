@@ -249,6 +249,7 @@ clients/pokemon-fables/
 - Episode popularity indicators: use Vercel Analytics privately first, then add "Popular"/"Trending" badges once traffic justifies it (avoid raw view counters — low numbers look bad early on)
 - Add Zod input validation schemas to API routes (low priority — all routes are behind admin auth, no public risk)
 - GitHub-as-storage isn't transactional — safe with single admin user, but replace with database (Supabase) before multi-tenant SaaS to handle concurrent writes
+- build-data.js hardcoded to `pokemon-fables` client — make dynamic before adding second client
 
 ---
 
