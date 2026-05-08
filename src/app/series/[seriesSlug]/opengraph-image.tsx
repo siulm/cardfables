@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getSeriesBySlug, SERIES } from "@/lib/data";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "CardFables Series";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -53,6 +53,7 @@ export default async function OGImage({
         </div>
         <div
           style={{
+            display: "flex",
             fontSize: 56,
             fontWeight: 900,
             color: "#3B2F1E",
@@ -65,6 +66,7 @@ export default async function OGImage({
         </div>
         <div
           style={{
+            display: "flex",
             fontSize: 26,
             color: "#7A6B5A",
             marginBottom: 32,
