@@ -62,6 +62,15 @@ export async function POST(request: Request) {
     );
     const bible: Bible = JSON.parse(bibleRaw);
 
+    // Validate episode ID — must be exactly last_episode + 1
+    const expectedId = bible.last_episode + 1;
+    if (episode.id !== expectedId) {
+      return NextResponse.json(
+        { error: `Episode ID mismatch: expected ${expectedId}, got ${episode.id}` },
+        { status: 400 }
+      );
+    }
+
     // Merge updates
     const updatedBible = mergeBibleUpdates(bible, bible_updates);
 
