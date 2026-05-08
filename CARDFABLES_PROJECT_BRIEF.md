@@ -246,6 +246,7 @@ clients/pokemon-fables/
 - Newsletter/email capture: not needed for launch, but add later for retention (ConvertKit or Buttondown free tier). Places to add: about page + after last published episode. Social links cover this for now.
 - Consider Next.js `<Image>` component for automatic image optimization
 - Show featured community submissions on the submit page as social proof (needs real submissions first + permission flagging)
+- Episode popularity indicators: use Vercel Analytics privately first, then add "Popular"/"Trending" badges once traffic justifies it (avoid raw view counters — low numbers look bad early on)
 
 ---
 
