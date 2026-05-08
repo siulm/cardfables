@@ -36,7 +36,7 @@ export function Footer() {
               Series
             </h4>
             <div className="flex flex-col gap-2.5">
-              {SERIES.slice(0, 4).map((s) => (
+              {SERIES.filter((s) => s.epCount > 0).slice(0, 4).map((s) => (
                 <Link
                   key={s.id}
                   href={`/series/${s.id}`}
