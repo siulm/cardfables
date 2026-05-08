@@ -3,7 +3,7 @@ import { EmberParticles } from "@/components/effects/EmberParticles";
 import { SERIES } from "@/lib/data";
 
 export function Hero() {
-  const feat = SERIES[0];
+  const feat = SERIES.filter((s) => s.epCount > 0).sort((a, b) => b.epCount - a.epCount)[0] ?? SERIES[0];
 
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "88vh" }}>
@@ -88,19 +88,10 @@ export function Hero() {
               fontSize: "clamp(2.8rem, 6vw, 4.8rem)",
               lineHeight: 1.02,
               letterSpacing: -1.5,
+              color: feat.color,
             }}
           >
-            <span style={{ color: "#E8651A" }}>Flames</span>{" "}
-            <span
-              className="font-heading italic font-normal"
-              style={{
-                color: "#4A4035",
-                fontSize: "0.48em",
-              }}
-            >
-              of our
-            </span>{" "}
-            <span style={{ color: "#D4893A" }}>Lives</span>
+            {feat.title}
           </h1>
 
           {/* Description */}
