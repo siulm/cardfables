@@ -42,7 +42,31 @@ async function screenImage(base64Data: string, mediaType: string): Promise<boole
   return answer === "NO";
 }
 
+const submitAttempts = new Map<string, { count: number; resetAt: number }>();
+const MAX_SUBMISSIONS = 5;
+const SUBMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function getClientIp(req: Request): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+}
+
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const now = Date.now();
+  const record = submitAttempts.get(ip);
+
+  if (record && now < record.resetAt && record.count >= MAX_SUBMISSIONS) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again later." },
+      { status: 429 }
+    );
+  }
+
+  const entry = record && now < record.resetAt
+    ? { count: record.count + 1, resetAt: record.resetAt }
+    : { count: 1, resetAt: now + SUBMIT_WINDOW_MS };
+  submitAttempts.set(ip, entry);
+
   try {
     const formData = await request.formData();
 
