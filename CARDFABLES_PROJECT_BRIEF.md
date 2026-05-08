@@ -247,6 +247,7 @@ clients/pokemon-fables/
 - Consider Next.js `<Image>` component for automatic image optimization
 - Show featured community submissions on the submit page as social proof (needs real submissions first + permission flagging)
 - Episode popularity indicators: use Vercel Analytics privately first, then add "Popular"/"Trending" badges once traffic justifies it (avoid raw view counters — low numbers look bad early on)
+- Add Zod input validation schemas to API routes (low priority — all routes are behind admin auth, no public risk)
 
 ---
 
