@@ -8,6 +8,7 @@ import { AdminProvider, useAdmin } from "./context";
 const NAV_ITEMS = [
   { href: "/admin", label: "Overview", icon: "📊" },
   { href: "/admin/generate", label: "Generate", icon: "✨" },
+  { href: "/admin/episodes", label: "Episodes", icon: "🃏" },
   { href: "/admin/submissions", label: "Submissions", icon: "📬" },
   { href: "/admin/shop", label: "Shop", icon: "🛍️" },
   { href: "/admin/arc", label: "Story Arc", icon: "📖" },

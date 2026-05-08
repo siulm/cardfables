@@ -114,6 +114,13 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
                 </span>
               </div>
             )}
+            {card.sold && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <span className="rounded-lg bg-red-600 px-4 py-1.5 text-sm font-bold tracking-widest text-white shadow-lg" style={{ transform: "rotate(-12deg)" }}>
+                  SOLD
+                </span>
+              </div>
+            )}
             {cards.length > 1 && (
               <div className="absolute top-2 left-2 rounded-md bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white/90 backdrop-blur-sm">
                 CARD {ci + 1} OF {cards.length}

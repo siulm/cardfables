@@ -5,6 +5,7 @@ export interface CardInfo {
   emoji: string;
   image?: string;
   affiliateUrl?: string;
+  sold?: boolean;
 }
 
 export interface AffiliateProduct {
