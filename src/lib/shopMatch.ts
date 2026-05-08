@@ -4,6 +4,7 @@ const FULL_NAME_MATCH = 10;
 const SHORT_NAME_MATCH = 5;
 const FEATURED_BONUS = 2;
 const BOOSTER_BONUS = 1;
+const MIN_REAL_URLS_TO_FILTER = 3;
 
 function shortName(name: string): string {
   return name.split(/\s+/)[0];
@@ -14,9 +15,8 @@ export function rankProductsForEpisode(
   cards: CardInfo[],
   limit = 3
 ): ShopProduct[] {
-  const realUrlCount = shop.filter((p) => p.url && p.url !== "#").length;
-  const pool =
-    realUrlCount >= 3 ? shop.filter((p) => p.url && p.url !== "#") : shop;
+  const realUrlPool = shop.filter((p) => p.url && p.url !== "#");
+  const pool = realUrlPool.length >= MIN_REAL_URLS_TO_FILTER ? realUrlPool : shop;
 
   const scored = pool.map((p) => {
     let s = 0;
