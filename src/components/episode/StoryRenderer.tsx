@@ -1,4 +1,6 @@
-import type { StoryData } from "@/lib/types";
+import type { CardInfo, StoryData } from "@/lib/types";
+import { splitParagraph } from "@/lib/cardMentions";
+import { CardChip } from "./CardChip";
 
 type TextSize = "normal" | "large" | "xl";
 
@@ -13,16 +15,37 @@ interface StoryRendererProps {
   seriesColor: string;
   mode: "junior" | "full";
   textSize?: TextSize;
+  cards: CardInfo[];
 }
 
-export function StoryRenderer({ story, seriesColor, mode, textSize = "normal" }: StoryRendererProps) {
+function renderWithChips(
+  text: string,
+  cards: CardInfo[],
+  seriesColor: string
+): React.ReactNode {
+  const segments = splitParagraph(text, cards);
+  return segments.map((seg, i) => {
+    if (seg.kind === "text") return <span key={i}>{seg.value}</span>;
+    return (
+      <CardChip key={i} cardIndex={seg.cardIndex} seriesColor={seriesColor}>
+        {seg.value}
+      </CardChip>
+    );
+  });
+}
+
+export function StoryRenderer({
+  story,
+  seriesColor,
+  mode,
+  textSize = "normal",
+  cards,
+}: StoryRendererProps) {
   const { fontSize, lineHeight } = SIZE_MAP[textSize][mode];
   return (
     <article className="max-w-2xl">
-      {/* Scene heading */}
       <p className="mb-8 text-sm italic text-text-secondary">{story.scene}</p>
 
-      {/* Story blocks */}
       <div className="space-y-6">
         {story.paragraphs.map((block, i) => {
           switch (block.t) {
@@ -33,7 +56,7 @@ export function StoryRenderer({ story, seriesColor, mode, textSize = "normal" }:
                   className="text-text-story"
                   style={{ fontSize, lineHeight }}
                 >
-                  {block.c}
+                  {renderWithChips(block.c, cards, seriesColor)}
                 </p>
               );
             case "q":
@@ -51,10 +74,8 @@ export function StoryRenderer({ story, seriesColor, mode, textSize = "normal" }:
                       {block.speaker}
                     </span>
                   )}
-                  <p
-                    className="text-base italic leading-[1.85] text-text-primary"
-                  >
-                    {block.c}
+                  <p className="text-base italic leading-[1.85] text-text-primary">
+                    {renderWithChips(block.c, cards, seriesColor)}
                   </p>
                 </blockquote>
               );

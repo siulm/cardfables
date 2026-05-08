@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { CardSidebar } from "./CardSidebar";
 import { StoryRenderer } from "./StoryRenderer";
 import { NextEpisodeCTA } from "./NextEpisodeCTA";
+import { EpisodeCardSpotlight } from "./EpisodeCardSpotlight";
 import type { Episode, Series } from "@/lib/types";
 
 interface EpisodeReaderProps {
@@ -149,7 +150,17 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
       {/* Two-column reader */}
       <div ref={readerRef} className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
         <div>
-          <StoryRenderer story={story} seriesColor={series.color} mode={mode} textSize={textSize} />
+          <StoryRenderer
+            story={story}
+            seriesColor={series.color}
+            mode={mode}
+            textSize={textSize}
+            cards={episode.cards}
+          />
+          <EpisodeCardSpotlight
+            cards={episode.cards}
+            seriesColor={series.color}
+          />
           <NextEpisodeCTA
             series={series}
             currentEpisodeId={episode.id}

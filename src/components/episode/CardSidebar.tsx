@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useMemo } from "react";
-import { Button } from "@/components/ui/Button";
-import type { AffiliateProduct, CardInfo, ShopProduct } from "@/lib/types";
+import { useEffect, useRef, useMemo, useState } from "react";
+import Link from "next/link";
+import type { AffiliateProduct, CardInfo } from "@/lib/types";
 import { SHOP } from "@/lib/data";
+import { rankProductsForEpisode, findShopProductForCard } from "@/lib/shopMatch";
 
 interface CardSidebarProps {
   cards: CardInfo[];
@@ -12,14 +13,27 @@ interface CardSidebarProps {
   mode: "junior" | "full";
 }
 
+function resolveBuy(card: CardInfo): { url: string; external: boolean } {
+  if (card.affiliateUrl && card.affiliateUrl !== "#") {
+    return { url: card.affiliateUrl, external: true };
+  }
+  const fallback = findShopProductForCard(SHOP, card);
+  if (fallback?.url && fallback.url !== "#") {
+    return { url: fallback.url, external: true };
+  }
+  return { url: "/shop", external: false };
+}
+
 export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarProps) {
   const asideRef = useRef<HTMLElement>(null);
+  const [pulseIndex, setPulseIndex] = useState<number | null>(null);
 
+  // Scroll-direction sticky behavior (unchanged)
   useEffect(() => {
     const aside = asideRef.current;
     if (!aside) return;
 
-    const topGap = 96; // 6rem — matches the navbar clearance
+    const topGap = 96;
     let lastScrollY = window.scrollY;
     let stickyTop = topGap;
 
@@ -30,11 +44,9 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
       const viewportH = window.innerHeight;
 
       if (sidebarH <= viewportH - topGap) {
-        // Sidebar fits in viewport — plain sticky
         stickyTop = topGap;
       } else {
-        // Taller than viewport — shift top with scroll direction
-        const minTop = viewportH - sidebarH; // negative
+        const minTop = viewportH - sidebarH;
         stickyTop = Math.max(minTop, Math.min(topGap, stickyTop - delta));
       }
 
@@ -46,18 +58,33 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Pick 2-3 random shop products (stable per render)
-  const randomProducts = useMemo(() => {
-    const withUrl = SHOP.filter((p) => p.url && p.url !== "#");
-    const pool = withUrl.length > 0 ? withUrl : SHOP;
-    const count = Math.min(3, pool.length);
-    const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
+  // Listen for chip clicks → pulse the matching card
+  useEffect(() => {
+    const onFocus = (e: Event) => {
+      const detail = (e as CustomEvent<{ index: number }>).detail;
+      if (typeof detail?.index !== "number") return;
+      setPulseIndex(detail.index);
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const ms = reduce ? 0 : 1500;
+      window.setTimeout(() => setPulseIndex(null), ms);
+    };
+    window.addEventListener("cardfables:focus-card", onFocus as EventListener);
+    return () =>
+      window.removeEventListener("cardfables:focus-card", onFocus as EventListener);
   }, []);
+
+  // Smarter "You Might Like" — episode-aware
+  const suggestedProducts = useMemo(
+    () => rankProductsForEpisode(SHOP, cards, 3),
+    [cards]
+  );
+
+  const primaryCard = cards[0];
+  const primaryBuy = primaryCard ? resolveBuy(primaryCard) : null;
 
   return (
     <aside ref={asideRef} className="lg:sticky lg:self-start" style={{ top: 96 }}>
-      {/* Reading level info */}
+      {/* Reading level info — stays at top for parent reassurance */}
       <div
         className="mb-3.5 rounded-xl border p-3.5"
         style={{
@@ -79,62 +106,108 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
         </div>
         <p className="text-xs leading-relaxed text-text-dim">
           {mode === "junior"
-            ? "Written for ages 6\u201311. Shorter sentences, simpler words, all the fun. Perfect for reading together!"
+            ? "Written for ages 6–11. Shorter sentences, simpler words, all the fun. Perfect for reading together!"
             : "Written for ages 12 and up. Richer vocabulary, deeper emotions, dramatic storytelling."}
         </p>
       </div>
 
+      {/* Top Buy CTA — above-the-fold conversion */}
+      {primaryCard && primaryBuy && (
+        <BuyCTA
+          card={primaryCard}
+          buy={primaryBuy}
+          variant="top"
+        />
+      )}
+
       {/* Card placeholders */}
       <div className="flex flex-col gap-3">
-        {cards.map((card, ci) => (
-          <div
-            key={ci}
-            className="relative overflow-hidden rounded-2xl"
-            style={{
-              aspectRatio: cards.length > 1 ? "3/2" : "2.5/3.5",
-              boxShadow: `0 0 40px ${seriesColor}10, 0 16px 48px rgba(0,0,0,0.08)`,
-            }}
-          >
-            {card.image ? (
-              <img
-                src={card.image}
-                alt={card.name}
-                width={320}
-                height={448}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div
-                className="flex h-full w-full flex-col items-center justify-center"
-                style={{
-                  background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}55, ${seriesColor}22)`,
-                }}
-              >
-                <span className={cards.length > 1 ? "text-4xl" : "text-5xl"}>
-                  {card.emoji}
-                </span>
-                <span className="mt-1 text-xs font-semibold text-white/90">
-                  {card.name}
-                </span>
-              </div>
-            )}
-            {card.sold && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                <span className="rounded-lg bg-red-600 px-4 py-1.5 text-sm font-bold tracking-widest text-white shadow-lg" style={{ transform: "rotate(-12deg)" }}>
-                  SOLD
-                </span>
-              </div>
-            )}
-            {cards.length > 1 && (
-              <div className="absolute top-2 left-2 rounded-md bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white/90 backdrop-blur-sm">
-                CARD {ci + 1} OF {cards.length}
-              </div>
-            )}
-          </div>
-        ))}
+        {cards.map((card, ci) => {
+          const buy = resolveBuy(card);
+          const cardImage = (
+            <div
+              className="relative h-full w-full overflow-hidden rounded-2xl"
+              style={{
+                aspectRatio: cards.length > 1 ? "3/2" : "2.5/3.5",
+                boxShadow:
+                  pulseIndex === ci
+                    ? `0 0 0 3px ${seriesColor}, 0 0 32px ${seriesColor}80`
+                    : `0 0 40px ${seriesColor}10, 0 16px 48px rgba(0,0,0,0.08)`,
+                transition: "box-shadow 350ms ease-out",
+              }}
+            >
+              {card.image ? (
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  width={320}
+                  height={448}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div
+                  className="flex h-full w-full flex-col items-center justify-center"
+                  style={{
+                    background: `linear-gradient(135deg, ${seriesColor}CC, ${seriesColor}55, ${seriesColor}22)`,
+                  }}
+                >
+                  <span className={cards.length > 1 ? "text-4xl" : "text-5xl"}>
+                    {card.emoji}
+                  </span>
+                  <span className="mt-1 text-xs font-semibold text-white/90">
+                    {card.name}
+                  </span>
+                </div>
+              )}
+              {card.sold && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                  <span
+                    className="rounded-lg bg-red-600 px-4 py-1.5 text-sm font-bold tracking-widest text-white shadow-lg"
+                    style={{ transform: "rotate(-12deg)" }}
+                  >
+                    SOLD
+                  </span>
+                </div>
+              )}
+              {cards.length > 1 && (
+                <div className="absolute top-2 left-2 rounded-md bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wider text-white/90 backdrop-blur-sm">
+                  CARD {ci + 1} OF {cards.length}
+                </div>
+              )}
+            </div>
+          );
+
+          return (
+            <div
+              id={`sidebar-card-${ci}`}
+              key={ci}
+              className="relative"
+            >
+              {buy.external ? (
+                <a
+                  href={buy.url}
+                  target="_blank"
+                  rel="nofollow noopener"
+                  aria-label={`Buy ${card.name} on Amazon`}
+                  className="block"
+                >
+                  {cardImage}
+                </a>
+              ) : (
+                <Link
+                  href={buy.url}
+                  aria-label={`Browse ${card.name} in shop`}
+                  className="block"
+                >
+                  {cardImage}
+                </Link>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Card info */}
+      {/* Card info + bottom Buy CTA */}
       <div
         className="mt-3.5 rounded-xl border border-border p-4"
         style={{ background: "var(--color-surface-light, #E8DFD0)" }}
@@ -147,29 +220,20 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
             <p className="text-xs text-text-dim">
               {card.set} &middot; Art by {card.artist}
             </p>
-            {ci < cards.length - 1 && (
-              <div className="mt-3 h-px bg-border" />
-            )}
+            {ci < cards.length - 1 && <div className="mt-3 h-px bg-border" />}
           </div>
         ))}
 
-        {cards[0]?.affiliateUrl && cards[0].affiliateUrl !== "#" ? (
-          <>
-            <Button href={cards[0].affiliateUrl} className="mt-3.5 w-full">
-              Buy on Amazon ↗
-            </Button>
-            <p className="mt-2 text-center text-[10px] text-text-dim">
-              Opens Amazon.com — ask a parent first!
-            </p>
-          </>
-        ) : (
-          <div className="mt-3.5 w-full rounded-xl px-7 py-3.5 text-center text-sm font-semibold text-text-dim" style={{ background: "rgba(74,64,53,0.06)" }}>
-            Buy link coming soon
-          </div>
+        {primaryCard && primaryBuy && (
+          <BuyCTA
+            card={primaryCard}
+            buy={primaryBuy}
+            variant="bottom"
+          />
         )}
       </div>
 
-      {/* Collector's Gear */}
+      {/* Collector's Gear (unchanged) */}
       {products && products.length > 0 && (
         <div
           className="mt-3.5 rounded-xl border border-border p-4"
@@ -212,39 +276,103 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
         </div>
       )}
 
-      {/* Shop suggestions */}
-      {randomProducts.length > 0 && (
-        <div className="mt-3.5 rounded-xl border border-border p-4" style={{ background: "var(--color-surface, #F2EDE4)" }}>
+      {/* You Might Like — now episode-aware */}
+      {suggestedProducts.length > 0 && (
+        <div
+          className="mt-3.5 rounded-xl border border-border p-4"
+          style={{ background: "var(--color-surface, #F2EDE4)" }}
+        >
           <h4 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
             You Might Like
           </h4>
           <div className="flex flex-col gap-2.5">
-          {randomProducts.map((product, i) => {
-            const hasUrl = product.url && product.url !== "#";
-            return (
-            <a
-              key={i}
-              href={hasUrl ? product.url : undefined}
-              target={hasUrl ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className={`flex items-center gap-3 rounded-lg border border-border p-3 transition-colors ${
-                hasUrl ? "hover:border-[rgba(212,137,58,0.3)] cursor-pointer" : ""
-              }`}
-              style={{ background: "rgba(74,64,53,0.04)" }}
-            >
-              <span className="text-2xl">{product.icon}</span>
-              <div className="min-w-0 flex-1">
-                <div className="text-[13px] font-semibold text-text-primary">{product.name}</div>
-                <div className="text-[11px] text-text-dim mt-0.5">{product.desc}</div>
-                <div className="mt-1 text-xs font-bold text-gold">{product.price}</div>
-              </div>
-            </a>
-            );
-          })}
+            {suggestedProducts.map((product, i) => {
+              const hasUrl = product.url && product.url !== "#";
+              const Tag = hasUrl ? "a" : Link;
+              const href = hasUrl ? product.url! : "/shop";
+              const props = hasUrl
+                ? {
+                    href,
+                    target: "_blank" as const,
+                    rel: "nofollow noopener",
+                  }
+                : { href };
+              return (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <Tag
+                  key={i}
+                  {...(props as any)}
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-[rgba(212,137,58,0.3)]"
+                  style={{ background: "rgba(74,64,53,0.04)" }}
+                >
+                  <span className="text-2xl">{product.icon}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[13px] font-semibold text-text-primary">
+                      {product.name}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-text-dim">
+                      {product.desc}
+                    </div>
+                    <div className="mt-1 text-xs font-bold text-gold">
+                      {product.price}
+                    </div>
+                  </div>
+                </Tag>
+              );
+            })}
           </div>
         </div>
       )}
-
     </aside>
+  );
+}
+
+interface BuyCTAProps {
+  card: CardInfo;
+  buy: { url: string; external: boolean };
+  variant: "top" | "bottom";
+}
+
+function BuyCTA({ card, buy, variant }: BuyCTAProps) {
+  const label = buy.external
+    ? `Buy ${card.name} ↗`
+    : `Browse this card in Shop →`;
+
+  const className =
+    "mt-3.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-[#FFFEF7] transition-opacity hover:opacity-90";
+  const style = {
+    background: "linear-gradient(135deg, #D4893A, #B86E28)",
+    boxShadow: "0 8px 28px rgba(212,137,58,0.25)",
+  };
+
+  const button = buy.external ? (
+    <a
+      href={buy.url}
+      target="_blank"
+      rel="nofollow noopener"
+      className={className}
+      style={style}
+    >
+      {label}
+    </a>
+  ) : (
+    <Link href={buy.url} className={className} style={style}>
+      {label}
+    </Link>
+  );
+
+  return (
+    <>
+      {button}
+      <p className="mt-2 text-center text-[10px] text-text-dim">
+        {variant === "top"
+          ? buy.external
+            ? "Opens Amazon.com — ask a parent first!"
+            : "Browse related cards on our shop page"
+          : buy.external
+          ? "Opens Amazon.com — ask a parent first!"
+          : "Browse related cards on our shop page"}
+      </p>
+    </>
   );
 }
