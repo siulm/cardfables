@@ -171,6 +171,9 @@ export async function POST(request: Request) {
     ];
 
     const apiKey = process.env.ANTHROPIC_API_KEY || config.anthropic_api_key;
+    if (!apiKey) {
+      return NextResponse.json({ error: "ANTHROPIC_API_KEY is not configured" }, { status: 500 });
+    }
     const client = new Anthropic({ apiKey });
 
     const response = await client.messages.create({
