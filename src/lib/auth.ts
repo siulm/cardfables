@@ -21,7 +21,7 @@ export async function setSessionCookie(): Promise<void> {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24, // 24 hours
+    maxAge: 60 * 60 * 2, // 2 hours
   });
 }
 

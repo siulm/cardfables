@@ -77,16 +77,16 @@ function LoginGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-function Sidebar() {
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { selectedSeries, setSelectedSeries, allSeries, setAuthenticated } = useAdmin();
   const seriesOptions = allSeries.length > 0 ? allSeries : [{ id: "flames-of-our-lives", title: "Flames of Our Lives" }];
 
   return (
-    <aside className="fixed top-0 left-0 h-screen w-56 border-r border-border bg-surface flex flex-col z-40">
+    <>
       {/* Logo */}
       <div className="px-5 py-5 border-b border-border">
-        <Link href="/admin" className="flex items-center gap-2 no-underline">
+        <Link href="/admin" className="flex items-center gap-2 no-underline" onClick={onNavigate}>
           <span
             className="flex h-7 w-7 items-center justify-center rounded-lg text-xs"
             style={{ background: "linear-gradient(135deg, #D4893A, #B86E28)" }}
@@ -119,6 +119,7 @@ function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors no-underline ${
                 isActive
                   ? "bg-[rgba(212,137,58,0.12)] text-[#D4893A] font-semibold"
@@ -149,17 +150,48 @@ function Sidebar() {
           Logout
         </button>
       </div>
-    </aside>
+    </>
   );
 }
 
 function DashboardShell({ children }: { children: React.ReactNode }) {
   const { error, setError, success, setSuccess } = useAdmin();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-bg">
-      <Sidebar />
-      <main className="flex-1 ml-56 px-8 py-8">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex fixed top-0 left-0 h-screen w-56 border-r border-border bg-surface flex-col z-40">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setSidebarOpen(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <aside
+            className="relative h-screen w-56 border-r border-border bg-surface flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SidebarContent onNavigate={() => setSidebarOpen(false)} />
+          </aside>
+        </div>
+      )}
+
+      {/* Mobile top bar */}
+      <div className="fixed top-0 left-0 right-0 z-30 flex items-center gap-3 border-b border-border bg-surface px-4 py-3 lg:hidden">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-text-secondary hover:bg-[rgba(74,64,53,0.06)] cursor-pointer"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M3 5h14M3 10h14M3 15h14" />
+          </svg>
+        </button>
+        <span className="font-heading text-sm font-bold text-gold">Admin</span>
+      </div>
+
+      <main className="flex-1 lg:ml-56 px-4 sm:px-8 py-8 pt-16 lg:pt-8">
         {/* Messages */}
         {error && (
           <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
