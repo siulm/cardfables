@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
-import { randomBytes } from "crypto";
+import { randomBytes, timingSafeEqual } from "crypto";
 
 const COOKIE_NAME = "admin_session";
 
 export function verifyPassword(password: string): boolean {
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) return false;
-  return password === expected;
+  if (password.length !== expected.length) return false;
+  return timingSafeEqual(Buffer.from(password), Buffer.from(expected));
 }
 
 export async function setSessionCookie(): Promise<void> {
