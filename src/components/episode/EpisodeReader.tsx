@@ -56,7 +56,7 @@ export function EpisodeReader({ episode, series }: EpisodeReaderProps) {
       <div className="mb-8">
         <div className="mb-2 flex items-center gap-3">
           <span
-            className="text-xs font-semibold uppercase tracking-wider"
+            className="font-heading text-sm font-semibold uppercase tracking-wider"
             style={{ color: series.color }}
           >
             {series.title}
