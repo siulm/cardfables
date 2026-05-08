@@ -64,7 +64,7 @@ export function NextEpisodeCTA({
           rel="noopener noreferrer"
           className="text-gold hover:underline"
         >
-          Buy us a coffee ☕
+          Buy us a coffee ☕ ↗
         </a>
       </p>
     </>

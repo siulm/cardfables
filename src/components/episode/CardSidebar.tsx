@@ -150,8 +150,11 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
         ))}
 
         <Button href={cards[0]?.affiliateUrl ?? "#"} className="mt-3.5 w-full">
-          Buy {cards.length > 1 ? "These Cards" : "This Card"}
+          Buy on Amazon ↗
         </Button>
+        <p className="mt-2 text-center text-[10px] text-text-dim">
+          Opens Amazon.com — ask a parent first!
+        </p>
       </div>
 
       {/* Collector's Gear */}
@@ -161,8 +164,11 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
           style={{ background: "var(--color-surface-light, #E8DFD0)" }}
         >
           <h4 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
-            Collector&apos;s Gear
+            Collector&apos;s Gear ↗
           </h4>
+          <p className="mb-2.5 text-[10px] text-text-dim">
+            These links go to Amazon.com — ask a grown-up before buying!
+          </p>
           <div className="flex flex-col gap-2.5">
             {products.map((product, i) => (
               <a

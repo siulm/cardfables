@@ -1,14 +1,22 @@
 import type { StoryData } from "@/lib/types";
 
+type TextSize = "normal" | "large" | "xl";
+
+const SIZE_MAP: Record<TextSize, Record<"junior" | "full", { fontSize: string; lineHeight: string }>> = {
+  normal: { junior: { fontSize: "16px", lineHeight: "1.9" }, full: { fontSize: "15px", lineHeight: "1.85" } },
+  large:  { junior: { fontSize: "19px", lineHeight: "2.0" }, full: { fontSize: "18px", lineHeight: "1.95" } },
+  xl:     { junior: { fontSize: "22px", lineHeight: "2.1" }, full: { fontSize: "21px", lineHeight: "2.05" } },
+};
+
 interface StoryRendererProps {
   story: StoryData;
   seriesColor: string;
   mode: "junior" | "full";
+  textSize?: TextSize;
 }
 
-export function StoryRenderer({ story, seriesColor, mode }: StoryRendererProps) {
-  const fontSize = mode === "junior" ? "16px" : "15px";
-  const lineHeight = mode === "junior" ? "1.9" : "1.85";
+export function StoryRenderer({ story, seriesColor, mode, textSize = "normal" }: StoryRendererProps) {
+  const { fontSize, lineHeight } = SIZE_MAP[textSize][mode];
   return (
     <article className="max-w-2xl">
       {/* Scene heading */}

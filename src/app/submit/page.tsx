@@ -33,11 +33,11 @@ export default function SubmitPage() {
     setError("");
 
     if (!cardName.trim()) {
-      setError("Card name is required.");
+      setError("Oops! What\u2019s your card called? Type the name above.");
       return;
     }
     if (!photo) {
-      setError("Card photo is required.");
+      setError("Don\u2019t forget to add a photo of your card!");
       return;
     }
 
@@ -58,14 +58,14 @@ export default function SubmitPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Submission could not be processed.");
+        setError(data.error || "Hmm, something went wrong. Try again in a moment!");
         setSubmitting(false);
         return;
       }
 
       setSubmitted(true);
     } catch {
-      setError("Submission could not be processed.");
+      setError("Hmm, something went wrong. Try again in a moment!");
     } finally {
       setSubmitting(false);
     }

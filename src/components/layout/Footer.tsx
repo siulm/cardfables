@@ -96,7 +96,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm text-text-secondary transition-colors duration-200 hover:text-gold"
                 >
-                  {social.name}
+                  {social.name} ↗
                 </a>
               ))}
               <a
@@ -105,7 +105,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-[rgba(212,137,58,0.2)] bg-[rgba(212,137,58,0.06)] px-3 py-1.5 text-xs font-semibold text-gold transition-colors duration-200 hover:bg-[rgba(212,137,58,0.12)]"
               >
-                ☕ Support CardFables
+                ☕ Support CardFables ↗
               </a>
             </div>
           </div>
