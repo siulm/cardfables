@@ -98,6 +98,61 @@ export default async function SeriesPage({ params }: Props) {
         </div>
       </div>
 
+      {/* Start Reading prompt */}
+      {series.episodes.length > 0 && series.episodes[0].status === "live" && (
+        <div
+          className="mb-10 flex flex-col items-center gap-3 rounded-2xl border border-dashed p-8 text-center sm:flex-row sm:text-left"
+          style={{ borderColor: `${series.color}33` }}
+        >
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-text-primary">New here?</p>
+            <p className="mt-1 text-sm text-text-secondary">
+              Start from Episode 1 — each episode builds on the last.
+            </p>
+          </div>
+          <a
+            href={`/series/${series.id}/${series.episodes[0].slug}`}
+            className="inline-block flex-shrink-0 rounded-lg px-6 py-2.5 text-sm font-bold text-[#FFFEF7] transition-opacity hover:opacity-90"
+            style={{ background: `linear-gradient(135deg, #D4893A, #B86E28)` }}
+          >
+            Read Episode 1 &rarr;
+          </a>
+        </div>
+      )}
+
+      {/* Meet the Cast */}
+      {series.characters && series.characters.length > 0 && (
+        <section className="mb-10">
+          <h2 className="mb-5 font-heading text-xl font-bold text-text-primary">
+            Meet the Cast
+          </h2>
+          {series.setting && (
+            <p className="mb-5 text-sm italic text-text-secondary">
+              Set in {series.setting}
+            </p>
+          )}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {series.characters.slice(0, 6).map((char) => (
+              <div
+                key={char.name}
+                className="rounded-xl border border-border p-4"
+                style={{ background: "var(--color-surface)" }}
+              >
+                <h3 className="text-sm font-bold text-text-primary">
+                  {char.name}
+                </h3>
+                {char.card !== "N/A" && (
+                  <p className="mt-0.5 text-xs text-text-dim">{char.card}</p>
+                )}
+                <p className="mt-1.5 text-xs leading-relaxed text-text-secondary">
+                  {char.role}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Episodes */}
       <h2 className="mb-5 font-heading text-xl font-bold text-text-primary">
         Episodes

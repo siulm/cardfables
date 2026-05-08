@@ -27,6 +27,12 @@ export interface Episode {
   full?: StoryData;
 }
 
+export interface SeriesCharacter {
+  name: string;
+  card: string;
+  role: string;
+}
+
 export interface Series {
   id: string;
   title: string;
@@ -40,6 +46,8 @@ export interface Series {
   status: "Airing" | "Coming Soon";
   epCount: number;
   episodes: Episode[];
+  characters?: SeriesCharacter[];
+  setting?: string;
 }
 
 export type StoryBlockType = "p" | "q" | "a" | "end";

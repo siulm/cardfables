@@ -58,11 +58,27 @@ const seriesWithEpisodes = series.map((s) => {
   // Update status to Airing if there are live episodes
   const status = liveEpisodes.length > 0 ? "Airing" : s.status;
 
+  // Read story bible for characters and setting
+  const biblePath = join(clientDir, "series", s.id, "story-bible.json");
+  let characters = [];
+  let setting = "";
+  if (existsSync(biblePath)) {
+    const bible = JSON.parse(readFileSync(biblePath, "utf-8"));
+    characters = (bible.characters || []).map((c) => ({
+      name: c.name,
+      card: c.card,
+      role: c.role,
+    }));
+    setting = bible.setting || "";
+  }
+
   return {
     ...s,
     status,
     epCount: liveEpisodes.length,
     episodes: liveEpisodes,
+    characters,
+    setting,
   };
 });
 

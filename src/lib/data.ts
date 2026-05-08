@@ -1389,7 +1389,45 @@ export const SERIES: Series[] = [
           ]
         }
       }
-    ]
+    ],
+    "characters": [
+      {
+        "name": "Charizard",
+        "card": "Charizard V",
+        "role": "reluctant hero, secretly kind"
+      },
+      {
+        "name": "Venusaur",
+        "card": "N/A",
+        "role": "skeptical neighbor, growing to care"
+      },
+      {
+        "name": "Mismagius",
+        "card": "Mismagius ex",
+        "role": "dramatic observer, reluctant hero"
+      },
+      {
+        "name": "Genesect",
+        "card": "Genesect V",
+        "role": "antagonist, approaching from north"
+      },
+      {
+        "name": "Team Rocket's Dugtrio",
+        "card": "ロケット団のダグトリオ 083/193 (m2a)",
+        "role": "Team Rocket agents tunneling beneath the northern caves to create a hidden entry point for Genesect; three heads, perpetually bickering, dangerously competent despite themselves"
+      },
+      {
+        "name": "Metang",
+        "card": "メタング 092/083 AR (M4) — illus. Kurata So",
+        "role": "Structural inspector and assessor for Verdant Valley's Safety and Infrastructure Initiative; rule-abiding, methodical, deeply principled, and now the only thing standing between a tunneling Dugtrio and a cave full of baby Pokémon"
+      },
+      {
+        "name": "Ceruledge",
+        "card": "ソウブレイズ 109/106 AR SV8 — illus. Rond",
+        "role": "Mysterious armored wanderer with ghost-fire blades and a flair for the dramatic entrance; appeared claiming to be 'in the area'; used Blaze Curse to neutralize Dugtrio's Team Rocket equipment; now standing as the first line of defense against Genesect's cannon blast, flanked reluctantly by Venusaur and Mismagius"
+      }
+    ],
+    "setting": "Verdant Valley"
   },
   {
     "id": "oceans-deep",
@@ -1403,7 +1441,9 @@ export const SERIES: Series[] = [
     "desc": "A missing Lapras. A suspicious Gyarados. A detective Slowking who's way smarter than everyone thinks. Dive into the underwater mystery that has the whole reef talking.",
     "status": "Coming Soon",
     "epCount": 0,
-    "episodes": []
+    "episodes": [],
+    "characters": [],
+    "setting": "Unknown"
   },
   {
     "id": "grass-is-greener",
@@ -1417,7 +1457,9 @@ export const SERIES: Series[] = [
     "desc": "Bulbasaur just wanted a quiet garden. Then Oddish moved in next door. Then Sunflora started a podcast. Welcome to the funniest meadow in the Pokemon world.",
     "status": "Coming Soon",
     "epCount": 0,
-    "episodes": []
+    "episodes": [],
+    "characters": [],
+    "setting": "Unknown"
   },
   {
     "id": "thunderstruck",
@@ -1431,7 +1473,9 @@ export const SERIES: Series[] = [
     "desc": "A young Pichu trying to evolve, a legendary Raikou who refuses to teach, and a storm that's about to change everything.",
     "status": "Coming Soon",
     "epCount": 0,
-    "episodes": []
+    "episodes": [],
+    "characters": [],
+    "setting": "Unknown"
   },
   {
     "id": "shadow-protocol",
@@ -1445,7 +1489,9 @@ export const SERIES: Series[] = [
     "desc": "Gengar is running a spy ring. Absol knows too much. And someone in the shadows is pulling all the strings. A psychological thriller where nobody is innocent.",
     "status": "Coming Soon",
     "epCount": 0,
-    "episodes": []
+    "episodes": [],
+    "characters": [],
+    "setting": "Unknown"
   },
   {
     "id": "iron-will",
@@ -1459,7 +1505,9 @@ export const SERIES: Series[] = [
     "desc": "An ancient conflict. A reluctant Lucario. A kingdom on the edge of collapse. The steel-type epic that will test everything you believe about honor and sacrifice.",
     "status": "Coming Soon",
     "epCount": 0,
-    "episodes": []
+    "episodes": [],
+    "characters": [],
+    "setting": "Unknown"
   }
 ];
 
