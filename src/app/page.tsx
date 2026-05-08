@@ -1,14 +1,10 @@
 import { Hero } from "@/components/home/Hero";
-import { SeriesRow } from "@/components/home/SeriesRow";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Button } from "@/components/ui/Button";
 import { EpisodeCard } from "@/components/cards/EpisodeCard";
 import { SERIES } from "@/lib/data";
 
 export default function Home() {
-  const withEpisodes = SERIES.filter((s) => s.epCount > 0);
-  const airing = withEpisodes.filter((s) => s.status === "Airing");
-
   // Get latest episodes across all series
   const latestEpisodes = SERIES.flatMap((s) =>
     s.episodes
@@ -28,7 +24,7 @@ export default function Home() {
             name: "CardFables",
             url: "https://cardfables.com",
             description:
-              "Original episodic stories inspired by Pokemon trading card artwork.",
+              "Free original stories inspired by Pokemon trading card artwork.",
           }),
         }}
       />
@@ -36,15 +32,6 @@ export default function Home() {
       <Hero />
 
       <div className="mx-auto max-w-6xl px-6">
-        {/* Now Airing */}
-        {airing.length > 0 && (
-          <SeriesRow
-            title="Now Airing"
-            emoji={"\u{1F525}"}
-            series={airing}
-          />
-        )}
-
         {/* Latest Episodes */}
         {latestEpisodes.length > 0 && (
           <section className="py-6">
@@ -62,15 +49,6 @@ export default function Home() {
               ))}
             </div>
           </section>
-        )}
-
-        {/* All Series (only those with episodes) */}
-        {withEpisodes.length > 1 && (
-          <SeriesRow
-            title="All Series"
-            emoji={"\u{1F3AC}"}
-            series={withEpisodes}
-          />
         )}
 
         {/* How It Works */}
