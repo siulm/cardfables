@@ -18,8 +18,20 @@ export function NextEpisodeCTA({
 
   return (
     <>
+      <p className="mt-12 text-center text-sm text-text-dim">
+        Enjoyed this fable?{" "}
+        <a
+          href="https://ko-fi.com/cardfables"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gold hover:underline"
+        >
+          Buy us a coffee ☕ ↗
+        </a>
+      </p>
+
       <div
-        className="mt-12 rounded-2xl border border-dashed p-8 text-center"
+        className="mt-6 rounded-2xl border border-dashed p-8 text-center"
         style={{ borderColor: `${series.color}33` }}
       >
         {hasNextLive ? (
@@ -55,18 +67,6 @@ export function NextEpisodeCTA({
           </>
         )}
       </div>
-
-      <p className="mt-6 text-center text-sm text-text-dim">
-        Enjoyed this fable?{" "}
-        <a
-          href="https://ko-fi.com/cardfables"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gold hover:underline"
-        >
-          Buy us a coffee ☕ ↗
-        </a>
-      </p>
     </>
   );
 }
