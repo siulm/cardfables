@@ -8,6 +8,7 @@ interface Card {
   set: string;
   emoji: string;
   sold?: boolean;
+  affiliateUrl?: string;
 }
 
 interface Episode {
@@ -21,6 +22,7 @@ export default function EpisodesPage() {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState<string | null>(null);
+  const [savingUrl, setSavingUrl] = useState<string | null>(null);
 
   const fetchEpisodes = useCallback(async () => {
     setLoading(true);
@@ -78,6 +80,30 @@ export default function EpisodesPage() {
     }
   }
 
+  async function saveAffiliateUrl(episodeId: number, cardIndex: number, url: string) {
+    const key = `url-${episodeId}-${cardIndex}`;
+    setSavingUrl(key);
+    try {
+      const res = await fetch("/api/episodes", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          seriesId: selectedSeries,
+          episodeId,
+          cardIndex,
+          affiliateUrl: url,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setSuccess("Affiliate URL saved");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to save URL");
+    } finally {
+      setSavingUrl(null);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -109,31 +135,61 @@ export default function EpisodesPage() {
             <div className="space-y-2">
               {ep.cards.map((card, ci) => {
                 const key = `${ep.id}-${ci}`;
+                const urlKey = `url-${ep.id}-${ci}`;
                 const isSold = card.sold ?? false;
+                const currentUrl = card.affiliateUrl ?? "";
+                const hasUrl = currentUrl && currentUrl !== "#";
                 return (
                   <div
                     key={ci}
-                    className="flex items-center justify-between rounded-lg border border-border px-3 py-2"
+                    className="rounded-lg border border-border px-3 py-3"
                     style={{ background: "rgba(74,64,53,0.04)" }}
                   >
-                    <div className="flex items-center gap-2 text-sm">
-                      <span>{card.emoji}</span>
-                      <span className="font-medium text-text-primary">{card.name}</span>
-                      <span className="text-text-dim">— {card.set}</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span>{card.emoji}</span>
+                        <span className="font-medium text-text-primary">{card.name}</span>
+                        <span className="text-text-dim">— {card.set}</span>
+                      </div>
+                      <button
+                        onClick={() => toggleSold(ep.id, ci, isSold)}
+                        disabled={toggling === key}
+                        className="cursor-pointer rounded-lg px-3 py-1 text-xs font-bold tracking-wider transition-colors"
+                        style={{
+                          background: isSold ? "rgba(239,68,68,0.12)" : "rgba(34,197,94,0.10)",
+                          color: isSold ? "#EF4444" : "#22C55E",
+                          border: `1px solid ${isSold ? "rgba(239,68,68,0.25)" : "rgba(34,197,94,0.2)"}`,
+                          opacity: toggling === key ? 0.5 : 1,
+                        }}
+                      >
+                        {toggling === key ? "..." : isSold ? "SOLD" : "AVAILABLE"}
+                      </button>
                     </div>
-                    <button
-                      onClick={() => toggleSold(ep.id, ci, isSold)}
-                      disabled={toggling === key}
-                      className="cursor-pointer rounded-lg px-3 py-1 text-xs font-bold tracking-wider transition-colors"
-                      style={{
-                        background: isSold ? "rgba(239,68,68,0.12)" : "rgba(34,197,94,0.10)",
-                        color: isSold ? "#EF4444" : "#22C55E",
-                        border: `1px solid ${isSold ? "rgba(239,68,68,0.25)" : "rgba(34,197,94,0.2)"}`,
-                        opacity: toggling === key ? 0.5 : 1,
-                      }}
-                    >
-                      {toggling === key ? "..." : isSold ? "SOLD" : "AVAILABLE"}
-                    </button>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="url"
+                        placeholder="Amazon affiliate URL"
+                        defaultValue={hasUrl ? currentUrl : ""}
+                        onBlur={(e) => {
+                          const val = e.target.value.trim();
+                          if (val !== (hasUrl ? currentUrl : "")) {
+                            saveAffiliateUrl(ep.id, ci, val);
+                            setEpisodes((prev) =>
+                              prev.map((episode) =>
+                                episode.id === ep.id
+                                  ? { ...episode, cards: episode.cards.map((c, i) => i === ci ? { ...c, affiliateUrl: val || "#" } : c) }
+                                  : episode
+                              )
+                            );
+                          }
+                        }}
+                        className="flex-1 rounded-lg border border-border bg-bg px-3 py-1.5 text-xs text-text-primary placeholder:text-text-dim outline-none focus:border-[rgba(212,137,58,0.3)]"
+                        style={{ opacity: savingUrl === urlKey ? 0.5 : 1 }}
+                      />
+                      <span className={`text-[10px] font-bold ${hasUrl ? "text-green-500" : "text-text-dim"}`}>
+                        {hasUrl ? "LINKED" : "NO LINK"}
+                      </span>
+                    </div>
                   </div>
                 );
               })}

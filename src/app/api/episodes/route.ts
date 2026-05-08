@@ -41,9 +41,9 @@ export async function PUT(request: Request) {
   }
 
   try {
-    const { seriesId, episodeId, cardIndex, sold } = await request.json();
+    const { seriesId, episodeId, cardIndex, sold, affiliateUrl } = await request.json();
 
-    if (!seriesId || episodeId == null || cardIndex == null || sold == null) {
+    if (!seriesId || episodeId == null || cardIndex == null) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -55,11 +55,21 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Card not found" }, { status: 404 });
     }
 
-    episode.cards[cardIndex].sold = sold;
+    const changes: string[] = [];
+
+    if (sold != null) {
+      episode.cards[cardIndex].sold = sold;
+      changes.push(`${sold ? "sold" : "available"}`);
+    }
+
+    if (affiliateUrl != null) {
+      episode.cards[cardIndex].affiliateUrl = affiliateUrl || "#";
+      changes.push(`affiliate URL ${affiliateUrl ? "set" : "cleared"}`);
+    }
 
     await commitFiles(
       [{ path, content: JSON.stringify(episode, null, 2) }],
-      `feat: mark ${episode.cards[cardIndex].name} as ${sold ? "sold" : "available"} in episode ${episodeId}`
+      `feat: update ${episode.cards[cardIndex].name} in episode ${episodeId} — ${changes.join(", ")}`
     );
 
     return NextResponse.json({ ok: true });
