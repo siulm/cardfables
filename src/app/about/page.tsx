@@ -120,9 +120,9 @@ export default function AboutPage() {
             with your kids &mdash; or sneak off to read on your own.
           </p>
           <p>
-            The stories are generated with AI (Claude by Anthropic) and curated
-            by a human who genuinely loves Pokemon cards and good storytelling.
-            Think of it as a collaboration between creativity and technology.
+            Every story is written by someone who genuinely loves Pokemon cards
+            and good storytelling. The ideas, the tone, the characters, and every
+            published word are shaped and approved by a real person in Tokyo.
           </p>
         </div>
       </section>
