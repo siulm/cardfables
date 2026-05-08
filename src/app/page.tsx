@@ -6,8 +6,8 @@ import { EpisodeCard } from "@/components/cards/EpisodeCard";
 import { SERIES } from "@/lib/data";
 
 export default function Home() {
-  const airing = SERIES.filter((s) => s.status === "Airing");
-  const comingSoon = SERIES.filter((s) => s.status === "Coming Soon");
+  const withEpisodes = SERIES.filter((s) => s.epCount > 0);
+  const airing = withEpisodes.filter((s) => s.status === "Airing");
 
   // Get latest episodes across all series
   const latestEpisodes = SERIES.flatMap((s) =>
@@ -64,21 +64,14 @@ export default function Home() {
           </section>
         )}
 
-        {/* Coming Soon */}
-        {comingSoon.length > 0 && (
+        {/* All Series (only those with episodes) */}
+        {withEpisodes.length > 1 && (
           <SeriesRow
-            title="Coming Soon"
-            emoji={"\u{1F4FA}"}
-            series={comingSoon}
+            title="All Series"
+            emoji={"\u{1F3AC}"}
+            series={withEpisodes}
           />
         )}
-
-        {/* All Series */}
-        <SeriesRow
-          title="All Series"
-          emoji={"\u{1F3AC}"}
-          series={SERIES}
-        />
 
         {/* How It Works */}
         <HowItWorks />
