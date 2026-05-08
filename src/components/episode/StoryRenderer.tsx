@@ -61,10 +61,29 @@ export function StoryRenderer({
         {story.paragraphs.map((block, i) => {
           switch (block.t) {
             case "p":
+              if (i === firstProseIndex && block.c.length > 0) {
+                const firstChar = block.c.charAt(0);
+                const rest = block.c.slice(1);
+                return (
+                  <p
+                    key={i}
+                    className="text-text-story story-paragraph"
+                    style={{ fontSize, lineHeight }}
+                  >
+                    <span
+                      className="drop-cap-letter"
+                      style={{ color: seriesColor }}
+                    >
+                      {firstChar}
+                    </span>
+                    {renderWithChips(rest, cards, seriesColor)}
+                  </p>
+                );
+              }
               return (
                 <p
                   key={i}
-                  className={`text-text-story story-paragraph ${i === firstProseIndex ? "drop-cap" : ""}`}
+                  className="text-text-story story-paragraph"
                   style={{ fontSize, lineHeight }}
                 >
                   {renderWithChips(block.c, cards, seriesColor)}
