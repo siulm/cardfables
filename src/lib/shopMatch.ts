@@ -50,16 +50,88 @@ export function findShopProductForCard(
   return shop.find((p) => p.name.includes(short) && p.cat === "Featured");
 }
 
+export type BuyDestination = "amazon" | "messenger" | "shop" | "other";
+
+export function classifyBuyUrl(url: string): BuyDestination {
+  if (url.startsWith("/shop")) return "shop";
+  let host: string;
+  try {
+    host = new URL(url).hostname.toLowerCase();
+  } catch {
+    return "other";
+  }
+  if (host.endsWith("amazon.com") || host.endsWith("amazon.co.jp") || host.endsWith("amzn.to")) {
+    return "amazon";
+  }
+  if (host === "m.me" || host.endsWith("messenger.com") || host === "facebook.com" || host.endsWith(".facebook.com")) {
+    return "messenger";
+  }
+  return "other";
+}
+
+export interface ResolvedBuy {
+  url: string;
+  external: boolean;
+  destination: BuyDestination;
+}
+
 export function resolveCardBuyUrl(
   shop: ShopProduct[],
   card: CardInfo
-): { url: string; external: boolean } {
+): ResolvedBuy {
   if (card.affiliateUrl && card.affiliateUrl !== "#") {
-    return { url: card.affiliateUrl, external: true };
+    return {
+      url: card.affiliateUrl,
+      external: true,
+      destination: classifyBuyUrl(card.affiliateUrl),
+    };
   }
   const fallback = findShopProductForCard(shop, card);
   if (fallback?.url && fallback.url !== "#") {
-    return { url: fallback.url, external: true };
+    return {
+      url: fallback.url,
+      external: true,
+      destination: classifyBuyUrl(fallback.url),
+    };
   }
-  return { url: "/shop", external: false };
+  return { url: "/shop", external: false, destination: "shop" };
+}
+
+export function buyLabelFor(buy: ResolvedBuy, cardName: string): string {
+  switch (buy.destination) {
+    case "amazon":
+      return `Buy ${cardName} on Amazon ↗`;
+    case "messenger":
+      return `Message me to buy ${cardName} ↗`;
+    case "shop":
+      return "Browse this card in Shop →";
+    case "other":
+      return `Buy ${cardName} ↗`;
+  }
+}
+
+export function buyShortLabelFor(buy: ResolvedBuy): string {
+  switch (buy.destination) {
+    case "amazon":
+      return "Buy on Amazon ↗";
+    case "messenger":
+      return "Message me to buy ↗";
+    case "shop":
+      return "Browse in Shop →";
+    case "other":
+      return "Buy this card ↗";
+  }
+}
+
+export function buyMicrocopyFor(buy: ResolvedBuy): string {
+  switch (buy.destination) {
+    case "amazon":
+      return "Opens Amazon.com — ask a parent first!";
+    case "messenger":
+      return "Opens Messenger to chat with the seller";
+    case "shop":
+      return "Browse related cards on our shop page";
+    case "other":
+      return "Opens an external site";
+  }
 }

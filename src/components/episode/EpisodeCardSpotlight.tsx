@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CardInfo } from "@/lib/types";
 import { SHOP } from "@/lib/data";
-import { resolveCardBuyUrl } from "@/lib/shopMatch";
+import { resolveCardBuyUrl, buyShortLabelFor } from "@/lib/shopMatch";
 
 interface EpisodeCardSpotlightProps {
   cards: CardInfo[];
@@ -85,14 +85,14 @@ export function EpisodeCardSpotlight({
                     background: "linear-gradient(135deg, #D4893A, #B86E28)",
                   }}
                 >
-                  Buy on Amazon ↗
+                  {buyShortLabelFor(buy)}
                 </a>
               ) : (
                 <Link
                   href={buy.url}
                   className="mt-2 inline-flex w-full items-center justify-center rounded-lg border border-border px-3 py-2 text-xs font-bold text-text-secondary transition-colors hover:border-[rgba(212,137,58,0.3)] hover:text-text-primary"
                 >
-                  Browse in Shop →
+                  {buyShortLabelFor(buy)}
                 </Link>
               )}
             </div>
@@ -100,8 +100,24 @@ export function EpisodeCardSpotlight({
         })}
       </div>
       <p className="mt-5 text-center text-[10px] text-text-dim">
-        Amazon links open in a new tab — ask a parent first!
+        {spotlightFooterMicrocopy(cards)}
       </p>
     </section>
   );
+}
+
+function spotlightFooterMicrocopy(cards: CardInfo[]): string {
+  const dests = new Set(
+    cards.map((c) => resolveCardBuyUrl(SHOP, c).destination)
+  );
+  if (dests.has("amazon") && dests.has("messenger")) {
+    return "Some links open Amazon, some open Messenger — ask a parent first!";
+  }
+  if (dests.has("amazon")) {
+    return "Amazon links open in a new tab — ask a parent first!";
+  }
+  if (dests.has("messenger")) {
+    return "Opens Messenger to chat with the seller";
+  }
+  return "Browse related cards on our shop page";
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { rankProductsForEpisode, findShopProductForCard, resolveCardBuyUrl } from "./shopMatch";
+import { rankProductsForEpisode, findShopProductForCard, resolveCardBuyUrl, classifyBuyUrl } from "./shopMatch";
 import type { CardInfo, ShopProduct } from "./types";
 
 const charizard: CardInfo = {
@@ -132,6 +132,7 @@ describe("resolveCardBuyUrl", () => {
     expect(resolveCardBuyUrl(placeholderShop, card)).toEqual({
       url: "https://amazon.com/direct",
       external: true,
+      destination: "amazon",
     });
   });
 
@@ -140,6 +141,7 @@ describe("resolveCardBuyUrl", () => {
     expect(resolveCardBuyUrl(realUrlShop, card)).toEqual({
       url: "https://amazon.com/charizard",
       external: true,
+      destination: "amazon",
     });
   });
 
@@ -148,6 +150,7 @@ describe("resolveCardBuyUrl", () => {
     expect(resolveCardBuyUrl(placeholderShop, card)).toEqual({
       url: "/shop",
       external: false,
+      destination: "shop",
     });
   });
 
@@ -156,6 +159,58 @@ describe("resolveCardBuyUrl", () => {
     expect(resolveCardBuyUrl(realUrlShop, card)).toEqual({
       url: "/shop",
       external: false,
+      destination: "shop",
     });
+  });
+
+  it("classifies a Messenger URL as messenger destination", () => {
+    const card: CardInfo = { ...charizard, affiliateUrl: "https://m.me/cardfables" };
+    expect(resolveCardBuyUrl(placeholderShop, card)).toEqual({
+      url: "https://m.me/cardfables",
+      external: true,
+      destination: "messenger",
+    });
+  });
+});
+
+describe("classifyBuyUrl", () => {
+  it("classifies amazon.com as amazon", () => {
+    expect(classifyBuyUrl("https://www.amazon.com/dp/B0XYZ")).toBe("amazon");
+  });
+
+  it("classifies amazon.co.jp as amazon", () => {
+    expect(classifyBuyUrl("https://www.amazon.co.jp/dp/B0XYZ")).toBe("amazon");
+  });
+
+  it("classifies amzn.to short URLs as amazon", () => {
+    expect(classifyBuyUrl("https://amzn.to/abc123")).toBe("amazon");
+  });
+
+  it("classifies m.me as messenger", () => {
+    expect(classifyBuyUrl("https://m.me/cardfables")).toBe("messenger");
+  });
+
+  it("classifies messenger.com as messenger", () => {
+    expect(classifyBuyUrl("https://www.messenger.com/t/12345")).toBe("messenger");
+  });
+
+  it("classifies facebook.com as messenger", () => {
+    expect(classifyBuyUrl("https://facebook.com/messages/t/12345")).toBe("messenger");
+  });
+
+  it("classifies internal /shop path as shop", () => {
+    expect(classifyBuyUrl("/shop")).toBe("shop");
+  });
+
+  it("classifies internal /shop with anchor as shop", () => {
+    expect(classifyBuyUrl("/shop#card-charizard")).toBe("shop");
+  });
+
+  it("classifies unknown hosts as other", () => {
+    expect(classifyBuyUrl("https://example.com/foo")).toBe("other");
+  });
+
+  it("classifies invalid URL as other", () => {
+    expect(classifyBuyUrl("not-a-url")).toBe("other");
   });
 });

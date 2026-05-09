@@ -4,7 +4,13 @@ import { useEffect, useRef, useMemo, useState } from "react";
 import Link from "next/link";
 import type { AffiliateProduct, CardInfo } from "@/lib/types";
 import { SHOP } from "@/lib/data";
-import { rankProductsForEpisode, resolveCardBuyUrl } from "@/lib/shopMatch";
+import {
+  rankProductsForEpisode,
+  resolveCardBuyUrl,
+  buyLabelFor,
+  buyMicrocopyFor,
+  type ResolvedBuy,
+} from "@/lib/shopMatch";
 
 interface CardSidebarProps {
   cards: CardInfo[];
@@ -318,14 +324,12 @@ export function CardSidebar({ cards, products, seriesColor, mode }: CardSidebarP
 
 interface BuyCTAProps {
   card: CardInfo;
-  buy: { url: string; external: boolean };
+  buy: ResolvedBuy;
   variant: "top" | "bottom";
 }
 
 function BuyCTA({ card, buy, variant }: BuyCTAProps) {
-  const label = buy.external
-    ? `Buy ${card.name} ↗`
-    : `Browse this card in Shop →`;
+  const label = buyLabelFor(buy, card.name);
 
   const className =
     "mt-3.5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-[#FFFEF7] transition-opacity hover:opacity-90";
@@ -358,9 +362,7 @@ function BuyCTA({ card, buy, variant }: BuyCTAProps) {
     <>
       {button}
       <p className="mt-2 text-center text-[10px] text-text-dim">
-        {buy.external
-          ? "Opens Amazon.com — ask a parent first!"
-          : "Browse related cards on our shop page"}
+        {buyMicrocopyFor(buy)}
       </p>
     </>
   );
