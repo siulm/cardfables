@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship `/cards` as the public catalog of ~500 personal Pokémon cards for direct sale via Messenger, plus `/admin/cards` for owner-side management including bulk CSV import.
+**Goal:** Ship `/cards` as the public catalog of ~500 personal Pokémon cards for direct sale via Messenger, plus `/admin/cards` for owner-side management including bulk CSV import. Plus a one-shot image-processing tool (Task 1) that takes Canon-camera photos → identified, background-removed, resized PNGs + a starter CSV.
 
 **Architecture:** New `clients/pokemon-fables/cards-collection.json` is the source of truth; `scripts/build-data.js` reads it and emits a typed `CARDS` array into `src/lib/data.ts`. Pure helpers in `src/lib/cardsCollection.ts` drive filter/sort/group/search/episode-link logic with full vitest coverage. Public surface = grid + filter sidebar + desktop hover-overlay + mobile full-screen modal. Admin surface = list with quick actions + inline edit + CSV import/export. Buy CTA opens `m.me/cardfables` with a clipboard-prefilled message.
 
@@ -16,6 +16,8 @@
 
 | File | Status | Layer | Responsibility |
 |---|---|---|---|
+| `scripts/process-card-images.js` | new | prep | One-shot tool: photos → identify + bg-remove + resize + CSV |
+| `scripts/README-card-images.md` | new | docs | Usage instructions for the image processor |
 | `clients/pokemon-fables/cards-collection.json` | new | data | Source of truth for cards |
 | `clients/pokemon-fables/config.json` | modify | data | Add `"currency": "USD"` field |
 | `src/lib/types.ts` | modify | types | Add `CardCollectionEntry`, `PokemonType`, `CardCondition`, `CardStatus`, `CSVImportRow`, `CSVImportResult` interfaces |
@@ -41,7 +43,351 @@
 
 ---
 
-## Task 1: Data foundation (types + JSON + build script)
+## Task 1: Image processing pipeline (Canon photos → identified, background-removed, resized PNGs + starter CSV)
+
+**Files:**
+- Modify: `package.json` (add `@imgly/background-removal-node` dev dep)
+- Create: `scripts/process-card-images.js`
+- Create: `scripts/README-card-images.md` (usage instructions)
+
+This task can be run independently of the other 11. Its output (processed images + CSV) flows into Task 11 (the CSV import UI). The image-processing tool itself ships ready to use whenever you have new batches of photos to process.
+
+- [ ] **Step 1: Add the background-removal dependency**
+
+Run from `/Users/lm/repos/cardfables`:
+```bash
+pnpm add -D @imgly/background-removal-node
+```
+Expected: package added to devDependencies.
+
+- [ ] **Step 2: Create the processing script**
+
+Create `/Users/lm/repos/cardfables/scripts/process-card-images.js`:
+
+```js
+/**
+ * Process Canon-camera photos of Pokémon cards:
+ *   1. Identify each card via Claude Vision (claude-sonnet-4-6)
+ *   2. Cross-check metadata against the public Pokémon TCG API
+ *   3. Remove the yellow background
+ *   4. Auto-crop + resize to 1200x1680 max
+ *   5. Save as <slug>.png to public/images/cards-collection/
+ *   6. Emit a starter CSV ready for /admin/cards/import
+ *
+ * Usage:
+ *   node scripts/process-card-images.js path/to/canon-photos [--dry-run]
+ *
+ * Environment:
+ *   ANTHROPIC_API_KEY must be set (already required for episode generation)
+ */
+
+import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
+import { join, dirname, basename, extname } from "node:path";
+import { fileURLToPath } from "node:url";
+import sharp from "sharp";
+import Anthropic from "@anthropic-ai/sdk";
+import { removeBackground } from "@imgly/background-removal-node";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, "..");
+
+const inputDir = process.argv[2];
+const dryRun = process.argv.includes("--dry-run");
+
+if (!inputDir) {
+  console.error("Usage: node scripts/process-card-images.js <photo-dir> [--dry-run]");
+  process.exit(1);
+}
+
+const OUTPUT_IMAGE_DIR = join(ROOT, "public", "images", "cards-collection");
+const OUTPUT_CSV = join(ROOT, "cards-import.csv");
+const FAILURES_FILE = join(ROOT, "cards-failures.txt");
+
+const IDENTIFY_PROMPT = `You are analyzing a photograph of a Pokémon trading card on a yellow background. Return ONLY valid JSON (no other text, no markdown fences) with this exact structure:
+
+{
+  "name": "Charizard V (SAR)",
+  "set": "VSTAR Universe",
+  "setNumber": "018/172",
+  "year": 2022,
+  "type": "Fire",
+  "rarity": "SAR",
+  "artist": "Oswaldo KATO",
+  "confidence": "high"
+}
+
+Rules:
+- "name" includes subtitles like V, VMAX, ex, EX, GX, (SAR), (RR)
+- "type" MUST be one of: Fire, Water, Grass, Electric, Dark, Steel, Psychic, Fighting, Normal, Dragon, Fairy
+- "rarity": Common, Uncommon, Rare, Holo, Promo, Full Art, SAR, or "Other" if unsure
+- "year" is the set release year (4-digit number)
+- "confidence" is high/medium/low based on how clearly the card is identifiable
+
+If you cannot identify the card, return: {"error": "unable to identify", "reason": "..."}
+`;
+
+const anthropic = new Anthropic();
+
+function slugify(s) {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/-+/g, "-");
+}
+
+async function identifyCard(photoPath) {
+  const buf = await readFile(photoPath);
+  const base64 = buf.toString("base64");
+  const ext = extname(photoPath).toLowerCase();
+  const mediaType =
+    ext === ".png" ? "image/png" :
+    ext === ".webp" ? "image/webp" :
+    "image/jpeg";
+
+  const resp = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 500,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
+          { type: "text", text: IDENTIFY_PROMPT },
+        ],
+      },
+    ],
+  });
+
+  const text = resp.content[0].type === "text" ? resp.content[0].text.trim() : "";
+  const jsonMatch = text.match(/\\{[\\s\\S]*\\}/);
+  if (!jsonMatch) throw new Error("no JSON in response");
+  return JSON.parse(jsonMatch[0]);
+}
+
+async function lookupPokemonTcg(name, setNumber) {
+  // Query the free Pokémon TCG API for canonical metadata. Best-effort —
+  // if it 404s or returns nothing, fall back to Claude's identification.
+  if (!name || !setNumber) return null;
+  const number = setNumber.split("/")[0];
+  const q = encodeURIComponent(`name:"${name}" number:"${number}"`);
+  try {
+    const res = await fetch(`https://api.pokemontcg.io/v2/cards?q=${q}&pageSize=1`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.data?.[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function processOne(photoPath) {
+  console.log(`\\n→ ${basename(photoPath)}`);
+
+  // 1. Identify via Claude
+  let cardInfo;
+  try {
+    cardInfo = await identifyCard(photoPath);
+  } catch (e) {
+    console.log(`  ❌ identification failed: ${e.message}`);
+    return { error: "identification_failed", photo: basename(photoPath) };
+  }
+  if (cardInfo.error) {
+    console.log(`  ❌ unable to identify: ${cardInfo.reason ?? ""}`);
+    return { error: cardInfo.error, reason: cardInfo.reason, photo: basename(photoPath) };
+  }
+
+  console.log(`  identified: ${cardInfo.name} · ${cardInfo.set} (${cardInfo.confidence})`);
+
+  // 2. Cross-check with Pokémon TCG API (optional)
+  const canonical = await lookupPokemonTcg(cardInfo.name, cardInfo.setNumber);
+  if (canonical) {
+    cardInfo.artist = canonical.artist ?? cardInfo.artist;
+    cardInfo.set = canonical.set?.name ?? cardInfo.set;
+    cardInfo.year = canonical.set?.releaseDate ? Number(canonical.set.releaseDate.slice(0, 4)) : cardInfo.year;
+    console.log(`  ✓ confirmed via Pokémon TCG API`);
+  }
+
+  const slug = slugify(`${cardInfo.name}-${cardInfo.set}`);
+
+  if (dryRun) {
+    console.log(`  [dry-run] would save as ${slug}.png`);
+    return { ok: true, slug, ...cardInfo };
+  }
+
+  // 3. Background remove
+  let cutoutBuf;
+  try {
+    const blob = await removeBackground(photoPath);
+    cutoutBuf = Buffer.from(await blob.arrayBuffer());
+  } catch (e) {
+    console.log(`  ❌ background removal failed: ${e.message}`);
+    return { error: "bg_removal_failed", photo: basename(photoPath) };
+  }
+
+  // 4. Trim + resize
+  const outputPath = join(OUTPUT_IMAGE_DIR, `${slug}.png`);
+  await sharp(cutoutBuf)
+    .trim()
+    .resize({ width: 1200, height: 1680, fit: "inside", withoutEnlargement: true })
+    .png({ quality: 90, compressionLevel: 9 })
+    .toFile(outputPath);
+  console.log(`  ✓ saved ${slug}.png`);
+
+  return {
+    ok: true,
+    slug,
+    ...cardInfo,
+    image: `/images/cards-collection/${slug}.png`,
+  };
+}
+
+function escapeCSV(v) {
+  if (v === undefined || v === null) return "";
+  const s = String(v);
+  return /[,"\\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+async function main() {
+  await mkdir(OUTPUT_IMAGE_DIR, { recursive: true });
+  const photos = (await readdir(inputDir))
+    .filter((f) => /\\.(jpg|jpeg|png|webp|heic)$/i.test(f))
+    .sort();
+
+  console.log(`Processing ${photos.length} photo(s) from ${inputDir}`);
+
+  const results = [];
+  for (const f of photos) {
+    const result = await processOne(join(inputDir, f));
+    results.push(result);
+  }
+
+  // Write CSV of successes
+  const successes = results.filter((r) => r.ok);
+  const columns = [
+    "id", "name", "set", "setNumber", "year", "type", "rarity",
+    "artist", "image", "price", "condition", "status",
+  ];
+  const lines = [
+    columns.join(","),
+    ...successes.map((r) =>
+      columns
+        .map((c) => {
+          if (c === "id") return escapeCSV(r.slug);
+          if (c === "price") return ""; // user fills in
+          if (c === "condition") return "NM"; // sensible default
+          if (c === "status") return "available";
+          return escapeCSV(r[c]);
+        })
+        .join(",")
+    ),
+  ];
+  await writeFile(OUTPUT_CSV, lines.join("\\n"));
+  console.log(`\\n✓ Wrote ${successes.length} card(s) to ${OUTPUT_CSV}`);
+
+  // Write failures report
+  const failures = results.filter((r) => r.error);
+  if (failures.length > 0) {
+    const report = failures
+      .map((f) => `${f.photo}: ${f.error}${f.reason ? " — " + f.reason : ""}`)
+      .join("\\n");
+    await writeFile(FAILURES_FILE, report);
+    console.log(`⚠ ${failures.length} photo(s) failed — see ${FAILURES_FILE}`);
+  }
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
+```
+
+- [ ] **Step 3: Add a usage README**
+
+Create `/Users/lm/repos/cardfables/scripts/README-card-images.md`:
+
+```markdown
+# Card Image Processing
+
+Pipeline that takes Canon-camera photos of Pokémon cards (with a yellow background) and produces:
+- Processed PNG images (background removed, auto-cropped, resized) saved to `public/images/cards-collection/`
+- A `cards-import.csv` ready to drop into `/admin/cards/import`
+- A `cards-failures.txt` for any photos that couldn't be identified
+
+## Prerequisites
+
+- `ANTHROPIC_API_KEY` environment variable set
+- Dependencies installed (`pnpm install`)
+- Photos in a single folder (JPG, PNG, WEBP, or HEIC)
+
+## Usage
+
+```bash
+# Dry run (identify only, no image processing)
+node scripts/process-card-images.js path/to/canon-photos --dry-run
+
+# Full run
+node scripts/process-card-images.js path/to/canon-photos
+```
+
+## Cost & timing (500 cards estimate)
+
+- Claude Vision API: ~$2.50-5.00 total (claude-sonnet-4-6, ~$0.005-0.01 per image)
+- Background removal: local, no cost
+- Total time: ~15-25 minutes (sequential, no rate limit hit at this scale)
+
+## Workflow
+
+1. Put your photos in `./canon-photos/`
+2. Run the script
+3. Open `cards-import.csv` in Excel/Numbers
+4. Fill in the `price` column (the script can't read this from the photo)
+5. Adjust `condition` if not NM
+6. Upload via Admin → Cards → Import CSV
+7. Manually handle any rows in `cards-failures.txt`
+
+## Tips
+
+- Run `--dry-run` first to sanity-check identification without consuming time on image processing
+- Claude Vision's confidence score is in the script output — re-take photos of any `low` confidence cards
+- The Pokémon TCG API is best-effort; if it's down or returns nothing, the script uses Claude's identification as-is
+```
+
+- [ ] **Step 4: Verify the script syntax-checks**
+
+Run from `/Users/lm/repos/cardfables`:
+```bash
+node --check scripts/process-card-images.js
+```
+Expected: no output, exit code 0.
+
+- [ ] **Step 5: Dry-run test (optional, requires a sample photo)**
+
+If you have one sample photo handy:
+```bash
+mkdir -p /tmp/test-cards && cp <some-card-photo.jpg> /tmp/test-cards/
+node scripts/process-card-images.js /tmp/test-cards --dry-run
+```
+Expected: prints identified card info, no image written.
+
+If you don't have a sample yet, skip — the script's correctness is verified the first time you run it for real.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add package.json pnpm-lock.yaml \
+        scripts/process-card-images.js \
+        scripts/README-card-images.md
+git commit -m "feat(cards): image processing pipeline — Claude Vision + bg removal + resize + CSV"
+```
+
+**Note**: this task is intentionally INDEPENDENT of the rest. You can build it now and start processing photos in parallel while Tasks 2-12 are implemented. By the time Task 11 (CSV import UI) is done, you'll have a CSV ready to upload.
+
+---
+
+## Task 2: Data foundation (types + JSON + build script)
 
 **Files:**
 - Modify: `src/lib/types.ts`
@@ -263,7 +609,7 @@ git commit -m "feat(cards): data foundation — types, JSON, build script"
 
 ---
 
-## Task 2: `cardsCollection.ts` helpers + tests (TDD)
+## Task 3: `cardsCollection.ts` helpers + tests (TDD)
 
 **Files:**
 - Create: `src/lib/cardsCollection.test.ts`
@@ -1005,7 +1351,7 @@ git commit -m "feat(cards): add cardsCollection helpers (filter/sort/group/searc
 
 ---
 
-## Task 3: `/cards` page MVP (no filters)
+## Task 4: `/cards` page MVP (no filters)
 
 **Files:**
 - Create: `src/app/cards/page.tsx`
@@ -1243,7 +1589,7 @@ git commit -m "feat(cards): /cards page MVP — grid of all cards"
 
 ---
 
-## Task 4: Filter bar + sort + group + URL state sync
+## Task 5: Filter bar + sort + group + URL state sync
 
 **Files:**
 - Create: `src/components/cards/CardCollectionFilters.tsx`
@@ -1699,7 +2045,7 @@ git commit -m "feat(cards): filter bar, sort, group, URL state sync"
 
 ---
 
-## Task 5: `CardDetailOverlay` (desktop floating + mobile modal + Messenger flow)
+## Task 6: `CardDetailOverlay` (desktop floating + mobile modal + Messenger flow)
 
 **Files:**
 - Create: `src/components/cards/CardDetailOverlay.tsx`
@@ -2073,7 +2419,7 @@ git commit -m "feat(cards): CardDetailOverlay — desktop overlay + mobile modal
 
 ---
 
-## Task 6: Navbar + sitemap
+## Task 7: Navbar + sitemap
 
 **Files:**
 - Modify: `src/components/layout/Navbar.tsx`
@@ -2120,7 +2466,7 @@ git commit -m "feat(cards): add Cards to navbar and sitemap"
 
 ---
 
-## Task 7: `/admin/cards` API routes (CRUD)
+## Task 8: `/admin/cards` API routes (CRUD)
 
 **Files:**
 - Create: `src/app/api/cards/route.ts`
@@ -2334,7 +2680,7 @@ If `commitFiles` needed a binary-encoding update, that's a separate prior commit
 
 ---
 
-## Task 8: `/admin/cards` page (list + inline edit + quick actions)
+## Task 9: `/admin/cards` page (list + inline edit + quick actions)
 
 **Files:**
 - Create: `src/app/admin/cards/page.tsx`
@@ -2527,7 +2873,7 @@ export default function AdminCardsPage() {
 }
 ```
 
-Note: this MVP renders the list with quick status toggle + delete. Full inline-edit form is added in Task 9 (along with CSV import). For now, status + delete + new (via dedicated route, also added in Task 9).
+Note: this MVP renders the list with quick status toggle + delete. Full inline-edit form is added in Task 10 (alongside the add-card form). For now, status + delete + new (via dedicated route, also added in Task 10).
 
 - [ ] **Step 3: Add "Cards" entry to admin sidebar**
 
@@ -2551,7 +2897,7 @@ git commit -m "feat(cards): /admin/cards page — list, quick status, delete"
 
 ---
 
-## Task 9: Admin "Add card" + inline edit form
+## Task 10: Admin "Add card" + inline edit form
 
 **Files:**
 - Create: `src/app/admin/cards/new/page.tsx`
@@ -2746,7 +3092,7 @@ git commit -m "feat(cards): admin add-card form"
 
 ---
 
-## Task 10: CSV import + export
+## Task 11: CSV import + export
 
 **Files:**
 - Create: `src/app/api/cards/import/route.ts`
@@ -3095,7 +3441,7 @@ git commit -m "feat(cards): CSV import (with preview) and export"
 
 ---
 
-## Task 11: Manual browser verification
+## Task 12: Manual browser verification
 
 **Files:** none modified — verification step.
 
@@ -3216,29 +3562,30 @@ Spec coverage check:
 
 | Spec section | Implementing task |
 |---|---|
-| Architecture (3-layer JSON, cross-link by name) | Task 1, 2 (helper), 3-5 (consumers) |
-| Data schema (`CardCollectionEntry` + enums) | Task 1 |
-| Currency from config | Task 1, used in 3 and 5 |
-| Grid + filter + sort + group + search + URL sync | Task 3 (grid), Task 4 (filters/sort/group/URL) |
-| Card thumbnail (price strikethrough, rarity tag, status badges) | Task 3 |
-| Desktop floating overlay | Task 5 |
-| Mobile full-screen modal | Task 5 |
-| Buy CTA with clipboard pre-fill | Task 5 |
-| Episode cross-link badge + link | Task 2 (helper), Task 3 (badge), Task 5 (link) |
-| Admin `/admin/cards` list with quick status | Task 8 |
-| Add / Delete card | Task 7 (API), Task 8 (delete UI), Task 9 (add UI) |
-| Inline edit form | **Partially**: status quick-toggle in Task 8; full edit via delete+re-add. Full inline form deferred per Task 9 note. |
-| CSV import with preview | Task 10 |
-| CSV export | Task 10 |
-| Single-card image upload | Task 7 (API only; not yet wired into UI — see note) |
-| Navbar + sitemap entries | Task 6 |
-| Manual browser walk-through | Task 11 |
+| Image processing pipeline (photos → identified + bg-removed + resized + CSV) | Task 1 |
+| Architecture (3-layer JSON, cross-link by name) | Task 2, 3 (helper), 4-6 (consumers) |
+| Data schema (`CardCollectionEntry` + enums) | Task 2 |
+| Currency from config | Task 2, used in 4 and 6 |
+| Grid + filter + sort + group + search + URL sync | Task 4 (grid), Task 5 (filters/sort/group/URL) |
+| Card thumbnail (price strikethrough, rarity tag, status badges) | Task 4 |
+| Desktop floating overlay | Task 6 |
+| Mobile full-screen modal | Task 6 |
+| Buy CTA with clipboard pre-fill | Task 6 |
+| Episode cross-link badge + link | Task 3 (helper), Task 4 (badge), Task 6 (link) |
+| Admin `/admin/cards` list with quick status | Task 9 |
+| Add / Delete card | Task 8 (API), Task 9 (delete UI), Task 10 (add UI) |
+| Inline edit form | **Partially**: status quick-toggle in Task 9; full edit via delete+re-add. Full inline form deferred per Task 10 note. |
+| CSV import with preview | Task 11 |
+| CSV export | Task 11 |
+| Single-card image upload | Task 8 (API only; not yet wired into UI — see note) |
+| Navbar + sitemap entries | Task 7 |
+| Manual browser walk-through | Task 12 |
 
 **Acknowledged gaps**:
 1. Full inline edit (beyond status toggle) is deferred. Status + delete + add cover the v1 flows; full row-expansion edit is a follow-up. Add to backlog.
-2. Image upload UI (the field in the form) is text-path only. The API exists (Task 7) but the form doesn't call it. Wire the upload into both the Add form (Task 9) and any future edit form when added.
-3. The image upload API may need a binary-encoding update to `commitFiles` in `src/lib/github.ts` — flagged in Task 7 Step 4. Verify before relying on it.
+2. Image upload UI (the field in the form) is text-path only. The API exists (Task 8) but the form doesn't call it. Wire the upload into both the Add form (Task 10) and any future edit form when added.
+3. The image upload API may need a binary-encoding update to `commitFiles` in `src/lib/github.ts` — flagged in Task 8. Verify before relying on it.
 
-Type consistency: `CardCollectionEntry`, `CardFilters`, `CardSort`, `CardGrouping`, `CardGroup`, `CSVImportRow`, `CSVImportResult` are defined in Task 1/2 and consumed consistently in Tasks 3-10.
+Type consistency: `CardCollectionEntry`, `CardFilters`, `CardSort`, `CardGrouping`, `CardGroup`, `CSVImportRow`, `CSVImportResult` are defined in Task 2/3 and consumed consistently in Tasks 4-11.
 
 No placeholders. Every step has actual code or commands.
