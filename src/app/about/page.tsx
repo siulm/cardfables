@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
+import { VERSION, formatReleaseDate } from "@/lib/version";
 
 export const metadata: Metadata = {
   title: "About CardFables — Original Pokemon Card Stories",
@@ -159,6 +160,20 @@ export default function AboutPage() {
           </a>
         </p>
       </section>
+
+      {/* Colophon — last-updated signal for readers + version marker for the maker */}
+      <div className="mt-16 border-t border-border pt-8 text-center">
+        <p className="text-sm text-text-secondary">
+          🌱 Last tended on{" "}
+          <span className="font-medium text-text-primary">
+            {formatReleaseDate()}
+          </span>{" "}
+          &mdash; new fables are always growing.
+        </p>
+        <p className="mt-2 text-xs tracking-wide text-text-dim">
+          CardFables &middot; v{VERSION}
+        </p>
+      </div>
     </div>
   );
 }
