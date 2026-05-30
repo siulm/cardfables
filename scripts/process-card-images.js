@@ -60,20 +60,23 @@ const RAW_JPEG_MAX_EDGE = 2400;
 const IDENTIFY_PROMPT = `You are analyzing a photograph of a Pokémon trading card on a yellow background. Return ONLY valid JSON (no other text, no markdown fences) with this exact structure:
 
 {
-  "name": "Charizard V (SAR)",
+  "name": "Charizard V",
   "set": "VSTAR Universe",
   "setNumber": "018/172",
   "year": 2022,
   "type": "Fire",
   "rarity": "SAR",
   "artist": "Oswaldo KATO",
+  "language": "jp",
   "confidence": "high"
 }
 
 Rules:
-- "name" includes subtitles like V, VMAX, ex, EX, GX, (SAR), (RR)
+- "name": the Pokémon/card name plus gameplay subtitles only (V, VMAX, VSTAR, ex, EX, GX). Do NOT put rarity codes (RR, RRR, SR, SAR, AR, UR) or the language in the name — those have their own fields.
+- "set": the commonly-used set name ONLY. Do NOT include the set code (e.g. s12a, sv2a, sp6, m2a), the language, or the rarity. For Japanese sets, give the romanized/English set name (e.g. "VSTAR Universe", "Shiny Treasure ex").
+- "language": "jp" if it is a Japanese card, otherwise "en". (English is the default; only mark "jp" when the card is clearly Japanese.)
 - "type" MUST be one of: Fire, Water, Grass, Electric, Dark, Steel, Psychic, Fighting, Normal, Dragon, Fairy
-- "rarity": Common, Uncommon, Rare, Holo, Promo, Full Art, SAR, or "Other" if unsure
+- "rarity": Common, Uncommon, Rare, Holo, Promo, Full Art, SAR, RR, RRR, SR, AR, UR, or "Other" if unsure
 - "year" is the set release year (4-digit number)
 - "confidence" is high/medium/low based on how clearly the card is identifiable
 
@@ -92,21 +95,37 @@ export function slugify(s) {
     .replace(/-+/g, "-");
 }
 
+// Tokens that occasionally leak into name/set despite the prompt. Stripped from
+// ids as a safety net. Language is encoded separately (see the -jp suffix), and
+// rarity lives in its own field, so neither belongs in the slug.
+const NOISE_TOKENS = new Set([
+  "japanese", "japan", "jpn", "english", "eng", "en", "jp",
+  "rr", "rrr", "sr", "ssr", "sar", "ar", "ur", "hr", "csr", "chr",
+]);
+
+// Slugify then drop noise tokens (kept as whole hyphen-segments only).
+function cleanSegment(s) {
+  return slugify(String(s ?? ""))
+    .split("-")
+    .filter((tok) => tok && !NOISE_TOKENS.has(tok))
+    .join("-");
+}
+
 /**
- * Build a stable, collision-resistant id from name + set + a discriminator.
- * Preference order for the discriminator (so two different Moltres / Sableye
- * in the same set never collide):
- *   1. full card number ("018/172" -> "018-172"); the denominator marks the
- *      set/version group, so same-numerator cards from different prints differ
- *   2. release year
- *   3. nothing (relies on the dedup suffix below)
+ * Build a stable, collision-resistant id: name + set + discriminator + lang.
+ * - name/set are normalized (set codes / rarity / language stripped)
+ * - discriminator: full card number ("018/172" -> "018-172") so the denominator
+ *   marks the set/version group; falls back to year, then to nothing
+ * - "-jp" suffix only for Japanese cards (English is the understood default)
  */
 export function buildId(cardInfo) {
-  const base = slugify(`${cardInfo.name}-${cardInfo.set}`);
+  const base = [cleanSegment(cardInfo.name), cleanSegment(cardInfo.set)]
+    .filter(Boolean)
+    .join("-");
   const num = cardInfo.setNumber ? slugify(String(cardInfo.setNumber)) : "";
-  if (num) return `${base}-${num}`;
-  if (cardInfo.year) return `${base}-${cardInfo.year}`;
-  return base;
+  const disc = num || (cardInfo.year ? String(cardInfo.year) : "");
+  const lang = cardInfo.language === "jp" ? "jp" : "";
+  return [base, disc, lang].filter(Boolean).join("-");
 }
 
 /**
@@ -177,14 +196,27 @@ async function identifyCard(imagePath) {
 async function lookupPokemonTcg(name, setNumber) {
   // Query the free Pokémon TCG API for canonical metadata. Best-effort —
   // if it 404s or returns nothing, fall back to Claude's identification.
+  //
+  // Matching on the numerator alone is unsafe: "Charizard #3" exists in many
+  // sets. We require the set size (denominator of "3/70") to match too, so we
+  // only ever confirm a card from the SAME set — otherwise we keep Claude's id.
   if (!name || !setNumber) return null;
-  const number = setNumber.split("/")[0];
-  const q = encodeURIComponent(`name:"${name}" number:"${number}"`);
+  const [num, denom] = String(setNumber).split("/").map((s) => s.trim());
+  if (!num) return null;
+  const q = encodeURIComponent(`name:"${name}" number:"${num}"`);
   try {
-    const res = await fetch(`https://api.pokemontcg.io/v2/cards?q=${q}&pageSize=1`);
+    const res = await fetch(`https://api.pokemontcg.io/v2/cards?q=${q}&pageSize=50`);
     if (!res.ok) return null;
     const data = await res.json();
-    return data.data?.[0] ?? null;
+    const cards = data.data ?? [];
+    if (cards.length === 0) return null;
+    if (!denom) return null; // no set size to verify against — don't risk a wrong match
+    const d = Number(denom);
+    return (
+      cards.find(
+        (c) => Number(c.set?.printedTotal) === d || Number(c.set?.total) === d
+      ) ?? null
+    );
   } catch {
     return null;
   }
@@ -234,7 +266,7 @@ async function processOne(photoPath, tmpDir, usedIds) {
     const slug = uniqueId(cardInfo, usedIds);
 
     if (dryRun) {
-      console.log(`  [dry-run] id=${slug}  (#${cardInfo.setNumber ?? "?"}, ${cardInfo.year ?? "?"})`);
+      console.log(`  [dry-run] id=${slug}  (#${cardInfo.setNumber ?? "?"}, ${cardInfo.year ?? "?"}, ${cardInfo.language ?? "?"})`);
       return { ok: true, slug, ...cardInfo };
     }
 
