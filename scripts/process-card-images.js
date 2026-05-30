@@ -25,7 +25,7 @@
 import { readdir, readFile, writeFile, mkdir, mkdtemp, rm } from "node:fs/promises";
 import { join, dirname, basename, extname } from "node:path";
 import { tmpdir } from "node:os";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import sharp from "sharp";
@@ -82,7 +82,7 @@ If you cannot identify the card, return: {"error": "unable to identify", "reason
 
 const anthropic = new Anthropic();
 
-function slugify(s) {
+export function slugify(s) {
   return s
     .toLowerCase()
     .normalize("NFKD")
@@ -90,6 +90,36 @@ function slugify(s) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .replace(/-+/g, "-");
+}
+
+/**
+ * Build a stable, collision-resistant id from name + set + a discriminator.
+ * Preference order for the discriminator (so two different Moltres / Sableye
+ * in the same set never collide):
+ *   1. full card number ("018/172" -> "018-172"); the denominator marks the
+ *      set/version group, so same-numerator cards from different prints differ
+ *   2. release year
+ *   3. nothing (relies on the dedup suffix below)
+ */
+export function buildId(cardInfo) {
+  const base = slugify(`${cardInfo.name}-${cardInfo.set}`);
+  const num = cardInfo.setNumber ? slugify(String(cardInfo.setNumber)) : "";
+  if (num) return `${base}-${num}`;
+  if (cardInfo.year) return `${base}-${cardInfo.year}`;
+  return base;
+}
+
+/**
+ * Guarantee global uniqueness. If buildId still collides (e.g. two genuine
+ * copies of the exact same card), append -2, -3, … rather than overwrite.
+ */
+export function uniqueId(cardInfo, usedIds) {
+  const base = buildId(cardInfo);
+  let id = base;
+  let n = 2;
+  while (usedIds.has(id)) id = `${base}-${n++}`;
+  usedIds.add(id);
+  return id;
 }
 
 /**
@@ -160,7 +190,7 @@ async function lookupPokemonTcg(name, setNumber) {
   }
 }
 
-async function processOne(photoPath, tmpDir) {
+async function processOne(photoPath, tmpDir, usedIds) {
   console.log(`\n→ ${basename(photoPath)}`);
 
   // 0. Convert RAW → JPEG if needed
@@ -201,10 +231,10 @@ async function processOne(photoPath, tmpDir) {
       console.log(`  ✓ confirmed via Pokémon TCG API`);
     }
 
-    const slug = slugify(`${cardInfo.name}-${cardInfo.set}`);
+    const slug = uniqueId(cardInfo, usedIds);
 
     if (dryRun) {
-      console.log(`  [dry-run] would save as ${slug}.png`);
+      console.log(`  [dry-run] id=${slug}  (#${cardInfo.setNumber ?? "?"}, ${cardInfo.year ?? "?"})`);
       return { ok: true, slug, ...cardInfo };
     }
 
@@ -255,9 +285,10 @@ async function main() {
   console.log(`Processing ${photos.length} photo(s) from ${inputDir}`);
 
   const results = [];
+  const usedIds = new Set();
   try {
     for (const f of photos) {
-      const result = await processOne(join(inputDir, f), tmpDir);
+      const result = await processOne(join(inputDir, f), tmpDir, usedIds);
       results.push(result);
     }
   } finally {
@@ -298,7 +329,11 @@ async function main() {
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// Only auto-run when invoked directly as a CLI (so helpers can be imported
+// by tooling — e.g. regenerating ids — without kicking off a full run).
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
