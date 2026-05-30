@@ -44,6 +44,5 @@ next-env.d.ts
 # superpowers brainstorming session artifacts
 .superpowers/
 
-# card image processor intermediate outputs (the PNGs it writes are committed; these are throwaway)
-/cards-import.csv
+# card image processor failure log (throwaway; the CSV + images are committed)
 /cards-failures.txt

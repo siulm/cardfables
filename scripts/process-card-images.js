@@ -280,20 +280,20 @@ async function processOne(photoPath, tmpDir, usedIds) {
       return { error: "bg_removal_failed", photo: basename(photoPath) };
     }
 
-    // 4. Trim + resize
-    const outputPath = join(OUTPUT_IMAGE_DIR, `${slug}.png`);
+    // 4. Trim + resize → WebP (smaller than PNG, keeps transparency)
+    const outputPath = join(OUTPUT_IMAGE_DIR, `${slug}.webp`);
     await sharp(cutoutBuf)
       .trim()
       .resize({ width: 1200, height: 1680, fit: "inside", withoutEnlargement: true })
-      .png({ quality: 90, compressionLevel: 9 })
+      .webp({ quality: 82, effort: 6 })
       .toFile(outputPath);
-    console.log(`  ✓ saved ${slug}.png`);
+    console.log(`  ✓ saved ${slug}.webp`);
 
     return {
       ok: true,
       slug,
       ...cardInfo,
-      image: `/images/cards-collection/${slug}.png`,
+      image: `/images/cards-collection/${slug}.webp`,
     };
   } finally {
     await cleanup();

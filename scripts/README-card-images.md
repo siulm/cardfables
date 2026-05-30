@@ -1,7 +1,7 @@
 # Card Image Processing
 
 Pipeline that takes camera photos of Pokémon cards (on a yellow background) and produces:
-- Processed PNG images (background removed, auto-cropped, resized) saved to `public/images/cards-collection/`
+- Processed WebP images (background removed, auto-cropped, resized) saved to `public/images/cards-collection/`
 - A `cards-import.csv` ready to drop into `/admin/cards/import`
 - A `cards-failures.txt` for any photos that couldn't be identified
 
