@@ -1,11 +1,12 @@
 "use client";
 
+import type React from "react";
 import type { CardCollectionEntry } from "@/lib/types";
 import { CURRENCY } from "@/lib/data";
 
 interface CardCollectionItemProps {
   card: CardCollectionEntry;
-  onClick: (card: CardCollectionEntry) => void;
+  onClick: (card: CardCollectionEntry, event?: React.MouseEvent<HTMLButtonElement>) => void;
   episodeBadge?: { href: string };
 }
 
@@ -32,7 +33,7 @@ export function CardCollectionItem({ card, onClick, episodeBadge }: CardCollecti
   return (
     <button
       type="button"
-      onClick={() => onClick(card)}
+      onClick={(e) => onClick(card, e)}
       className="hover-lift group relative block w-full overflow-hidden rounded-2xl border border-border bg-surface text-left p-0"
       aria-label={`View details for ${card.name}`}
       style={{ opacity: isSold ? 0.55 : 1, cursor: "pointer" }}

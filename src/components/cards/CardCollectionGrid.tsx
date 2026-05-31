@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CardCollectionItem } from "./CardCollectionItem";
 import { CardCollectionFilters } from "./CardCollectionFilters";
+import { CardDetailOverlay } from "./CardDetailOverlay";
 import {
   filterCards,
   searchCards,
@@ -34,6 +35,17 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedCard, setSelectedCard] = useState<CardCollectionEntry | null>(null);
+  const [anchor, setAnchor] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
+
+  const handleCardClick = (card: CardCollectionEntry, event?: React.MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setAnchor({ x: rect.left, y: rect.top, width: rect.width, height: rect.height });
+    } else {
+      setAnchor(null);
+    }
+    setSelectedCard(card);
+  };
 
   // Parse state from URL — status defaults to "available-only" so sold cards are hidden by default
   const filters: CardFilters = useMemo(
@@ -171,7 +183,7 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
                   <CardCollectionItem
                     key={card.id}
                     card={card}
-                    onClick={setSelectedCard}
+                    onClick={(c, e) => handleCardClick(c, e)}
                     episodeBadge={ep ? { href: `/series/${ep.series.id}/${ep.episode.slug}` } : undefined}
                   />
                 );
@@ -194,25 +206,16 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
         )}
       </div>
 
-      {/* Detail view added in Task 6 */}
       {selectedCard && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-          onClick={() => setSelectedCard(null)}
-        >
-          <div className="rounded-2xl bg-bg p-6 text-text-primary" onClick={(e) => e.stopPropagation()}>
-            <p>Detail view for {selectedCard.name} — coming in Task 6</p>
-            <button
-              type="button"
-              onClick={() => setSelectedCard(null)}
-              className="mt-4 rounded-lg bg-gold px-4 py-1.5 text-sm font-bold text-white"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <CardDetailOverlay
+          card={selectedCard}
+          series={series}
+          onClose={() => {
+            setSelectedCard(null);
+            setAnchor(null);
+          }}
+          anchor={anchor}
+        />
       )}
     </div>
   );
