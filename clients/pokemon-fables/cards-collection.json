@@ -1,0 +1,48 @@
+[
+  {
+    "id": "charizard-v-sar-vstar-universe",
+    "name": "Charizard V (SAR)",
+    "set": "VSTAR Universe",
+    "setNumber": "018/172",
+    "year": 2022,
+    "type": "Fire",
+    "rarity": "SAR",
+    "artist": "Oswaldo KATO",
+    "image": "/images/cards-collection/charizard-v-sar.jpg",
+    "description": "Special Art Rare Charizard from the Japanese VSTAR Universe set. Featured in Episode 1 of Flames of Our Lives.",
+    "price": 30,
+    "originalPrice": 45,
+    "condition": "NM",
+    "stock": 1,
+    "status": "available",
+    "addedAt": "2026-05-29"
+  },
+  {
+    "id": "venusaur-ex-scarlet-violet",
+    "name": "Venusaur ex",
+    "set": "Scarlet & Violet 151",
+    "year": 2023,
+    "type": "Grass",
+    "rarity": "Holo",
+    "image": "",
+    "price": 18,
+    "condition": "LP",
+    "stock": 1,
+    "status": "available",
+    "addedAt": "2026-05-29"
+  },
+  {
+    "id": "mismagius-ex-shrouded-fable",
+    "name": "Mismagius ex",
+    "set": "Shrouded Fable",
+    "year": 2024,
+    "type": "Psychic",
+    "rarity": "Full Art",
+    "image": "",
+    "price": 22,
+    "condition": "NM",
+    "stock": 2,
+    "status": "available",
+    "addedAt": "2026-05-29"
+  }
+]

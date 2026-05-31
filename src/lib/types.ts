@@ -80,3 +80,49 @@ export interface Submission {
   photo: File | null;
   reason: string;
 }
+
+export type PokemonType =
+  | "Fire" | "Water" | "Grass" | "Electric" | "Dark"
+  | "Steel" | "Psychic" | "Fighting" | "Normal"
+  | "Dragon" | "Fairy";
+
+export type CardCondition = "NM" | "LP" | "MP" | "HP" | "DMG";
+
+export type CardStatus = "available" | "sold" | "reserved" | "hidden";
+
+export interface CardCollectionEntry {
+  id: string;
+  name: string;
+  set: string;
+  setNumber?: string;
+  year: number;
+  type: PokemonType;
+  rarity: string;
+  artist?: string;
+  image: string;
+  description?: string;
+  price: number;
+  originalPrice?: number;
+  condition: CardCondition;
+  stock?: number;
+  status: CardStatus;
+  suggestedPrice?: number;
+  priceCheckedAt?: string;
+  addedAt?: string;
+}
+
+export interface CSVImportRow {
+  rowNumber: number;
+  entry?: CardCollectionEntry;
+  errors: string[];
+  warnings: string[];
+  action: "create" | "update" | "skip";
+}
+
+export interface CSVImportResult {
+  rows: CSVImportRow[];
+  totalCreate: number;
+  totalUpdate: number;
+  totalErrors: number;
+  totalWarnings: number;
+}
