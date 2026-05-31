@@ -35,6 +35,8 @@ export async function POST() {
     const updated: CardCollectionEntry[] = [];
     const today = new Date().toISOString().slice(0, 10);
 
+    let matched = 0;
+
     for (const card of cards) {
       const suggestion = await fetchSuggestedPrice({
         name: card.name,
@@ -44,6 +46,8 @@ export async function POST() {
 
       const previousSuggestion = card.suggestedPrice ?? null;
       const newSuggestion = suggestion?.suggestedPrice ?? null;
+
+      if (newSuggestion !== null) matched++;
 
       results.push({
         id: card.id,
@@ -60,6 +64,15 @@ export async function POST() {
         priceCheckedAt: today,
       };
       updated.push(updatedCard);
+    }
+
+    // If the collection is non-empty but every single fetch failed (total API outage),
+    // do NOT commit stale priceCheckedAt stamps — report an error instead.
+    if (cards.length > 0 && matched === 0) {
+      return NextResponse.json(
+        { error: "Price service unavailable — nothing was changed" },
+        { status: 502 }
+      );
     }
 
     await commitFiles(

@@ -386,4 +386,59 @@ describe("validateCSVRows", () => {
     expect(result.rows[0].action).toBe("create");
     expect(result.totalCreate).toBe(1);
   });
+
+  it("update row preserves existing fields absent from CSV (status not wiped)", () => {
+    const soldCard: CardCollectionEntry = {
+      ...baseCard,
+      status: "sold",
+      addedAt: "2024-01-15",
+    };
+    // CSV row omits status and addedAt — only updates price
+    const result = validateCSVRows(
+      [
+        {
+          id: soldCard.id,
+          name: soldCard.name,
+          set: soldCard.set,
+          year: String(soldCard.year),
+          type: soldCard.type,
+          rarity: soldCard.rarity,
+          price: "99",
+          condition: soldCard.condition,
+          // status intentionally absent
+          // addedAt intentionally absent
+        },
+      ],
+      [soldCard]
+    );
+    expect(result.rows[0].action).toBe("update");
+    expect(result.rows[0].entry?.status).toBe("sold");
+    expect(result.rows[0].entry?.addedAt).toBe("2024-01-15");
+    expect(result.rows[0].entry?.price).toBe(99);
+  });
+
+  it("update row with empty status cell preserves existing status", () => {
+    const soldCard: CardCollectionEntry = {
+      ...baseCard,
+      status: "sold",
+    };
+    const result = validateCSVRows(
+      [
+        {
+          id: soldCard.id,
+          name: soldCard.name,
+          set: soldCard.set,
+          year: String(soldCard.year),
+          type: soldCard.type,
+          rarity: soldCard.rarity,
+          price: "50",
+          condition: soldCard.condition,
+          status: "", // empty string = column present but blank → preserve existing
+        },
+      ],
+      [soldCard]
+    );
+    expect(result.rows[0].action).toBe("update");
+    expect(result.rows[0].entry?.status).toBe("sold");
+  });
 });

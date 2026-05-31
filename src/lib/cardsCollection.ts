@@ -213,7 +213,7 @@ export function validateCSVRows(
   rows: Record<string, string>[],
   existing: CardCollectionEntry[]
 ): CSVImportResult {
-  const existingIds = new Set(existing.map((c) => c.id));
+  const existingById = new Map(existing.map((c) => [c.id, c]));
   const today = new Date().toISOString().slice(0, 10);
 
   const result: CSVImportResult = {
@@ -271,30 +271,67 @@ export function validateCSVRows(
 
     if (errors.length === 0) {
       const id = raw.id || slugifyCardId(raw.name, raw.set || "");
-      entry = {
-        id,
-        name: raw.name,
-        set: raw.set || "",
-        setNumber: raw.setNumber || undefined,
-        year: yearNum || new Date().getFullYear(),
-        type: (raw.type as PokemonType) || "Normal",
-        rarity: raw.rarity || "Common",
-        artist: raw.artist || undefined,
-        image: raw.image || "",
-        description: raw.description || undefined,
-        price: priceNum,
-        originalPrice: raw.originalPrice ? Number(raw.originalPrice) : undefined,
-        condition: raw.condition as CardCondition,
-        stock: stockNum,
-        status: (raw.status as CardStatus) || "available",
-        addedAt: raw.addedAt || today,
-        // Advisory pricing columns from scripts/suggest-prices.ts — never affect owner-set price
-        ...(raw.suggestedPrice ? { suggestedPrice: Number(raw.suggestedPrice) } : {}),
-        ...(raw.priceCheckedAt ? { priceCheckedAt: raw.priceCheckedAt } : {}),
-      };
-      action = existingIds.has(id) ? "update" : "create";
-      if (action === "create") result.totalCreate++;
-      else result.totalUpdate++;
+      const existingCard = existingById.get(id);
+      action = existingCard ? "update" : "create";
+
+      if (action === "create") {
+        // CREATE: apply CSV values with defaults for absent columns
+        entry = {
+          id,
+          name: raw.name,
+          set: raw.set || "",
+          setNumber: raw.setNumber || undefined,
+          year: yearNum || new Date().getFullYear(),
+          type: (raw.type as PokemonType) || "Normal",
+          rarity: raw.rarity || "Common",
+          artist: raw.artist || undefined,
+          image: raw.image || "",
+          description: raw.description || undefined,
+          price: priceNum,
+          originalPrice: raw.originalPrice ? Number(raw.originalPrice) : undefined,
+          condition: raw.condition as CardCondition,
+          stock: stockNum,
+          status: (raw.status as CardStatus) || "available",
+          addedAt: raw.addedAt || today,
+          // Advisory pricing columns from scripts/suggest-prices.ts — never affect owner-set price
+          ...(raw.suggestedPrice ? { suggestedPrice: Number(raw.suggestedPrice) } : {}),
+          ...(raw.priceCheckedAt ? { priceCheckedAt: raw.priceCheckedAt } : {}),
+        };
+        result.totalCreate++;
+      } else {
+        // UPDATE: start from existing card, then overlay only CSV-present (non-empty) columns
+        entry = { ...existingCard! };
+
+        // Always overwrite required fields that are present in the CSV
+        entry.name = raw.name;
+        entry.price = priceNum;
+        entry.condition = raw.condition as CardCondition;
+
+        // Optional fields: only overwrite when the CSV column is non-empty
+        if (raw.set !== undefined && raw.set !== "") entry.set = raw.set;
+        if (raw.setNumber !== undefined && raw.setNumber !== "") entry.setNumber = raw.setNumber;
+        else if (raw.setNumber === "") entry.setNumber = undefined; // explicit clear
+        if (raw.year !== undefined && raw.year !== "") entry.year = yearNum || existingCard!.year;
+        if (raw.type !== undefined && raw.type !== "") entry.type = raw.type as PokemonType;
+        if (raw.rarity !== undefined && raw.rarity !== "") entry.rarity = raw.rarity;
+        if (raw.artist !== undefined && raw.artist !== "") entry.artist = raw.artist;
+        if (raw.image !== undefined && raw.image !== "") entry.image = raw.image;
+        if (raw.description !== undefined && raw.description !== "") entry.description = raw.description;
+        if (raw.originalPrice !== undefined && raw.originalPrice !== "") {
+          entry.originalPrice = Number(raw.originalPrice);
+        }
+        if (raw.stock !== undefined && raw.stock !== "") entry.stock = stockNum;
+        if (raw.status !== undefined && raw.status !== "") entry.status = raw.status as CardStatus;
+        if (raw.addedAt !== undefined && raw.addedAt !== "") entry.addedAt = raw.addedAt;
+        if (raw.suggestedPrice !== undefined && raw.suggestedPrice !== "") {
+          entry.suggestedPrice = Number(raw.suggestedPrice);
+        }
+        if (raw.priceCheckedAt !== undefined && raw.priceCheckedAt !== "") {
+          entry.priceCheckedAt = raw.priceCheckedAt;
+        }
+
+        result.totalUpdate++;
+      }
     } else {
       result.totalErrors += errors.length;
     }

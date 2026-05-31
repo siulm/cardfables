@@ -14,7 +14,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "image and id required" }, { status: 400 });
     }
     const safeId = id.replace(/[^a-z0-9-]/gi, "-").toLowerCase();
-    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "webp"];
+    if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      return NextResponse.json(
+        { error: `File extension ".${ext}" is not allowed. Accepted: ${ALLOWED_EXTENSIONS.join(", ")}` },
+        { status: 400 }
+      );
+    }
     const path = `public/images/cards-collection/${safeId}.${ext}`;
     const arrayBuf = await file.arrayBuffer();
     const base64 = Buffer.from(arrayBuf).toString("base64");

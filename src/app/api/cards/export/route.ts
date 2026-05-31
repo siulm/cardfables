@@ -9,6 +9,7 @@ const COLUMNS: (keyof CardCollectionEntry)[] = [
   "id", "name", "set", "setNumber", "year", "type", "rarity",
   "artist", "image", "description", "price", "originalPrice",
   "condition", "stock", "status", "addedAt",
+  "suggestedPrice", "priceCheckedAt",
 ];
 
 function escapeCSV(v: unknown): string {
