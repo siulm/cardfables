@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { CARDS, SERIES } from "@/lib/data";
 import { CardCollectionGrid } from "@/components/cards/CardCollectionGrid";
 
@@ -17,7 +18,9 @@ export default function CardsPage() {
           Browse the full collection. Click any card for details. Tap "Message me to buy" to start a chat.
         </p>
       </header>
-      <CardCollectionGrid cards={CARDS} series={SERIES} />
+      <Suspense fallback={<div className="text-text-secondary text-sm">Loading cards…</div>}>
+        <CardCollectionGrid cards={CARDS} series={SERIES} />
+      </Suspense>
     </div>
   );
 }
