@@ -426,6 +426,8 @@ export interface CardCollectionEntry {
   condition: CardCondition;
   stock?: number;
   status: CardStatus;
+  suggestedPrice?: number;  // advisory market price from the TCG API; never the asking price
+  priceCheckedAt?: string;  // ISO date the suggestion was last refreshed
   addedAt?: string;
 }
 
@@ -2897,6 +2899,31 @@ git commit -m "feat(cards): /admin/cards page — list, quick status, delete"
 
 ---
 
+## Task 9b: Admin "Review Prices" button
+
+**Files:**
+- Create: `src/app/api/cards/refresh-prices/route.ts`
+- Modify: `src/app/admin/cards/page.tsx`
+
+Implements Part B of `docs/superpowers/specs/2026-05-29-card-pricing-design.md`,
+reusing `fetchSuggestedPrice` from `src/lib/cardPricing.ts` (built in the
+`2026-05-29-card-pricing.md` plan, Task 1).
+
+- [ ] **Step 1**: `POST /api/cards/refresh-prices` — auth-gated (`isAuthenticated()`);
+  reads `CARDS`, calls `fetchSuggestedPrice` per card, persists refreshed
+  `suggestedPrice` + `priceCheckedAt` to `cards-collection.json` via
+  `commitFiles`. Never writes `price`. Returns per-card results (prior vs new
+  suggestion) for the review table.
+- [ ] **Step 2**: On the admin cards header, add a "Review Prices" button plus a
+  "Prices last reviewed N days ago" label (derived from the newest
+  `priceCheckedAt`; emphasized when N > 14).
+- [ ] **Step 3**: Clicking the button opens a confirmation modal; the fetch runs
+  ONLY on confirm. After it returns, render a review table
+  (card · your price · previous suggestion · new suggestion · % change).
+- [ ] **Step 4**: Verify build + type-check; commit.
+
+---
+
 ## Task 10: Admin "Add card" + inline edit form
 
 **Files:**
@@ -3100,6 +3127,11 @@ git commit -m "feat(cards): admin add-card form"
 - Create: `src/app/admin/cards/import/page.tsx`
 
 - [ ] **Step 1: Create the import API route**
+
+> **Pricing columns:** the CSV may include optional `suggestedPrice` (number) and
+> `priceCheckedAt` (ISO date) columns produced by `scripts/suggest-prices.ts`.
+> `parseCSV`/`validateCSVRows` should map them onto the entry when present and
+> ignore them when absent — they never affect the owner-set `price`.
 
 Create `/Users/lm/repos/cardfables/src/app/api/cards/import/route.ts`:
 
