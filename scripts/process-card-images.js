@@ -222,6 +222,40 @@ async function lookupPokemonTcg(name, setNumber) {
   }
 }
 
+// Find the small rotation (degrees) that best axis-aligns the cutout
+// silhouette, by minimizing the alpha bounding-box area over a ±8° search.
+async function deskewAngle(buf) {
+  const { data, info } = await sharp(buf)
+    .ensureAlpha()
+    .resize({ width: 300 })
+    .extractChannel(3)
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const px = [], py = [];
+  let sx = 0, sy = 0, n = 0;
+  for (let y = 0; y < info.height; y++) {
+    for (let x = 0; x < info.width; x++) {
+      if (data[y * info.width + x] > 128) { px.push(x); py.push(y); sx += x; sy += y; n++; }
+    }
+  }
+  if (n === 0) return 0;
+  const cx = sx / n, cy = sy / n;
+  for (let i = 0; i < n; i++) { px[i] -= cx; py[i] -= cy; }
+  let best = 0, bestArea = Infinity;
+  for (let a = -8; a <= 8; a += 0.25) {
+    const r = (a * Math.PI) / 180, c = Math.cos(r), s = Math.sin(r);
+    let mnx = Infinity, mxx = -Infinity, mny = Infinity, mxy = -Infinity;
+    for (let i = 0; i < n; i++) {
+      const xr = px[i] * c - py[i] * s, yr = px[i] * s + py[i] * c;
+      if (xr < mnx) mnx = xr; if (xr > mxx) mxx = xr;
+      if (yr < mny) mny = yr; if (yr > mxy) mxy = yr;
+    }
+    const area = (mxx - mnx) * (mxy - mny);
+    if (area < bestArea) { bestArea = area; best = a; }
+  }
+  return best;
+}
+
 async function processOne(photoPath, tmpDir, usedIds) {
   console.log(`\n→ ${basename(photoPath)}`);
 
@@ -280,14 +314,25 @@ async function processOne(photoPath, tmpDir, usedIds) {
       return { error: "bg_removal_failed", photo: basename(photoPath) };
     }
 
+    // 3b. Auto-straighten (deskew): cards photographed at a slight angle would
+    // otherwise stay tilted inside their crop. Find the rotation that minimizes
+    // the silhouette's bounding box, then straighten before trimming.
+    const angle = await deskewAngle(cutoutBuf);
+    const straightened =
+      Math.abs(angle) >= 0.5
+        ? await sharp(cutoutBuf)
+            .rotate(angle, { background: { r: 0, g: 0, b: 0, alpha: 0 } })
+            .toBuffer()
+        : cutoutBuf;
+
     // 4. Trim + resize → WebP (smaller than PNG, keeps transparency)
     const outputPath = join(OUTPUT_IMAGE_DIR, `${slug}.webp`);
-    await sharp(cutoutBuf)
+    await sharp(straightened)
       .trim()
       .resize({ width: 1200, height: 1680, fit: "inside", withoutEnlargement: true })
       .webp({ quality: 82, effort: 6 })
       .toFile(outputPath);
-    console.log(`  ✓ saved ${slug}.webp`);
+    console.log(`  ✓ saved ${slug}.webp${Math.abs(angle) >= 0.5 ? ` (deskewed ${angle.toFixed(1)}°)` : ""}`);
 
     return {
       ok: true,
