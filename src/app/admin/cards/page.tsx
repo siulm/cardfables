@@ -215,6 +215,12 @@ export default function AdminCardsPage() {
             <option value="hidden">Hidden</option>
           </select>
           <a
+            href="/admin/cards/import"
+            className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-medium text-text-primary"
+          >
+            Import CSV
+          </a>
+          <a
             href="/admin/cards/new"
             className="rounded-lg bg-gold px-3 py-1.5 text-sm font-bold text-white"
           >

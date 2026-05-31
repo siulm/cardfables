@@ -288,6 +288,9 @@ export function validateCSVRows(
         stock: stockNum,
         status: (raw.status as CardStatus) || "available",
         addedAt: raw.addedAt || today,
+        // Advisory pricing columns from scripts/suggest-prices.ts — never affect owner-set price
+        ...(raw.suggestedPrice ? { suggestedPrice: Number(raw.suggestedPrice) } : {}),
+        ...(raw.priceCheckedAt ? { priceCheckedAt: raw.priceCheckedAt } : {}),
       };
       action = existingIds.has(id) ? "update" : "create";
       if (action === "create") result.totalCreate++;
