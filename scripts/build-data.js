@@ -36,10 +36,12 @@ const cardsCollection = existsSync(cardsCollectionPath)
   ? JSON.parse(readFileSync(cardsCollectionPath, "utf-8"))
   : [];
 
-// Read client config (for currency)
-const config = JSON.parse(
-  readFileSync(join(clientDir, "config.json"), "utf-8")
-);
+// Read client config (for currency). config.json is gitignored (holds secrets),
+// so it is absent on CI/Vercel — fall back gracefully rather than throw.
+const configPath = join(clientDir, "config.json");
+const config = existsSync(configPath)
+  ? JSON.parse(readFileSync(configPath, "utf-8"))
+  : {};
 const currency = config.currency || "USD";
 
 // Read episodes from per-series directories
