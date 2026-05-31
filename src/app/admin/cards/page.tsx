@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useAdmin } from "../context";
 import type { CardCollectionEntry, CardStatus } from "@/lib/types";
-import type { RefreshPriceResult } from "@/app/api/cards/refresh-prices/route";
+import { formatPrice } from "@/lib/cardsCollection";
+import { CURRENCY } from "@/lib/data";
 
 const STATUS_COLORS: Record<CardStatus, { bg: string; fg: string }> = {
   available: { bg: "rgba(34,197,94,0.10)", fg: "#16A34A" },
@@ -12,42 +13,12 @@ const STATUS_COLORS: Record<CardStatus, { bg: string; fg: string }> = {
   hidden: { bg: "rgba(74,64,53,0.04)", fg: "#9B8F7E" },
 };
 
-function getPriceAgeLabel(cards: CardCollectionEntry[]): {
-  label: string;
-  overdue: boolean;
-} {
-  const dates = cards
-    .map((c) => c.priceCheckedAt)
-    .filter((d): d is string => !!d)
-    .sort()
-    .reverse();
-
-  if (dates.length === 0) {
-    return { label: "Prices never reviewed", overdue: true };
-  }
-
-  const newest = new Date(dates[0]);
-  const now = new Date();
-  const diffMs = now.getTime() - newest.getTime();
-  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (days === 0) {
-    return { label: "Prices reviewed today", overdue: false };
-  }
-  if (days === 1) {
-    return { label: "Prices last reviewed 1 day ago", overdue: false };
-  }
-  return {
-    label: `Prices last reviewed ${days} days ago`,
-    overdue: days > 14,
-  };
-}
-
-function pctChange(prev: number | null, next: number | null): string {
-  if (prev == null || next == null || prev === 0) return "—";
-  const pct = ((next - prev) / prev) * 100;
-  const sign = pct >= 0 ? "+" : "";
-  return `${sign}${pct.toFixed(0)}%`;
+interface CheckPriceResult {
+  id: string;
+  suggestedPrice: number | null;
+  price: number;
+  priceCheckedAt: string;
+  matched: boolean;
 }
 
 export default function AdminCardsPage() {
@@ -58,11 +29,9 @@ export default function AdminCardsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<CardStatus | "all">("all");
 
-  // Review Prices state
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [reviewResults, setReviewResults] = useState<RefreshPriceResult[] | null>(null);
-  const [refreshError, setRefreshError] = useState<string | null>(null);
+  // Per-card price check state
+  const [checkingPriceId, setCheckingPriceId] = useState<string | null>(null);
+  const [checkPriceResults, setCheckPriceResults] = useState<Record<string, CheckPriceResult>>({});
 
   useEffect(() => {
     if (!authenticated) return;
@@ -107,67 +76,34 @@ export default function AdminCardsPage() {
     setCards((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const handleConfirmRefresh = async () => {
-    setShowConfirmModal(false);
-    setRefreshing(true);
-    setRefreshError(null);
-    setReviewResults(null);
-
+  const handleCheckPrice = async (id: string) => {
+    setCheckingPriceId(id);
     try {
-      const res = await fetch("/api/cards/refresh-prices", { method: "POST" });
+      const res = await fetch(`/api/cards/${id}/check-price`, { method: "POST" });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        setRefreshError((data as { error?: string }).error ?? "Request failed");
+        alert((data as { error?: string }).error ?? "Price check failed");
         return;
       }
-      const data = (await res.json()) as { results: RefreshPriceResult[] };
-      setReviewResults(data.results);
-      // Refresh local cards list so age label updates
-      const updated = await fetch("/api/cards").then((r) => r.json());
-      setCards(updated.cards ?? cards);
+      const result = (await res.json()) as CheckPriceResult;
+      setCheckPriceResults((prev) => ({ ...prev, [id]: result }));
+      // Update the local card's price + priceCheckedAt inline
+      setCards((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? { ...c, price: result.price, priceCheckedAt: result.priceCheckedAt, suggestedPrice: result.suggestedPrice ?? c.suggestedPrice }
+            : c
+        )
+      );
     } catch (err) {
-      setRefreshError(err instanceof Error ? err.message : "Unknown error");
+      alert(err instanceof Error ? err.message : "Unknown error");
     } finally {
-      setRefreshing(false);
+      setCheckingPriceId(null);
     }
   };
 
-  const { label: priceAgeLabel, overdue: priceOverdue } = getPriceAgeLabel(cards);
-
   return (
     <div className="p-6">
-      {/* Confirm modal */}
-      {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-xl">
-            <h2 className="mb-3 font-heading text-lg font-bold text-text-primary">
-              Refresh price suggestions?
-            </h2>
-            <p className="mb-5 text-sm text-text-secondary">
-              Fetch current market prices for all {cards.length} cards from the
-              Pokémon TCG API? This won&apos;t change your set prices — it refreshes
-              suggestions for review.
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setShowConfirmModal(false)}
-                className="rounded-lg border border-border bg-bg px-4 py-2 text-sm font-medium text-text-primary"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmRefresh}
-                className="rounded-lg bg-gold px-4 py-2 text-sm font-bold text-white"
-              >
-                Fetch prices
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl font-bold text-text-primary">Cards</h1>
@@ -176,26 +112,6 @@ export default function AdminCardsPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {/* Price age label */}
-          <span
-            className={[
-              "text-xs font-medium",
-              priceOverdue ? "font-bold text-amber-600" : "text-text-secondary",
-            ].join(" ")}
-          >
-            {priceAgeLabel}
-          </span>
-
-          {/* Review Prices button */}
-          <button
-            type="button"
-            disabled={refreshing}
-            onClick={() => setShowConfirmModal(true)}
-            className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-medium text-text-primary disabled:opacity-50"
-          >
-            {refreshing ? "Fetching…" : "Review Prices"}
-          </button>
-
           <input
             type="search"
             value={search}
@@ -229,82 +145,6 @@ export default function AdminCardsPage() {
         </div>
       </header>
 
-      {/* Error banner */}
-      {refreshError && (
-        <div className="mb-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
-          Price refresh failed: {refreshError}
-        </div>
-      )}
-
-      {/* Review table */}
-      {reviewResults && (
-        <div className="mb-6 overflow-hidden rounded-2xl border border-border bg-surface">
-          <div className="border-b border-border px-4 py-3">
-            <h2 className="font-heading text-base font-bold text-text-primary">
-              Price Review
-            </h2>
-            <p className="text-xs text-text-secondary">
-              Your prices are unchanged. Review suggestions and edit any you want to
-              update.
-            </p>
-          </div>
-          <table className="w-full text-sm">
-            <thead className="bg-surface-light text-xs uppercase tracking-wider text-text-secondary">
-              <tr>
-                <th className="px-3 py-2 text-left">Card</th>
-                <th className="px-3 py-2 text-right">Your Price</th>
-                <th className="px-3 py-2 text-right">Prev. Suggestion</th>
-                <th className="px-3 py-2 text-right">New Suggestion</th>
-                <th className="px-3 py-2 text-right">Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reviewResults.map((r) => {
-                const change = pctChange(r.previousSuggestion, r.newSuggestion);
-                const changePositive =
-                  r.previousSuggestion != null &&
-                  r.newSuggestion != null &&
-                  r.newSuggestion > r.previousSuggestion;
-                const changeNegative =
-                  r.previousSuggestion != null &&
-                  r.newSuggestion != null &&
-                  r.newSuggestion < r.previousSuggestion;
-                return (
-                  <tr key={r.id} className="border-t border-border">
-                    <td className="px-3 py-2 font-medium text-text-primary">
-                      {r.name}
-                    </td>
-                    <td className="px-3 py-2 text-right font-bold text-gold">
-                      ${r.price}
-                    </td>
-                    <td className="px-3 py-2 text-right text-text-secondary">
-                      {r.previousSuggestion != null ? `$${r.previousSuggestion}` : "—"}
-                    </td>
-                    <td className="px-3 py-2 text-right text-text-primary">
-                      {r.newSuggestion != null ? `$${r.newSuggestion}` : "—"}
-                    </td>
-                    <td
-                      className={[
-                        "px-3 py-2 text-right text-xs font-bold",
-                        changePositive ? "text-green-600" : "",
-                        changeNegative ? "text-red-600" : "",
-                        !changePositive && !changeNegative ? "text-text-secondary" : "",
-                      ].join(" ")}
-                    >
-                      {change}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div className="border-t border-border px-4 py-2 text-xs text-text-secondary">
-            {reviewResults.filter((r) => r.newSuggestion != null).length} of{" "}
-            {reviewResults.length} cards matched in the Pokémon TCG API
-          </div>
-        </div>
-      )}
-
       <div className="overflow-hidden rounded-2xl border border-border bg-surface">
         <table className="w-full text-sm">
           <thead className="bg-surface-light text-xs uppercase tracking-wider text-text-secondary">
@@ -313,6 +153,7 @@ export default function AdminCardsPage() {
               <th className="px-3 py-2 text-left">Name</th>
               <th className="px-3 py-2 text-left">Set · Year</th>
               <th className="px-3 py-2 text-left">Price</th>
+              <th className="px-3 py-2 text-left">TCG Suggestion</th>
               <th className="px-3 py-2 text-left">Cond.</th>
               <th className="px-3 py-2 text-left">Status</th>
               <th className="px-3 py-2 text-left">Stock</th>
@@ -322,6 +163,13 @@ export default function AdminCardsPage() {
           <tbody>
             {filtered.map((c) => {
               const sc = STATUS_COLORS[c.status];
+              const checkResult = checkPriceResults[c.id];
+              const isChecking = checkingPriceId === c.id;
+              const suggestedDisplay = checkResult?.suggestedPrice != null
+                ? formatPrice(checkResult.suggestedPrice, CURRENCY)
+                : c.suggestedPrice != null
+                  ? formatPrice(c.suggestedPrice, CURRENCY)
+                  : null;
               return (
                 <tr key={c.id} className="border-t border-border">
                   <td className="px-3 py-2">
@@ -333,7 +181,26 @@ export default function AdminCardsPage() {
                   </td>
                   <td className="px-3 py-2 font-medium text-text-primary">{c.name}</td>
                   <td className="px-3 py-2 text-text-secondary">{c.set} · {c.year}</td>
-                  <td className="px-3 py-2 font-bold text-gold">${c.price}{c.originalPrice ? <span className="ml-1 text-xs text-text-dim line-through">${c.originalPrice}</span> : null}</td>
+                  <td className="px-3 py-2 font-bold text-gold">
+                    {c.price ? formatPrice(c.price, CURRENCY) : <span className="text-text-dim">—</span>}
+                    {c.originalPrice ? (
+                      <span className="ml-1 text-xs text-text-dim line-through">
+                        {formatPrice(c.originalPrice, CURRENCY)}
+                      </span>
+                    ) : null}
+                  </td>
+                  <td className="px-3 py-2 text-text-secondary text-xs">
+                    {suggestedDisplay ? (
+                      <span className={checkResult && !checkResult.matched ? "text-text-dim" : ""}>
+                        {suggestedDisplay}
+                        {c.priceCheckedAt && (
+                          <span className="ml-1 text-text-dim">{c.priceCheckedAt}</span>
+                        )}
+                      </span>
+                    ) : (
+                      <span className="text-text-dim">—</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2">{c.condition}</td>
                   <td className="px-3 py-2">
                     <select
@@ -350,6 +217,14 @@ export default function AdminCardsPage() {
                   </td>
                   <td className="px-3 py-2">{c.stock ?? 1}</td>
                   <td className="px-3 py-2 text-right">
+                    <button
+                      type="button"
+                      disabled={isChecking}
+                      onClick={() => handleCheckPrice(c.id)}
+                      className="mr-2 text-xs font-medium text-text-secondary underline disabled:opacity-50"
+                    >
+                      {isChecking ? "Checking…" : "Check price"}
+                    </button>
                     <button
                       type="button"
                       onClick={() => setEditingId(editingId === c.id ? null : c.id)}

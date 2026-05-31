@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { CardCollectionEntry, Series } from "@/lib/types";
 import { CURRENCY } from "@/lib/data";
-import { findEpisodeForCard } from "@/lib/cardsCollection";
+import { findEpisodeForCard, isComingSoon, formatPrice } from "@/lib/cardsCollection";
 
 interface CardDetailOverlayProps {
   card: CardCollectionEntry;
@@ -13,14 +13,8 @@ interface CardDetailOverlayProps {
   anchor: { x: number; y: number; width: number; height: number } | null;
 }
 
-function formatPrice(n: number): string {
-  if (CURRENCY === "USD") return `$${n}`;
-  if (CURRENCY === "JPY") return `¥${n.toLocaleString()}`;
-  return `${CURRENCY} ${n}`;
-}
-
 function prefilledMessage(card: CardCollectionEntry): string {
-  return `Hi! I'm interested in: ${card.name} — ${card.set} (${card.year}) — ${formatPrice(card.price)}`;
+  return `Hi! I'm interested in: ${card.name} — ${card.set} (${card.year}) — ${formatPrice(card.price, CURRENCY)}`;
 }
 
 const RARITY_COLORS: Record<string, string> = {
@@ -99,6 +93,7 @@ export function CardDetailOverlay({ card, series, onClose, anchor }: CardDetailO
 
   const ep = findEpisodeForCard(series, card);
   const isAvailable = card.status === "available";
+  const comingSoon = isComingSoon(card);
   const rarityColor = RARITY_COLORS[card.rarity] ?? "#7A6E5E";
 
   const handleBuy = async () => {
@@ -147,17 +142,29 @@ export function CardDetailOverlay({ card, series, onClose, anchor }: CardDetailO
         )}
 
         <div className="mt-4 flex items-baseline gap-3">
-          {card.originalPrice && card.originalPrice > card.price && (
-            <span className="text-sm text-text-dim line-through">
-              {formatPrice(card.originalPrice)}
+          {comingSoon ? (
+            <span className="rounded-md bg-surface-light px-3 py-1 text-sm font-bold uppercase tracking-wider text-text-dim">
+              Coming Soon
             </span>
+          ) : (
+            <>
+              {card.originalPrice && card.originalPrice > card.price && (
+                <span className="text-sm text-text-dim line-through">
+                  {formatPrice(card.originalPrice, CURRENCY)}
+                </span>
+              )}
+              <span className="font-heading text-2xl font-bold text-gold">
+                {formatPrice(card.price, CURRENCY)}
+              </span>
+            </>
           )}
-          <span className="font-heading text-2xl font-bold text-gold">
-            {formatPrice(card.price)}
-          </span>
         </div>
 
-        {isAvailable ? (
+        {comingSoon ? (
+          <div className="mt-4 rounded-xl border border-border bg-surface-light px-5 py-3 text-center text-sm font-bold text-text-dim">
+            Coming Soon — not yet for sale
+          </div>
+        ) : isAvailable ? (
           <button
             type="button"
             onClick={handleBuy}
@@ -175,7 +182,7 @@ export function CardDetailOverlay({ card, series, onClose, anchor }: CardDetailO
           </div>
         )}
         <p className="mt-2 text-center text-[10px] text-text-dim">
-          {isAvailable ? "Message copied to clipboard — paste it into Messenger to start the conversation" : ""}
+          {isAvailable && !comingSoon ? "Message copied to clipboard — paste it into Messenger to start the conversation" : ""}
         </p>
 
         {ep && (

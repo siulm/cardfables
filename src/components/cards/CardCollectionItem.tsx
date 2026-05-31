@@ -3,17 +3,12 @@
 import type React from "react";
 import type { CardCollectionEntry } from "@/lib/types";
 import { CURRENCY } from "@/lib/data";
+import { isComingSoon, formatPrice } from "@/lib/cardsCollection";
 
 interface CardCollectionItemProps {
   card: CardCollectionEntry;
   onClick: (card: CardCollectionEntry, event?: React.MouseEvent<HTMLButtonElement>) => void;
   episodeBadge?: { href: string };
-}
-
-function formatPrice(n: number): string {
-  if (CURRENCY === "USD") return `$${n}`;
-  if (CURRENCY === "JPY") return `¥${n.toLocaleString()}`;
-  return `${CURRENCY} ${n}`;
 }
 
 const RARITY_COLORS: Record<string, string> = {
@@ -101,14 +96,22 @@ export function CardCollectionItem({ card, onClick, episodeBadge }: CardCollecti
           {card.set} · {card.year}
         </p>
         <div className="mt-1.5 flex items-baseline gap-2">
-          {card.originalPrice && card.originalPrice > card.price && (
-            <span className="text-xs text-text-dim line-through">
-              {formatPrice(card.originalPrice)}
+          {isComingSoon(card) ? (
+            <span className="rounded-md bg-surface-light px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-text-dim">
+              Coming Soon
             </span>
+          ) : (
+            <>
+              {card.originalPrice && card.originalPrice > card.price && (
+                <span className="text-xs text-text-dim line-through">
+                  {formatPrice(card.originalPrice, CURRENCY)}
+                </span>
+              )}
+              <span className="text-base font-bold text-gold">
+                {formatPrice(card.price, CURRENCY)}
+              </span>
+            </>
           )}
-          <span className="text-base font-bold text-gold">
-            {formatPrice(card.price)}
-          </span>
         </div>
       </div>
     </button>
