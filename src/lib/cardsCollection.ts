@@ -30,12 +30,18 @@ const RARITY_ORDER: Record<string, number> = {
 };
 
 export interface CardFilters {
+  language?: "en" | "jp";
   types?: PokemonType[];
   sets?: string[];
   years?: number[];
   conditions?: CardCondition[];
   rarities?: string[];
   status?: "available-only" | "include-sold";
+}
+
+// A card's language; cards without the field are treated as English.
+export function cardLanguage(card: { language?: "en" | "jp" }): "en" | "jp" {
+  return card.language ?? "en";
 }
 
 export function filterCards(
@@ -45,6 +51,9 @@ export function filterCards(
   return cards.filter((c) => {
     // Hidden never shown publicly
     if (c.status === "hidden") return false;
+
+    // Language filter (English and Japanese are never shown together)
+    if (filters.language && cardLanguage(c) !== filters.language) return false;
 
     // Status filter (default: include all non-hidden)
     const statusFilter = filters.status ?? "include-sold";

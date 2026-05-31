@@ -106,6 +106,7 @@ export interface CardCollectionEntry {
   condition: CardCondition;
   stock?: number;
   status: CardStatus;
+  language?: "en" | "jp"; // defaults to "en" when absent
   suggestedPrice?: number;
   priceCheckedAt?: string;
   addedAt?: string;

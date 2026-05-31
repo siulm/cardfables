@@ -471,3 +471,14 @@ describe("isComingSoon", () => {
     expect(isComingSoon({ price: 27 })).toBe(false);
   });
 });
+
+describe("filterCards — language", () => {
+  const en = { ...baseCard, id: "en-card" };
+  const jp = { ...baseCard, id: "jp-card", language: "jp" as const };
+  it("treats cards without a language as English", () => {
+    expect(filterCards([en, jp], { language: "en" }).map((c) => c.id)).toEqual(["en-card"]);
+  });
+  it("shows only Japanese cards when jp is selected", () => {
+    expect(filterCards([en, jp], { language: "jp" }).map((c) => c.id)).toEqual(["jp-card"]);
+  });
+});

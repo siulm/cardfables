@@ -4,17 +4,19 @@ import { useState } from "react";
 import type { CardCondition, PokemonType } from "@/lib/types";
 import type { CardFilters, CardSort, CardGrouping } from "@/lib/cardsCollection";
 
-const TYPES: PokemonType[] = ["Fire", "Water", "Grass", "Electric", "Dark", "Steel", "Psychic", "Fighting", "Normal", "Dragon", "Fairy"];
 const CONDITIONS: CardCondition[] = ["NM", "LP", "MP", "HP", "DMG"];
 
 interface FilterBarProps {
   filters: CardFilters;
+  language: "en" | "jp";
   search: string;
   sort: CardSort;
   grouping: CardGrouping;
+  availableTypes: PokemonType[];
   availableSets: string[];
   availableYears: number[];
   availableRarities: string[];
+  onLanguageChange: (lang: "en" | "jp") => void;
   onFiltersChange: (f: CardFilters) => void;
   onSearchChange: (q: string) => void;
   onSortChange: (s: CardSort) => void;
@@ -69,6 +71,32 @@ export function CardCollectionFilters(props: FilterBarProps) {
 
   const filterContent = (
     <div className="p-4">
+      {/* Language — English and Japanese cards are shown separately */}
+      <div className="mb-4">
+        <div className="mb-1.5 text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+          Collection
+        </div>
+        <div className="grid grid-cols-2 gap-1.5">
+          {(["en", "jp"] as const).map((lang) => {
+            const active = props.language === lang;
+            return (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => props.onLanguageChange(lang)}
+                className="rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors"
+                style={{
+                  background: active ? "rgba(212,137,58,0.15)" : "rgba(74,64,53,0.04)",
+                  borderColor: active ? "rgba(212,137,58,0.4)" : "rgba(74,64,53,0.10)",
+                  color: active ? "#D4893A" : "var(--color-text-secondary)",
+                }}
+              >
+                {lang === "en" ? "English" : "日本語 Japanese"}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       <div className="mb-3">
         <input
           type="search"
@@ -80,7 +108,7 @@ export function CardCollectionFilters(props: FilterBarProps) {
       </div>
       <ChipGroup
         label="Type"
-        options={TYPES}
+        options={props.availableTypes}
         selected={props.filters.types ?? []}
         onChange={(next) => props.onFiltersChange({ ...props.filters, types: next })}
       />

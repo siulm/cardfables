@@ -11,6 +11,7 @@ import {
   sortCards,
   groupCards,
   findEpisodeForCard,
+  cardLanguage,
   type CardFilters,
   type CardSort,
   type CardGrouping,
@@ -47,9 +48,13 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
     setSelectedCard(card);
   };
 
+  // Language: English by default; EN and JP cards are never shown together.
+  const language: "en" | "jp" = searchParams.get("lang") === "jp" ? "jp" : "en";
+
   // Parse state from URL — status defaults to "available-only" so sold cards are hidden by default
   const filters: CardFilters = useMemo(
     () => ({
+      language,
       types: parseList(searchParams.get("type")) as PokemonType[],
       sets: parseList(searchParams.get("set")),
       years: parseNumberList(searchParams.get("year")),
@@ -57,7 +62,7 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
       rarities: parseList(searchParams.get("rarity")),
       status: searchParams.get("status") === "include-sold" ? "include-sold" : "available-only",
     }),
-    [searchParams]
+    [searchParams, language]
   );
   const search = searchParams.get("q") ?? "";
   const sort = (searchParams.get("sort") as CardSort) ?? "recently-added";
@@ -94,23 +99,46 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
     updateUrl((p) => (s === "recently-added" ? p.delete("sort") : p.set("sort", s)));
   const onGroupingChange = (g: CardGrouping) =>
     updateUrl((p) => (g === "none" ? p.delete("group") : p.set("group", g)));
-  const onClearAll = () => router.replace("/cards", { scroll: false });
+  const onLanguageChange = (lang: "en" | "jp") =>
+    updateUrl((p) => {
+      if (lang === "jp") p.set("lang", "jp");
+      else p.delete("lang");
+      // Type/Set/Year/Condition/Rarity are language-specific — clear on switch
+      for (const k of ["type", "set", "year", "cond", "rarity"]) p.delete(k);
+    });
+  const onClearAll = () =>
+    updateUrl((p) => {
+      for (const k of ["type", "set", "year", "cond", "rarity", "status", "q"]) p.delete(k);
+      // keep the current language selection
+    });
 
-  // Compute available filter options from data
+  // Only the cards in the selected language; filter options are scoped to it.
+  const langCards = useMemo(
+    () => cards.filter((c) => cardLanguage(c) === language),
+    [cards, language]
+  );
+  const TYPE_ORDER: PokemonType[] = [
+    "Fire", "Water", "Grass", "Electric", "Dark",
+    "Steel", "Psychic", "Fighting", "Normal", "Dragon", "Fairy",
+  ];
+  const availableTypes = useMemo(() => {
+    const present = new Set(langCards.map((c) => c.type));
+    return TYPE_ORDER.filter((t) => present.has(t));
+  }, [langCards]);
   const availableSets = useMemo(
-    () => [...new Set(cards.map((c) => c.set))].filter(Boolean).sort(),
-    [cards]
+    () => [...new Set(langCards.map((c) => c.set))].filter(Boolean).sort(),
+    [langCards]
   );
   const availableYears = useMemo(
-    () => [...new Set(cards.map((c) => c.year))].sort((a, b) => b - a),
-    [cards]
+    () => [...new Set(langCards.map((c) => c.year))].sort((a, b) => b - a),
+    [langCards]
   );
   const availableRarities = useMemo(
-    () => [...new Set(cards.map((c) => c.rarity))].filter(Boolean).sort(),
-    [cards]
+    () => [...new Set(langCards.map((c) => c.rarity))].filter(Boolean).sort(),
+    [langCards]
   );
 
-  // Apply pipeline: filter → search → sort → group
+  // Apply pipeline: filter (incl. language) → search → sort → group
   const groups = useMemo(() => {
     const filtered = filterCards(cards, filters);
     const searched = searchCards(filtered, search);
@@ -119,19 +147,22 @@ export function CardCollectionGrid({ cards, series }: CardCollectionGridProps) {
   }, [cards, filters, search, sort, grouping]);
 
   const totalVisible = groups.reduce((sum, g) => sum + g.cards.length, 0);
-  const soldCount = cards.filter((c) => c.status === "sold").length;
-  const availableCount = cards.filter((c) => c.status === "available").length;
+  const soldCount = langCards.filter((c) => c.status === "sold").length;
+  const availableCount = langCards.filter((c) => c.status === "available").length;
 
   return (
     <div className="flex gap-6">
       <CardCollectionFilters
         filters={filters}
+        language={language}
         search={search}
         sort={sort}
         grouping={grouping}
+        availableTypes={availableTypes}
         availableSets={availableSets}
         availableYears={availableYears}
         availableRarities={availableRarities}
+        onLanguageChange={onLanguageChange}
         onFiltersChange={onFiltersChange}
         onSearchChange={onSearchChange}
         onSortChange={onSortChange}
