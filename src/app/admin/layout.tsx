@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/admin/episodes", label: "Episodes", icon: "🃏" },
   { href: "/admin/submissions", label: "Submissions", icon: "📬" },
   { href: "/admin/shop", label: "Shop", icon: "🛍️" },
+  { href: "/admin/cards", label: "Cards", icon: "🎴" },
   { href: "/admin/arc", label: "Story Arc", icon: "📖" },
   { href: "/admin/series", label: "Series", icon: "🎬" },
 ];
