@@ -35,9 +35,11 @@ describe("selectPrice", () => {
     });
   });
 
-  it("rounds to whole dollars", () => {
-    const prices = { normal: { low: 1, mid: 2, high: 3, market: 2.6, directLow: 1 } };
-    expect(selectPrice(prices, "Common")?.suggestedPrice).toBe(3);
+  it("rounds to the cent (keeps decimals; cards can be < $1)", () => {
+    const prices = { normal: { low: 1, mid: 2, high: 3, market: 2.649, directLow: 1 } };
+    expect(selectPrice(prices, "Common")?.suggestedPrice).toBe(2.65);
+    const cheap = { normal: { low: 0.1, mid: 0.5, high: 1, market: 0.49, directLow: 0.1 } };
+    expect(selectPrice(cheap, "Common")?.suggestedPrice).toBe(0.49);
   });
 
   it("returns null when there are no usable prices", () => {

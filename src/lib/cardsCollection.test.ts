@@ -8,6 +8,8 @@ import {
   findEpisodeForCard,
   parseCSV,
   validateCSVRows,
+  formatPrice,
+  isComingSoon,
 } from "./cardsCollection";
 import type { CardCollectionEntry, Series } from "./types";
 
@@ -440,5 +442,32 @@ describe("validateCSVRows", () => {
     );
     expect(result.rows[0].action).toBe("update");
     expect(result.rows[0].entry?.status).toBe("sold");
+  });
+});
+
+describe("formatPrice", () => {
+  it("drops decimals when the price is a whole number", () => {
+    expect(formatPrice(27)).toBe("$27");
+    expect(formatPrice(27.0)).toBe("$27");
+  });
+  it("shows cents when the price has a fractional part", () => {
+    expect(formatPrice(3.5)).toBe("$3.50");
+    expect(formatPrice(0.9)).toBe("$0.90");
+    expect(formatPrice(19.8)).toBe("$19.80");
+  });
+  it("respects the currency", () => {
+    expect(formatPrice(5, "EUR")).toBe("€5");
+  });
+});
+
+describe("isComingSoon", () => {
+  it("is true when price is missing or zero", () => {
+    expect(isComingSoon({ price: 0 })).toBe(true);
+    expect(isComingSoon({})).toBe(true);
+    expect(isComingSoon({ price: undefined })).toBe(true);
+  });
+  it("is false when there is a real price (including under $1)", () => {
+    expect(isComingSoon({ price: 0.9 })).toBe(false);
+    expect(isComingSoon({ price: 27 })).toBe(false);
   });
 });

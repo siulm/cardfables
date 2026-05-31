@@ -350,3 +350,28 @@ export function validateCSVRows(
 
   return result;
 }
+
+// ── Price display ────────────────────────────────────────────────────────────
+
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  JPY: "¥",
+  GBP: "£",
+};
+
+export function currencySymbol(code: string): string {
+  return CURRENCY_SYMBOLS[code] ?? `${code} `;
+}
+
+// A card is "Coming Soon" when it has no real asking price yet (blank or $0).
+export function isComingSoon(card: { price?: number | null }): boolean {
+  return !card.price || card.price <= 0;
+}
+
+// Format a price for display: drop the decimals when they're .00
+// ($27.00 → "$27"), otherwise show cents ($3.50 → "$3.50", $0.90 → "$0.90").
+export function formatPrice(price: number, currency = "USD"): string {
+  const body = Number.isInteger(price) ? String(price) : price.toFixed(2);
+  return `${currencySymbol(currency)}${body}`;
+}

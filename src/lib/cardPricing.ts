@@ -2,7 +2,7 @@
 // owner's asking price is never derived from this automatically.
 
 export interface PriceSuggestion {
-  suggestedPrice: number; // USD, whole dollars
+  suggestedPrice: number; // USD, to the cent (cards can be < $1)
   variant: string; // tcgplayer variant key the price came from
   basis: "market" | "mid";
   checkedAt: string; // ISO date (YYYY-MM-DD)
@@ -45,7 +45,7 @@ export function selectPrice(
     const value = block.market ?? block.mid ?? null;
     if (value != null && value > 0) {
       return {
-        suggestedPrice: Math.round(value),
+        suggestedPrice: Math.round(value * 100) / 100, // keep cents — cards can be < $1
         variant: v,
         basis: block.market != null ? "market" : "mid",
       };
