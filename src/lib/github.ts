@@ -53,7 +53,7 @@ export async function deleteFile(path: string, message: string): Promise<void> {
 }
 
 export async function commitFiles(
-  files: { path: string; content: string }[],
+  files: { path: string; content: string; encoding?: "utf-8" | "base64" }[],
   message: string
 ): Promise<void> {
   // 1. Get current HEAD
@@ -71,7 +71,7 @@ export async function commitFiles(
     files.map(async (f) => {
       const blobRes = await ghFetch("/git/blobs", {
         method: "POST",
-        body: JSON.stringify({ content: f.content, encoding: "utf-8" }),
+        body: JSON.stringify({ content: f.content, encoding: f.encoding ?? "utf-8" }),
       });
       const blobData = await blobRes.json();
       return { path: f.path, sha: blobData.sha, mode: "100644" as const, type: "blob" as const };
